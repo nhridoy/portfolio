@@ -1,9 +1,14 @@
 import type { NextConfig } from "next";
-import createMDX from "@next/mdx";
+import nextra from "nextra";
 
 const nextConfig: NextConfig = {
   /* config options here */
-  pageExtensions: ["js", "jsx", "md", "mdx", "ts", "tsx"],
+  turbopack: {
+    resolveAlias: {
+      // Path to your `mdx-components` file with extension
+      "next-mdx-import-source-file": "./mdx-components.tsx",
+    },
+  },
   images: {
     remotePatterns: [
       {
@@ -23,9 +28,9 @@ const nextConfig: NextConfig = {
   output: "standalone",
 };
 
-const withMDX = createMDX({
-  // Add markdown plugins here, as desired
-  extension: /\.(md|mdx)$/,
+// Set up Nextra with its configuration
+const withNextra = nextra({
+  search: { codeblocks: false },
 });
 
-export default withMDX(nextConfig);
+export default withNextra(nextConfig);
