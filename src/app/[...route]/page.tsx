@@ -23,7 +23,6 @@ export const generateStaticParams = generateStaticParamsFor("route");
 
 export async function generateMetadata(props: PageProps): Promise<Metadata> {
   const params = await props.params;
-  console.log({ params });
   const { metadata } = await importPage(params.route);
   return metadata;
 }
@@ -45,7 +44,7 @@ export default async function Page(props: PageProps) {
   };
 
   const isPostPage =
-    params.route && params.route.length > 1 && params.route.includes("posts");
+    params.route && params.route.length > 1 && params.route.includes("blog");
 
   return (
     // @ts-expect-error

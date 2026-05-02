@@ -1,13 +1,11 @@
 import { Posts } from "@/components/blog/posts";
-
----
-title: Nahidujjaman Hridoy
-description: I'm Nahidujjaman Hridoy, a passionate developer who believes good code should be both functional and beautiful. I spend my time building web applications and experimenting with modern frameworks. I've contributed to several projects ranging from e-commerce platforms to developer tools. Most of my work focuses on creating intuitive user experiences with clean, maintainable code. You can explore my projects and writing throughout this site.
----
-
-I'm Nahidujjaman Hridoy, a passionate developer who believes good code should be both functional and beautiful. I spend my time building web applications and experimenting with modern frameworks. I've contributed to several projects ranging from e-commerce platforms to developer tools. Most of my work focuses on creating intuitive user experiences with clean, maintainable code. You can explore my projects and writing throughout this site.
+import { Section } from "@/components/ui/section";
+import { Container } from "@/components/ui/container";
+import { H2, Lead } from "@/components/ui/typography";
 
 
-## Latest posts
+<H2>Latest posts</H2>
 
-<Posts first={5} showViewAllButton={true}/>
+<div className="mt-6">
+    <Posts first={5} showViewAllButton={true} />
+</div>

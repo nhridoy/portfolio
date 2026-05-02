@@ -1,5 +1,6 @@
 import { useMDXComponents as getNextraComponents } from "nextra/mdx-components";
 import { useMDXComponents as getThemeComponents } from "nextra-theme-blog"; // nextra-theme-blog or your custom theme
+import { Toc } from "./components/blog/toc";
 
 // const components: MDXComponents = {};
 
@@ -15,7 +16,7 @@ const defaultComponents = getNextraComponents({
       <>
         {children}
 
-        {/*<TOC toc={toc}/>*/}
+        {/* <Toc toc={toc} /> */}
       </>
     );
   },

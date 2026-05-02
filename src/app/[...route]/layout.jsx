@@ -1,12 +1,10 @@
-import { Layout } from "nextra-theme-blog";
+import { Container } from "@/components/ui/container";
+import { Section } from "@/components/ui/section";
 
 export default function MyLayout({ children, ...props }) {
   return (
-    <Layout
-      sidebar={{ autoCollapse: true }}
-      navigation={{ prev: true, next: true }}
-    >
-      {children}
-    </Layout>
+    <Section>
+      <Container>{children}</Container>
+    </Section>
   );
 }
