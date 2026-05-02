@@ -2,11 +2,11 @@ import type { Metadata } from "next";
 import { generateStaticParamsFor, importPage } from "nextra/pages";
 import type React from "react";
 import { PostDetail } from "@/components/blog/post-detail";
-import { useMDXComponents as getMDXComponents } from "../../../mdx-components";
+import { useMDXComponents as getMDXComponents } from "../../mdx-components";
 
 // Define types for params and metadata
 type PageParams = {
-  mdxPath: string[];
+  route: string[];
 };
 
 type PageProps = {
@@ -19,11 +19,12 @@ export type CustomMetadata = Metadata & {
   tags?: string[];
 };
 
-export const generateStaticParams = generateStaticParamsFor("mdxPath");
+export const generateStaticParams = generateStaticParamsFor("route");
 
 export async function generateMetadata(props: PageProps): Promise<Metadata> {
   const params = await props.params;
-  const { metadata } = await importPage(params.mdxPath);
+  console.log({ params });
+  const { metadata } = await importPage(params.route);
   return metadata;
 }
 
@@ -31,7 +32,8 @@ const Wrapper = getMDXComponents().wrapper;
 
 export default async function Page(props: PageProps) {
   const params = await props.params;
-  const result = await importPage(params.mdxPath);
+
+  const result = await importPage(params.route);
   const {
     default: MDXContent,
     toc,
@@ -43,9 +45,7 @@ export default async function Page(props: PageProps) {
   };
 
   const isPostPage =
-    params.mdxPath &&
-    params.mdxPath.length > 1 &&
-    params.mdxPath.includes("posts");
+    params.route && params.route.length > 1 && params.route.includes("posts");
 
   return (
     // @ts-expect-error

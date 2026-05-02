@@ -5,7 +5,6 @@ import "./globals.css";
 import ReactLenis from "lenis/react";
 import { Providers } from "@/components/providers/providers";
 import ReadingProgress from "@/components/ui/reading-progress";
-import { SectionDots } from "@/components/ui/section-dots";
 import { cn } from "@/lib/utils";
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
@@ -104,39 +103,6 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Person",
-    name: "Nahidujjaman Hridoy",
-    url: "https://nhridoy.github.io",
-    image:
-      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop",
-    jobTitle: "Software Engineer",
-    worksFor: {
-      "@type": "Organization",
-      name: "SELISE Bangladesh",
-    },
-    alumniOf: "Nexis Ltd",
-    sameAs: [
-      "https://github.com/nhridoy",
-      "https://linkedin.com/in/nahidujjaman-hridoy",
-      "https://nhridoy.github.io",
-    ],
-    knowsAbout: [
-      "React",
-      "Next.js",
-      "TypeScript",
-      "Django",
-      "Python",
-      "AWS",
-      "Docker",
-      "PostgreSQL",
-      "MongoDB",
-      "Full-Stack Development",
-      "DevOps",
-    ],
-  };
-
   return (
     <html
       lang="en"
@@ -150,16 +116,9 @@ export default function RootLayout({
     >
       <ReactLenis root />
       <body className="min-h-screen bg-background text-foreground">
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-        />
         <div className="bg-grain" />
         <ReadingProgress />
-        <Providers>
-          <SectionDots />
-          {children}
-        </Providers>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

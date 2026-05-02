@@ -1,13 +1,13 @@
 // @flow
 
 import { IconArrowBack, IconPoint } from "@tabler/icons-react";
+import Link from "next/link";
 // import { Link } from "next-view-transitions";
 import type * as React from "react";
-import type { CustomMetadata } from "@/app/blog/[[...mdxPath]]/page";
+import type { CustomMetadata } from "@/app/[...route]/page";
 import GiscusComments from "@/components/blog/giscus-comments";
 import { Posts } from "@/components/blog/posts";
 import { formatDate } from "@/lib/format-date";
-import Link from "next/link";
 
 type Props = {
   metadata: CustomMetadata;

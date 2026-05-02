@@ -6,7 +6,7 @@ const nextConfig: NextConfig = {
   turbopack: {
     resolveAlias: {
       // Path to your `mdx-components` file with extension
-      "next-mdx-import-source-file": "./mdx-components.tsx",
+      "next-mdx-import-source-file": "./src/mdx-components.tsx",
     },
   },
   images: {
@@ -31,6 +31,7 @@ const nextConfig: NextConfig = {
 // Set up Nextra with its configuration
 const withNextra = nextra({
   search: { codeblocks: false },
+  contentDirBasePath: "/",
 });
 
 export default withNextra(nextConfig);

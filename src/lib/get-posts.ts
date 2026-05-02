@@ -29,8 +29,8 @@ export async function getPosts(
 
   // get
   const { directories } = normalizePages({
-    list: await getPageMap("/posts"),
-    route: "/posts",
+    list: await getPageMap("/blog"),
+    route: "/blog",
   });
 
   // Sort posts by date
