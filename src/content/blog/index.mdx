@@ -2,9 +2,11 @@ import { Posts } from "@/components/blog/posts";
 import { Section } from "@/components/ui/section";
 import { Container } from "@/components/ui/container";
 import { H2, Lead } from "@/components/ui/typography";
+import { Banner, Head, Search } from 'nextra/components'
 
 
 <H2>Latest posts</H2>
+<Search />
 
 <div className="mt-6">
     <Posts first={5} showViewAllButton={true} />

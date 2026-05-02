@@ -70,17 +70,17 @@ export const metadata: Metadata = {
     locale: "en_US",
     type: "website",
   },
-  twitter: {
-    card: "summary_large_image",
-    title: "Nahidujjaman Hridoy | Software Engineer",
-    description:
-      "Building scalable web and mobile applications with React, Next.js, Django, and AWS. 15+ projects across e-commerce, streaming, ERP, and more.",
-    creator: "@nhridoy",
-    images: ["/og-image.jpg"],
-  },
-  verification: {
-    google: "your-google-verification-code",
-  },
+  // twitter: {
+  //   card: "summary_large_image",
+  //   title: "Nahidujjaman Hridoy | Software Engineer",
+  //   description:
+  //     "Building scalable web and mobile applications with React, Next.js, Django, and AWS. 15+ projects across e-commerce, streaming, ERP, and more.",
+  //   creator: "@nhridoy",
+  //   images: ["/og-image.jpg"],
+  // },
+  // verification: {
+  //   google: "your-google-verification-code",
+  // },
   robots: {
     index: true,
     follow: true,

@@ -64,3 +64,6 @@ ENV PORT=3000
 # https://nextjs.org/docs/pages/api-reference/config/next-config-js/output
 ENV HOSTNAME="0.0.0.0"
 CMD ["node", "server.js"]
+
+
+# pnpm build && cp -r public .next/standalone/ && cp -r .next/static .next/standalone/.next/ && HOSTNAME=localhost node .next/standalone/server.js

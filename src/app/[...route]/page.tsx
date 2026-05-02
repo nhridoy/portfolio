@@ -55,11 +55,7 @@ export default async function Page(props: PageProps) {
         </PostDetail>
       )}
 
-      {!isPostPage && (
-        <>
-          <MDXContent {...props} params={params} />
-        </>
-      )}
+      {!isPostPage && <MDXContent {...props} params={params} />}
     </Wrapper>
   );
 }
