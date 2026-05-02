@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { Posts } from "@/components/blog/posts";
 import { Tags } from "@/components/blog/tags";
-import { Container } from "@/components/ui/container";
-import { Section } from "@/components/ui/section";
 import { H2 } from "@/components/ui/typography";
 import { getTags } from "@/lib/get-tags";
 
@@ -31,19 +29,17 @@ export default async function TagPage(props: TagPageProps) {
   const decodedTag = decodeURIComponent(params.tag);
 
   return (
-    <Section>
-      <Container>
-        <H2>Posts Tagged with &quot;{decodedTag}&quot;</H2>
+    <>
+      <H2>Posts Tagged with &quot;{decodedTag}&quot;</H2>
 
-        <div className="mt-6">
-          <Posts tags={[decodedTag]} />
-        </div>
+      <div className="mt-6">
+        <Posts tags={[decodedTag]} isRelated />
+      </div>
 
-        <H2 className="mt-12">More tags</H2>
-        <div className="mt-4">
-          <Tags />
-        </div>
-      </Container>
-    </Section>
+      <H2 className="mt-12">More tags</H2>
+      <div className="mt-4">
+        <Tags />
+      </div>
+    </>
   );
 }

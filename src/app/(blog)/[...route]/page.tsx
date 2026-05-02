@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { generateStaticParamsFor, importPage } from "nextra/pages";
 import type React from "react";
 import { PostDetail } from "@/components/blog/post-detail";
-import { useMDXComponents as getMDXComponents } from "../../mdx-components";
+import { useMDXComponents as getMDXComponents } from "../../../mdx-components";
 
 // Define types for params and metadata
 type PageParams = {

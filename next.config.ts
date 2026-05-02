@@ -31,6 +31,8 @@ const nextConfig: NextConfig = {
 // Set up Nextra with its configuration
 const withNextra = nextra({
   search: { codeblocks: false },
+  codeHighlight: true,
+  defaultShowCopyCode: true,
   contentDirBasePath: "/",
 });
 

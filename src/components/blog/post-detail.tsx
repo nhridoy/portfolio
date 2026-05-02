@@ -4,7 +4,7 @@ import { IconArrowBack, IconPoint } from "@tabler/icons-react";
 import Link from "next/link";
 // import { Link } from "next-view-transitions";
 import type * as React from "react";
-import type { CustomMetadata } from "@/app/[...route]/page";
+import type { CustomMetadata } from "@/app/(blog)/[...route]/page";
 import GiscusComments from "@/components/blog/giscus-comments";
 import { Posts } from "@/components/blog/posts";
 import { formatDate } from "@/lib/format-date";
@@ -18,30 +18,41 @@ type Props = {
 export function PostDetail({ metadata, children }: Props) {
   return (
     <>
-      <div className="flex items-center gap-4 text-sm mb-6">
-        <Link
-          href="/blog"
-          className="hover:underline no-underline flex items-center gap-1"
-        >
-          <IconArrowBack className="w-4" />
-          Back to Blogs
-        </Link>
-        <IconPoint className="w-3" />
-        <Muted>{formatDate(metadata.date)}</Muted>
+      <div className="grid grid-cols-1 md:grid-cols-6 gap-12">
+        <div className="order-2 md:order-1 col-span-1 md:col-span-4">
+          <div className="flex items-center justify-between gap-4 text-sm mb-6">
+            <Link
+              href="/blog"
+              className="hover:underline no-underline flex items-center gap-1"
+            >
+              <IconArrowBack className="w-4" />
+              Back to Blogs
+            </Link>
+            <div className="flex items-center gap-2 text-muted-foreground">
+              <IconPoint className="w-3" />
+              <Muted>{formatDate(metadata.date)}</Muted>
+            </div>
+          </div>
+
+          <article className="x:prose x:max-md:prose-sm x:dark:prose-invert mx-0!">
+            {children}
+          </article>
+        </div>
+
+        <div className="order-1 md:order-2 col-span-1 md:col-span-2 mt-32 h-full bg-amber-50">
+          <div className="md:sticky top-32 bg-amber-300">
+            <H2>Table of Contents</H2>
+          </div>
+        </div>
       </div>
-
-      {metadata.title && typeof metadata.title === "string" && (
-        <H2 className="mb-6">{metadata.title}</H2>
-      )}
-
-      <div className="pros">{children}</div>
 
       <H2 className="mt-12">Related</H2>
       <div className="mt-6">
         <Posts
           tags={metadata.tags}
           excludeByTitle={metadata.title as string}
-          first={5}
+          first={4}
+          isRelated
         />
       </div>
 
