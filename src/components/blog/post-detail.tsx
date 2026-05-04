@@ -46,7 +46,7 @@ export function PostDetail({ metadata, children }: Props) {
         </div>
       </div>
 
-      <H2 className="mt-12">Related</H2>
+      <H2 className="mt-6">Related</H2>
       <div className="mt-6">
         <Posts
           tags={metadata.tags}

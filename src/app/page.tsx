@@ -4,7 +4,6 @@ import { Experience } from "@/components/sections/experience";
 import { Hero } from "@/components/sections/hero";
 import Projects from "@/components/sections/projects";
 import { Skills } from "@/components/sections/skills";
-import { Footer } from "@/components/ui/footer";
 import { SectionDots } from "@/components/ui/section-dots";
 
 export default function Home() {
@@ -54,7 +53,6 @@ export default function Home() {
       <Skills />
       <Projects />
       <Contact />
-      <Footer />
     </main>
   );
 }

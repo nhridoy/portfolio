@@ -48,8 +48,8 @@ export async function Posts({
 
         {!isRelated && <H2>Recent Posts</H2>}
         <div
-          className={cn("space-y-8 space-x-8", {
-            "grid grid-cols-1 sm:grid-cols-2": isRelated,
+          className={cn("grid grid-cols-1 gap-8", {
+            "sm:grid-cols-2": isRelated,
           })}
         >
           {displayPosts.map((post) => {

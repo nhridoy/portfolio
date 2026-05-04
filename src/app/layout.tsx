@@ -4,6 +4,8 @@ import "./globals.css";
 
 import ReactLenis from "lenis/react";
 import { Providers } from "@/components/providers/providers";
+import { Footer } from "@/components/ui/footer";
+import Header from "@/components/ui/header";
 import ReadingProgress from "@/components/ui/reading-progress";
 import { cn } from "@/lib/utils";
 
@@ -116,9 +118,13 @@ export default function RootLayout({
     >
       <ReactLenis root />
       <body className="min-h-screen bg-background text-foreground">
-        <div className="bg-grain" />
-        <ReadingProgress />
-        <Providers>{children}</Providers>
+        <Providers>
+          {/* <Header /> */}
+          <div className="bg-grain" />
+          <ReadingProgress />
+          {children}
+          <Footer />
+        </Providers>
       </body>
     </html>
   );

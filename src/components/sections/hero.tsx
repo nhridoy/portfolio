@@ -1,34 +1,29 @@
-'use client'
+"use client";
 
-import { motion } from 'framer-motion'
-import {
-  ArrowBigDownDashIcon,
-  ArrowBigDownIcon,
-  ArrowDownIcon,
-  ChevronDown,
-  ChevronDownIcon,
-} from 'lucide-react'
-import { ThemeToggle } from '@/components/theme-toggle'
-import { BlurReveal } from '@/components/ui/blur-reveal'
-import { Button } from '@/components/ui/button'
-import { Container } from '@/components/ui/container'
-import { TypingText } from '@/components/ui/typing-text'
-import { Caption } from '@/components/ui/typography'
-import { PERSONAL_INFO } from '@/lib/constants'
-import { Section } from '../ui/section'
+import { ChevronDownIcon } from "lucide-react";
+import { BlurReveal } from "@/components/ui/blur-reveal";
+import { Button } from "@/components/ui/button";
+import { Container } from "@/components/ui/container";
+import { TypingText } from "@/components/ui/typing-text";
+import { Caption } from "@/components/ui/typography";
+import { PERSONAL_INFO } from "@/lib/constants";
+import Header from "../ui/header";
+import { Section } from "../ui/section";
 
 export function Hero() {
   return (
     <Section id="hero" className="relative py-0 md:py-0 first:pt-0">
       <Container className="min-h-screen flex flex-col justify-center">
-        <nav className="flex justify-between items-start mb-20">
+        {/* <nav className="flex justify-between items-start mb-20">
           <BlurReveal>
             <Caption>Portfolio</Caption>
           </BlurReveal>
           <BlurReveal delay={0.3}>
             <ThemeToggle />
           </BlurReveal>
-        </nav>
+        </nav> */}
+
+        <Header />
 
         <BlurReveal>
           <h1 className="font-serif text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-medium tracking-tight leading-[0.95] mb-6">
@@ -46,14 +41,18 @@ export function Hero() {
         </BlurReveal>
 
         <BlurReveal delay={0.4}>
-          <Caption className="text-muted-foreground/40">{PERSONAL_INFO.title}</Caption>
+          <Caption className="text-muted-foreground/40">
+            {PERSONAL_INFO.title}
+          </Caption>
         </BlurReveal>
 
         <BlurReveal delay={0.45}>
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-4">
             <Button
               onClick={() =>
-                document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })
+                document
+                  .getElementById("contact")
+                  ?.scrollIntoView({ behavior: "smooth" })
               }
             >
               Contact Me
@@ -70,10 +69,13 @@ export function Hero() {
           </div>
         </BlurReveal>
 
-        <BlurReveal delay={0.6} className="absolute bottom-15 left-1/2 -translate-x-1/2">
+        <BlurReveal
+          delay={0.6}
+          className="absolute bottom-15 left-1/2 -translate-x-1/2"
+        >
           <ChevronDownIcon className="animate-bounce" />
         </BlurReveal>
       </Container>
     </Section>
-  )
+  );
 }

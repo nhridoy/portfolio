@@ -37,7 +37,7 @@ export default async function TagPage(props: TagPageProps) {
       </div>
 
       <H2 className="mt-12">More tags</H2>
-      <div className="mt-4">
+      <div className="my-4">
         <Tags />
       </div>
     </>

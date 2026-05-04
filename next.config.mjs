@@ -1,11 +1,9 @@
-import type { NextConfig } from "next";
 import nextra from "nextra";
 
-const nextConfig: NextConfig = {
-  /* config options here */
+/** @type {import('next').NextConfig} */
+const nextConfig = {
   turbopack: {
     resolveAlias: {
-      // Path to your `mdx-components` file with extension
       "next-mdx-import-source-file": "./src/mdx-components.tsx",
     },
   },
@@ -26,9 +24,12 @@ const nextConfig: NextConfig = {
     ],
   },
   output: "standalone",
+  experimental: {
+    inlineCss: true,
+    optimizeCss: true,
+  },
 };
 
-// Set up Nextra with its configuration
 const withNextra = nextra({
   search: { codeblocks: false },
   codeHighlight: true,
