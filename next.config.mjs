@@ -5,6 +5,9 @@ const nextConfig = {
   turbopack: {
     resolveAlias: {
       "next-mdx-import-source-file": "./src/mdx-components.tsx",
+      "../build/polyfills/polyfill-module": "./src/lib/modern-polyfill.js",
+      "next/dist/build/polyfills/polyfill-module":
+        "./src/lib/modern-polyfill.js",
     },
   },
   images: {

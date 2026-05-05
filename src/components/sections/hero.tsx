@@ -14,22 +14,11 @@ export function Hero() {
   return (
     <Section id="hero" className="relative py-0 md:py-0 first:pt-0">
       <Container className="min-h-screen flex flex-col justify-center">
-        {/* <nav className="flex justify-between items-start mb-20">
-          <BlurReveal>
-            <Caption>Portfolio</Caption>
-          </BlurReveal>
-          <BlurReveal delay={0.3}>
-            <ThemeToggle />
-          </BlurReveal>
-        </nav> */}
-
         <Header />
 
-        <BlurReveal>
-          <h1 className="font-serif text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-medium tracking-tight leading-[0.95] mb-6">
-            {PERSONAL_INFO.name}
-          </h1>
-        </BlurReveal>
+        <h1 className="font-serif text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-medium tracking-tight leading-[0.95] mb-6">
+          {PERSONAL_INFO.name}
+        </h1>
 
         <BlurReveal delay={0.15}>
           <TypingText
