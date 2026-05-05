@@ -24,7 +24,7 @@ export async function generateStaticParams(): Promise<TagPageParams[]> {
   return [...new Set(allTags)].map((item) => ({ tag: item.name }));
 }
 
-export default async function TagPage(props: TagPageProps) {
+export default async function TagPage(props: Readonly<TagPageProps>) {
   const params = await props.params;
   const decodedTag = decodeURIComponent(params.tag);
 

@@ -5,7 +5,9 @@ import { useEffect, useState } from "react";
 import { CustomCursor } from "@/components/ui/cursor";
 import { ThemeProvider } from "./theme-provider";
 
-export function Providers({ children }: { children: React.ReactNode }) {
+export function Providers({
+  children,
+}: Readonly<{ children: React.ReactNode }>) {
   const [isTouchDevice, setIsTouchDevice] = useState(false);
 
   useEffect(() => {

@@ -1,12 +1,8 @@
-// import { Link } from "next-view-transitions";
-
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { getTags } from "@/lib/get-tags";
 
-type Props = {};
-
-export async function Tags(props: Props) {
+export async function Tags() {
   const tags = await getTags();
 
   return (
