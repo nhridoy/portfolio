@@ -7,6 +7,7 @@ import { Container } from "@/components/ui/container";
 import { TypingText } from "@/components/ui/typing-text";
 import { Caption } from "@/components/ui/typography";
 import { PERSONAL_INFO } from "@/lib/constants";
+import { AnimatedLink } from "../ui/animated-link";
 import Header from "../ui/header";
 import { Section } from "../ui/section";
 
@@ -30,7 +31,7 @@ export function Hero() {
         </BlurReveal>
 
         <BlurReveal delay={0.4}>
-          <Caption className="text-muted-foreground/40">
+          <Caption className="text-muted-foreground/80">
             {PERSONAL_INFO.title}
           </Caption>
         </BlurReveal>
@@ -46,15 +47,17 @@ export function Hero() {
             >
               Contact Me
             </Button>
-            <Button variant="secondary">
-              <a
-                href="https://drive.google.com/file/d/1u9o56taT9Q2C36u9kl1Lx950gYRVWN3V/view?usp=sharing"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Download CV
-              </a>
-            </Button>
+            <Button
+              variant="secondary"
+              render={
+                <AnimatedLink
+                  href="https://drive.google.com/file/d/1u9o56taT9Q2C36u9kl1Lx950gYRVWN3V/view?usp=sharing"
+                  external
+                >
+                  Download CV
+                </AnimatedLink>
+              }
+            />
           </div>
         </BlurReveal>
 
