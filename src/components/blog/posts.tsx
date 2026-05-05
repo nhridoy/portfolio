@@ -1,6 +1,5 @@
-import { IconArrowNarrowRight, IconTags } from "@tabler/icons-react";
+import { ArrowRight, Tags } from "lucide-react";
 import { Search } from "nextra/components";
-// import { Link } from "next-view-transitions";
 import { formatDate } from "@/lib/format-date";
 import { getPosts, type PostItem } from "@/lib/get-posts";
 import { getTags } from "@/lib/get-tags";
@@ -26,7 +25,7 @@ export async function Posts({
   first,
   showViewAllButton,
   isRelated,
-}: Props) {
+}: Readonly<Props>) {
   const displayPosts =
     posts ?? (await getPosts({ tags, excludeByTitle, first }));
   const allTags = await getTags();
@@ -70,7 +69,7 @@ export async function Posts({
                   )}
 
                   <div className="flex gap-2 items-center mt-3 text-sm">
-                    <IconTags className="w-4 min-w-4 -translate-y-0.5 text-muted-foreground" />
+                    <Tags className="w-4 min-w-4 -translate-y-0.5 text-muted-foreground" />
                     <div className="flex flex-wrap gap-x-2 text-muted-foreground">
                       {post.frontMatter.tags.map((tagName, index: number) => {
                         return (
@@ -103,7 +102,7 @@ export async function Posts({
             variant="link"
             className="flex gap-2 items-center hover:underline"
           >
-            View all posts <IconArrowNarrowRight className="w-4" />
+            View all posts <ArrowRight className="w-4" />
           </Button>
         )}
       </div>

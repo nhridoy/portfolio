@@ -1,10 +1,8 @@
-'use client'
-
-import { Container } from '@/components/ui/container'
-import { Muted } from '@/components/ui/typography'
+import { Container } from "@/components/ui/container";
+import { Muted } from "@/components/ui/typography";
 
 export function Footer() {
-  const currentYear = new Date().getFullYear()
+  const currentYear = new Date().getFullYear();
 
   return (
     <footer className="py-8 border-t border-border">
@@ -17,5 +15,5 @@ export function Footer() {
         </div>
       </Container>
     </footer>
-  )
+  );
 }

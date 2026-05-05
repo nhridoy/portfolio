@@ -1,17 +1,34 @@
-'use client'
+"use client";
 
-import { CursorifyProvider } from '@cursorify/react'
-import { CustomCursor } from '@/components/ui/cursor'
-import { GlassCursor } from '../ui/glass-cursor'
-import { ThemeProvider } from './theme-provider'
-import { useState, useEffect } from 'react'
+import dynamic from "next/dynamic";
+import { useEffect, useState } from "react";
+import { ThemeProvider } from "./theme-provider";
 
-export function Providers({ children }: { children: React.ReactNode }) {
-  const [isTouchDevice, setIsTouchDevice] = useState(false)
+type ProvidersProps = Readonly<{
+  children: React.ReactNode;
+}>;
+
+const CursorifyProvider = dynamic(
+  () => import("@cursorify/react").then((mod) => mod.CursorifyProvider),
+  { ssr: false },
+);
+
+const CustomCursor = dynamic(
+  () => import("@/components/ui/cursor").then((mod) => mod.CustomCursor),
+  { ssr: false },
+);
+
+export function Providers(props: Readonly<ProvidersProps>) {
+  const { children } = props;
+  const [isTouchDevice, setIsTouchDevice] = useState(true);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setIsTouchDevice('ontouchstart' in globalThis || navigator.maxTouchPoints > 0)
-  }, [])
+    setMounted(true);
+    setIsTouchDevice(
+      "ontouchstart" in globalThis || navigator.maxTouchPoints > 0,
+    );
+  }, []);
 
   return (
     <ThemeProvider
@@ -21,14 +38,18 @@ export function Providers({ children }: { children: React.ReactNode }) {
       disableTransitionOnChange
       storageKey="portfolio-theme"
     >
-      <CursorifyProvider
-        enabled={!isTouchDevice}
-        cursor={<CustomCursor />}
-        delay={5}
-        defaultCursorVisible={false}
-      >
-        {children}
-      </CursorifyProvider>
+      {mounted && !isTouchDevice ? (
+        <CursorifyProvider
+          enabled
+          cursor={<CustomCursor />}
+          delay={5}
+          defaultCursorVisible={false}
+        >
+          {children}
+        </CursorifyProvider>
+      ) : (
+        children
+      )}
     </ThemeProvider>
-  )
+  );
 }

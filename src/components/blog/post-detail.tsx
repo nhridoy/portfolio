@@ -1,10 +1,8 @@
 // @flow
 
-import { IconArrowBack, IconPoint } from "@tabler/icons-react";
+import { ArrowLeft, Circle } from "lucide-react";
 import Link from "next/link";
 import type { Heading } from "nextra";
-// import { Link } from "next-view-transitions";
-import type * as React from "react";
 import type { CustomMetadata } from "@/app/(blog)/[...route]/page";
 import GiscusComments from "@/components/blog/giscus-comments";
 import { Posts } from "@/components/blog/posts";
@@ -12,13 +10,15 @@ import { formatDate } from "@/lib/format-date";
 import { H2, Muted } from "../ui/typography";
 import { Toc } from "./toc";
 
-type Props = {
+export function PostDetail({
+  metadata,
+  children,
+  toc,
+}: Readonly<{
   metadata: CustomMetadata;
   children: React.ReactNode;
   toc: Heading[];
-};
-
-export function PostDetail({ metadata, children, toc }: Props) {
+}>) {
   return (
     <>
       <div className="flex items-center justify-between gap-4 text-sm mb-6">
@@ -26,11 +26,11 @@ export function PostDetail({ metadata, children, toc }: Props) {
           href="/blog"
           className="hover:underline no-underline flex items-center gap-1"
         >
-          <IconArrowBack className="w-4" />
+          <ArrowLeft className="size-4" />
           Back to Blogs
         </Link>
         <div className="flex items-center gap-2 text-muted-foreground">
-          <IconPoint className="w-3" />
+          <Circle className="size-1.5" />
           <Muted>{formatDate(metadata.date)}</Muted>
         </div>
       </div>
