@@ -18,33 +18,30 @@ type Props = {
 export function PostDetail({ metadata, children }: Props) {
   return (
     <>
-      <div className="grid grid-cols-1 md:grid-cols-6 gap-12">
-        <div className="order-2 md:order-1 col-span-1 md:col-span-4">
-          <div className="flex items-center justify-between gap-4 text-sm mb-6">
-            <Link
-              href="/blog"
-              className="hover:underline no-underline flex items-center gap-1"
-            >
-              <IconArrowBack className="w-4" />
-              Back to Blogs
-            </Link>
-            <div className="flex items-center gap-2 text-muted-foreground">
-              <IconPoint className="w-3" />
-              <Muted>{formatDate(metadata.date)}</Muted>
-            </div>
-          </div>
-
-          <article className="x:prose x:max-md:prose-sm x:dark:prose-invert mx-0!">
-            {children}
-          </article>
+      <div className="flex items-center justify-between gap-4 text-sm mb-6">
+        <Link
+          href="/blog"
+          className="hover:underline no-underline flex items-center gap-1"
+        >
+          <IconArrowBack className="w-4" />
+          Back to Blogs
+        </Link>
+        <div className="flex items-center gap-2 text-muted-foreground">
+          <IconPoint className="w-3" />
+          <Muted>{formatDate(metadata.date)}</Muted>
+        </div>
+      </div>
+      <article className="grid! grid-cols-1 md:grid-cols-6 gap-12">
+        <div className="order-2 md:order-1 col-span-1 md:col-span-4 x:prose x:max-md:prose-sm x:dark:prose-invert mx-0!">
+          {children}
         </div>
 
-        <div className="order-1 md:order-2 col-span-1 md:col-span-2 mt-32 h-full bg-amber-50">
-          <div className="md:sticky top-32 bg-amber-300">
+        <div className="order-1 md:order-2 col-span-1 md:col-span-2 h-full bg-amber-50">
+          <div className="md:sticky top-10 bg-amber-300">
             <H2>Table of Contents</H2>
           </div>
         </div>
-      </div>
+      </article>
 
       <H2 className="mt-6">Related</H2>
       <div className="mt-6">
