@@ -1,18 +1,15 @@
 import type { Heading } from "nextra";
 import type { FC } from "react";
+import { AnimatedLink } from "../ui/animated-link";
 
 export const Toc: FC<{ toc: Heading[] }> = ({ toc }) => {
   return (
-    <div style={{ background: "lightblue", padding: 20 }}>
-      <h3>Table of Contents</h3>
-      <ul>
-        {toc.map((heading) => (
-          <li key={heading.id}>
-            {heading.id}
-            {heading.value}
-          </li>
-        ))}
-      </ul>
+    <div className="flex flex-col gap-2 mt-4 border-l-2 border-muted pl-4">
+      {toc.map((heading) => (
+        <AnimatedLink key={heading.id} href={`#${heading.id}`}>
+          {heading.value}
+        </AnimatedLink>
+      ))}
     </div>
   );
 };

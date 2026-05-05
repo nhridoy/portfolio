@@ -127,7 +127,7 @@
     @apply bg-background text-foreground antialiased cursor-none;
   }
   html {
-    @apply font-sans scroll-auto;
+    @apply font-sans;
   }
   div[style*="translate(-50%, -50%)"] {
     @apply mix-blend-difference!;

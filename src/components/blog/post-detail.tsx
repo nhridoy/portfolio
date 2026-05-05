@@ -2,6 +2,7 @@
 
 import { IconArrowBack, IconPoint } from "@tabler/icons-react";
 import Link from "next/link";
+import type { Heading } from "nextra";
 // import { Link } from "next-view-transitions";
 import type * as React from "react";
 import type { CustomMetadata } from "@/app/(blog)/[...route]/page";
@@ -9,13 +10,15 @@ import GiscusComments from "@/components/blog/giscus-comments";
 import { Posts } from "@/components/blog/posts";
 import { formatDate } from "@/lib/format-date";
 import { H2, Muted } from "../ui/typography";
+import { Toc } from "./toc";
 
 type Props = {
   metadata: CustomMetadata;
   children: React.ReactNode;
+  toc: Heading[];
 };
 
-export function PostDetail({ metadata, children }: Props) {
+export function PostDetail({ metadata, children, toc }: Props) {
   return (
     <>
       <div className="flex items-center justify-between gap-4 text-sm mb-6">
@@ -36,9 +39,10 @@ export function PostDetail({ metadata, children }: Props) {
           {children}
         </div>
 
-        <div className="order-1 md:order-2 col-span-1 md:col-span-2 h-full bg-amber-50">
-          <div className="md:sticky top-10 bg-amber-300">
+        <div className="order-1 md:order-2 col-span-1 md:col-span-2 h-full">
+          <div className="md:sticky top-10">
             <H2>Table of Contents</H2>
+            <Toc toc={toc} />
           </div>
         </div>
       </article>
