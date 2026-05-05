@@ -1,14 +1,15 @@
-'use client'
+"use client";
 
-import Link from 'next/link'
-import type * as React from 'react'
-import { cn } from '@/lib/utils'
+import Link from "next/link";
+import type * as React from "react";
+import { cn } from "@/lib/utils";
 
-interface AnimatedLinkProps extends React.LinkHTMLAttributes<HTMLAnchorElement> {
-  href: string
-  children: React.ReactNode
-  external?: boolean
-  className?: string
+interface AnimatedLinkProps
+  extends React.LinkHTMLAttributes<HTMLAnchorElement> {
+  href: string;
+  children: React.ReactNode;
+  external?: boolean;
+  className?: string;
 }
 
 export function AnimatedLink({
@@ -17,34 +18,40 @@ export function AnimatedLink({
   external = false,
   className,
   ...props
-}: AnimatedLinkProps) {
+}: Readonly<AnimatedLinkProps>) {
   if (external) {
     return (
       <a
         href={href}
         target="_blank"
         rel="noopener noreferrer"
-        className={cn('text-foreground hover:underline underline-offset-4', className)}
+        className={cn(
+          "text-foreground hover:underline underline-offset-4",
+          className,
+        )}
         style={{
-          cursor: 'pointer',
+          cursor: "pointer",
         }}
         {...props}
       >
         {children}
       </a>
-    )
+    );
   }
 
   return (
     <Link
       href={href}
-      className={cn('text-foreground hover:underline underline-offset-4', className)}
+      className={cn(
+        "text-foreground hover:underline underline-offset-4",
+        className,
+      )}
       style={{
-        cursor: 'pointer',
+        cursor: "pointer",
       }}
       {...props}
     >
       {children}
     </Link>
-  )
+  );
 }
