@@ -1,7 +1,11 @@
 import type { Metadata } from "next";
+import dynamic from "next/dynamic";
 import { generateStaticParamsFor, importPage } from "nextra/pages";
-import { PostDetail } from "@/components/blog/post-detail";
 import { useMDXComponents as getMDXComponents } from "../../../mdx-components";
+
+const PostDetail = dynamic(() => import("@/components/blog/post-detail"), {
+  ssr: true,
+});
 
 // Define types for params and metadata
 type PageParams = {
@@ -28,7 +32,7 @@ export async function generateMetadata(props: PageProps): Promise<Metadata> {
 
 const Wrapper = getMDXComponents().wrapper;
 
-export default async function Page(props: PageProps) {
+export default async function Page(props: Readonly<PageProps>) {
   const params = await props.params;
 
   const {

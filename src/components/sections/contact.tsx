@@ -1,35 +1,35 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { AnimatedLink } from '@/components/ui/animated-link'
-import { BlurReveal } from '@/components/ui/blur-reveal'
-import { Button } from '@/components/ui/button'
-import { Container } from '@/components/ui/container'
-import { Section } from '@/components/ui/section'
-import { H2, Muted } from '@/components/ui/typography'
-import { CONTACT } from '@/lib/constants'
+import { useState } from "react";
+import { AnimatedLink } from "@/components/ui/animated-link";
+import { BlurReveal } from "@/components/ui/blur-reveal";
+import { Button } from "@/components/ui/button";
+import { Container } from "@/components/ui/container";
+import { Section } from "@/components/ui/section";
+import { H2, Muted } from "@/components/ui/typography";
+import { CONTACT } from "@/lib/constants";
 
 interface FormData {
-  name: string
-  email: string
-  message: string
+  name: string;
+  email: string;
+  message: string;
 }
 
 function Input({
-  type = 'text',
+  type = "text",
   name,
   placeholder,
   value,
   onChange,
   required,
-}: {
-  type?: string
-  name: string
-  placeholder?: string
-  value: string
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
-  required?: boolean
-}) {
+}: Readonly<{
+  type?: string;
+  name: string;
+  placeholder?: string;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  required?: boolean;
+}>) {
   return (
     <input
       type={type}
@@ -41,7 +41,7 @@ function Input({
       required={required}
       className="w-full bg-transparent border-b border-border py-3 px-0 text-base outline-none focus:border-foreground/70 transition-colors placeholder:text-muted-foreground/50"
     />
-  )
+  );
 }
 
 function Textarea({
@@ -51,14 +51,14 @@ function Textarea({
   onChange,
   required,
   rows = 5,
-}: {
-  name: string
-  placeholder?: string
-  value: string
-  onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void
-  required?: boolean
-  rows?: number
-}) {
+}: Readonly<{
+  name: string;
+  placeholder?: string;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  required?: boolean;
+  rows?: number;
+}>) {
   return (
     <textarea
       name={name}
@@ -70,44 +70,46 @@ function Textarea({
       rows={rows}
       className="w-full bg-transparent border-b border-border py-3 px-0 text-base outline-none focus:border-foreground/70 transition-colors placeholder:text-muted-foreground/50 resize-none"
     />
-  )
+  );
 }
 
-export function Contact() {
+export default function Contact() {
   const [formData, setFormData] = useState<FormData>({
-    name: '',
-    email: '',
-    message: '',
-  })
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [submitted, setSubmitted] = useState(false)
+    name: "",
+    email: "",
+    message: "",
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target
-    setFormData(prev => ({ ...prev, [name]: value }))
-  }
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsSubmitting(true)
+    e.preventDefault();
+    setIsSubmitting(true);
 
     try {
-      const response = await fetch('/api/contact', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
-      })
+      });
 
       if (response.ok) {
-        setSubmitted(true)
-        setFormData({ name: '', email: '', message: '' })
+        setSubmitted(true);
+        setFormData({ name: "", email: "", message: "" });
       }
     } catch (error) {
-      console.error('Failed to send message:', error)
+      console.error("Failed to send message:", error);
     } finally {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
     }
-  }
+  };
 
   return (
     <Section id="contact">
@@ -160,9 +162,15 @@ export function Contact() {
           <BlurReveal delay={0.2}>
             {submitted ? (
               <div className="flex flex-col items-start gap-4 p-6 bg-muted/30 rounded-lg">
-                <p className="text-lg font-medium">Thank you for your message!</p>
+                <p className="text-lg font-medium">
+                  Thank you for your message!
+                </p>
                 <Muted>I'll get back to you as soon as possible.</Muted>
-                <Button variant="outline" size="sm" onClick={() => setSubmitted(false)}>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setSubmitted(false)}
+                >
                   Send another message
                 </Button>
               </div>
@@ -187,11 +195,16 @@ export function Contact() {
                   name="message"
                   placeholder="Your message"
                   value={formData.message}
-                  onChange={e => setFormData(prev => ({ ...prev, message: e.target.value }))}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      message: e.target.value,
+                    }))
+                  }
                   required
                 />
                 <Button type="submit" disabled={isSubmitting}>
-                  {isSubmitting ? 'Sending...' : 'Send Message'}
+                  {isSubmitting ? "Sending..." : "Send Message"}
                 </Button>
               </form>
             )}
@@ -199,5 +212,5 @@ export function Contact() {
         </div>
       </Container>
     </Section>
-  )
+  );
 }

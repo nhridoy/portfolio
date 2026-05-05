@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { getTags } from "@/lib/get-tags";
 
-export async function Tags() {
+export default async function Tags() {
   const tags = await getTags();
 
   return (

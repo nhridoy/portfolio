@@ -1,7 +1,4 @@
-"use client";
-
 import Link from "next/link";
-import type * as React from "react";
 import { cn } from "@/lib/utils";
 
 interface AnimatedLinkProps

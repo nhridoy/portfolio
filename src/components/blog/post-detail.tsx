@@ -1,16 +1,18 @@
-// @flow
-
 import { ArrowLeft, Circle } from "lucide-react";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import type { Heading } from "nextra";
 import type { CustomMetadata } from "@/app/(blog)/[...route]/page";
-import GiscusComments from "@/components/blog/giscus-comments";
-import { Posts } from "@/components/blog/posts";
+import Posts from "@/components/blog/posts";
 import { formatDate } from "@/lib/format-date";
 import { H2, Muted } from "../ui/typography";
 import { Toc } from "./toc";
 
-export function PostDetail({
+const GiscusComments = dynamic(
+  () => import("@/components/blog/giscus-comments"),
+);
+
+export default function PostDetail({
   metadata,
   children,
   toc,

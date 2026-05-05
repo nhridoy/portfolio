@@ -18,7 +18,7 @@ type Props = {
   isRelated?: boolean;
 };
 
-export async function Posts({
+export default async function Posts({
   posts,
   tags,
   excludeByTitle,

@@ -1,12 +1,10 @@
-'use client'
+import { BlurReveal } from "@/components/ui/blur-reveal";
+import { Container } from "@/components/ui/container";
+import { Section } from "@/components/ui/section";
+import { Body, H2 } from "@/components/ui/typography";
+import { PERSONAL_INFO } from "@/lib/constants";
 
-import { BlurReveal } from '@/components/ui/blur-reveal'
-import { Container } from '@/components/ui/container'
-import { Section } from '@/components/ui/section'
-import { Body, H2 } from '@/components/ui/typography'
-import { PERSONAL_INFO } from '@/lib/constants'
-
-export function About() {
+export default function About() {
   return (
     <Section id="about">
       <Container>
@@ -19,5 +17,5 @@ export function About() {
         </BlurReveal>
       </Container>
     </Section>
-  )
+  );
 }

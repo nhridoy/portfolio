@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import { Posts } from "@/components/blog/posts";
-import { Tags } from "@/components/blog/tags";
+import Posts from "@/components/blog/posts";
+import Tags from "@/components/blog/tags";
 import { H2 } from "@/components/ui/typography";
 import { getTags } from "@/lib/get-tags";
 

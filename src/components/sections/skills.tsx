@@ -1,12 +1,10 @@
-'use client'
+import { BlurReveal } from "@/components/ui/blur-reveal";
+import { Container } from "@/components/ui/container";
+import { Section } from "@/components/ui/section";
+import { Body, H2, Muted } from "@/components/ui/typography";
+import { SKILLS } from "@/lib/constants";
 
-import { BlurReveal } from '@/components/ui/blur-reveal'
-import { Container } from '@/components/ui/container'
-import { Section } from '@/components/ui/section'
-import { Body, H2, Muted } from '@/components/ui/typography'
-import { SKILLS } from '@/lib/constants'
-
-export function Skills() {
+export default function Skills() {
   return (
     <Section id="skills">
       <Container>
@@ -20,11 +18,11 @@ export function Skills() {
               <Muted className="block mb-4 text-xs uppercase tracking-widest font-mono">
                 {category}
               </Muted>
-              <Body className="text-foreground/80">{skills.join(', ')}</Body>
+              <Body className="text-foreground/80">{skills.join(", ")}</Body>
             </BlurReveal>
           ))}
         </div>
       </Container>
     </Section>
-  )
+  );
 }

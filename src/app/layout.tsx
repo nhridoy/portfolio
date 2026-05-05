@@ -1,12 +1,22 @@
 import type { Metadata } from "next";
+import dynamic from "next/dynamic";
 import { Geist, Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
 
 import ReactLenis from "lenis/react";
 import { Providers } from "@/components/providers/providers";
-import { Footer } from "@/components/ui/footer";
-import ReadingProgress from "@/components/ui/reading-progress";
 import { cn } from "@/lib/utils";
+
+const Footer = dynamic(() => import("@/components/ui/footer"), {
+  ssr: true,
+});
+
+const ReadingProgress = dynamic(
+  () => import("@/components/ui/reading-progress"),
+  {
+    ssr: true,
+  },
+);
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
 

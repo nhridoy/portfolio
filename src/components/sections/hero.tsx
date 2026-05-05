@@ -44,15 +44,18 @@ export function Hero() {
                   .getElementById("contact")
                   ?.scrollIntoView({ behavior: "smooth" })
               }
+              style={{ cursor: "pointer" }}
             >
               Contact Me
             </Button>
             <Button
+              nativeButton={false}
               variant="secondary"
               render={
                 <AnimatedLink
                   href="https://drive.google.com/file/d/1u9o56taT9Q2C36u9kl1Lx950gYRVWN3V/view?usp=sharing"
                   external
+                  className="hover:no-underline"
                 >
                   Download CV
                 </AnimatedLink>

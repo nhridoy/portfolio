@@ -1,12 +1,24 @@
 import dynamic from "next/dynamic";
-import { About } from "@/components/sections/about";
-import { Contact } from "@/components/sections/contact";
-import { Experience } from "@/components/sections/experience";
 import { Hero } from "@/components/sections/hero";
-import { Skills } from "@/components/sections/skills";
 import { SectionDots } from "@/components/ui/section-dots";
 
+const About = dynamic(() => import("@/components/sections/about"), {
+  ssr: true,
+});
+
+const Experience = dynamic(() => import("@/components/sections/experience"), {
+  ssr: true,
+});
+
+const Skills = dynamic(() => import("@/components/sections/skills"), {
+  ssr: true,
+});
+
 const Projects = dynamic(() => import("@/components/sections/projects"), {
+  ssr: true,
+});
+
+const Contact = dynamic(() => import("@/components/sections/contact"), {
   ssr: true,
 });
 
