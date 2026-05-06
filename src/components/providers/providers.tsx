@@ -1,7 +1,7 @@
 "use client";
 
 import { CursorifyProvider } from "@cursorify/react";
-import { domAnimation, LazyMotion } from "framer-motion";
+import { LazyMotion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { CustomCursor } from "@/components/ui/cursor";
 import { ThemeProvider } from "./theme-provider";
@@ -9,6 +9,8 @@ import { ThemeProvider } from "./theme-provider";
 export function Providers({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  const loadFeatures = () =>
+    import("../../lib/motion-features").then((res) => res.default);
   const [isTouchDevice, setIsTouchDevice] = useState(false);
 
   useEffect(() => {
@@ -25,7 +27,7 @@ export function Providers({
       disableTransitionOnChange
       storageKey="portfolio-theme"
     >
-      <LazyMotion strict={true} features={domAnimation}>
+      <LazyMotion strict={true} features={loadFeatures}>
         <CursorifyProvider
           enabled={!isTouchDevice}
           cursor={<CustomCursor />}
