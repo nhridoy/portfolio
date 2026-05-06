@@ -1,72 +1,77 @@
-'use client'
+"use client";
 
-import { motion, useScroll, useTransform } from 'framer-motion'
-import { useRef, useLayoutEffect, useState } from 'react'
-import { PROJECTS } from '@/lib/constants'
-import { BlurReveal } from '../ui/blur-reveal'
-import { Container } from '../ui/container'
-import { Section } from '../ui/section'
-import { H2 } from '../ui/typography'
-import ProjectCard from './ProjectCard'
+import { useScroll, useTransform } from "framer-motion";
+import { div as Div } from "framer-motion/m";
+import { useLayoutEffect, useRef, useState } from "react";
+import { PROJECTS } from "@/lib/constants";
+import { BlurReveal } from "../ui/blur-reveal";
+import { Container } from "../ui/container";
+import { Section } from "../ui/section";
+import { H2 } from "../ui/typography";
+import ProjectCard from "./ProjectCard";
 
 export default function Projects() {
-  const containerRef = useRef<HTMLDivElement | null>(null)
-  const trackRef = useRef<HTMLDivElement | null>(null)
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const trackRef = useRef<HTMLDivElement | null>(null);
 
-  const [distance, setDistance] = useState(0)
-  const [startOffset, setStartOffset] = useState(0)
-  const [endOffset, setEndOffset] = useState(0)
-  const [scrollHeight, setScrollHeight] = useState(0)
+  const [distance, setDistance] = useState(0);
+  const [startOffset, setStartOffset] = useState(0);
+  const [endOffset, setEndOffset] = useState(0);
+  const [scrollHeight, setScrollHeight] = useState(0);
 
   useLayoutEffect(() => {
     const measure = () => {
-      if (!trackRef.current || !containerRef.current) return
+      if (!trackRef.current || !containerRef.current) return;
 
-      const track = trackRef.current
-      const container = containerRef.current
+      const track = trackRef.current;
+      const container = containerRef.current;
 
-      const totalWidth = track.scrollWidth
-      const visibleWidth = container.clientWidth
+      const totalWidth = track.scrollWidth;
+      const visibleWidth = container.clientWidth;
 
-      const items = track.children
-      if (!items.length) return
+      const items = track.children;
+      if (!items.length) return;
 
-      const firstItem = items[0] as HTMLElement
-      const lastItem = items[items.length - 1] as HTMLElement
+      const firstItem = items[0] as HTMLElement;
+      const lastItem = items[items.length - 1] as HTMLElement;
 
-      const firstWidth = firstItem.offsetWidth
-      const lastWidth = lastItem.offsetWidth
+      const firstWidth = firstItem.offsetWidth;
+      const lastWidth = lastItem.offsetWidth;
 
-      const start = (visibleWidth - firstWidth) / 2
-      const end = (visibleWidth - lastWidth) / 2
+      const start = (visibleWidth - firstWidth) / 2;
+      const end = (visibleWidth - lastWidth) / 2;
 
-      const baseDistance = totalWidth - visibleWidth
+      const baseDistance = totalWidth - visibleWidth;
 
       // ✅ IMPORTANT: include centering offsets in total scroll distance
-      const totalScrollDistance = baseDistance + start + end
+      const totalScrollDistance = baseDistance + start + end;
 
-      setDistance(Math.max(0, baseDistance))
-      setStartOffset(start)
-      setEndOffset(end)
+      setDistance(Math.max(0, baseDistance));
+      setStartOffset(start);
+      setEndOffset(end);
 
       // ✅ THIS FIXES YOUR ISSUE
-      setScrollHeight(totalScrollDistance + window.innerHeight)
-    }
+      setScrollHeight(totalScrollDistance + window.innerHeight);
+    };
 
-    measure()
+    measure();
 
-    const ro = new ResizeObserver(measure)
-    if (trackRef.current) ro.observe(trackRef.current)
+    const ro = new ResizeObserver(measure);
+    if (trackRef.current) ro.observe(trackRef.current);
 
-    return () => ro.disconnect()
-  }, [])
+    return () => ro.disconnect();
+  }, []);
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ['start start', 'end end'], // back to stable mapping
-  })
+    offset: ["start start", "end end"], // back to stable mapping
+  });
 
-  const x = useTransform(scrollYProgress, [0, 1], [startOffset, -(distance + endOffset)])
+  const x = useTransform(
+    scrollYProgress,
+    [0, 1],
+    [startOffset, -(distance + endOffset)],
+  );
 
   return (
     <Section id="projects">
@@ -74,7 +79,7 @@ export default function Projects() {
         ref={containerRef}
         className="relative"
         style={{
-          height: scrollHeight || '200vh', // fallback
+          height: scrollHeight || "200vh", // fallback
         }}
       >
         <div className="sticky top-0 h-screen flex flex-col">
@@ -87,7 +92,7 @@ export default function Projects() {
 
           {/* Slider */}
           <div className="flex-1 flex items-center overflow-hidden mt-6 md:mt-10">
-            <motion.div
+            <Div
               ref={trackRef}
               style={{ x }}
               className="flex gap-4 md:gap-7 px-[5vw] will-change-transform"
@@ -101,7 +106,7 @@ export default function Projects() {
                   <ProjectCard item={item} />
                 </BlurReveal>
               ))}
-            </motion.div>
+            </Div>
           </div>
         </div>
 
@@ -110,5 +115,5 @@ export default function Projects() {
         <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-12 md:w-16 bg-linear-to-l from-background to-transparent z-10" />
       </div>
     </Section>
-  )
+  );
 }
