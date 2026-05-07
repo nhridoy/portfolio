@@ -9,7 +9,7 @@ const GiscusComments = () => {
       repo="nhridoy/portfolio"
       repoId="R_kgDOSKjMhQ"
       category="Announcements"
-      categoryId="DIC_kwDOSKjMhc4C8fRZ"
+      categoryId="DIC_kwDOSKjMhc4C8fRX"
       mapping="pathname"
       strict="1"
       reactionsEnabled="1"
