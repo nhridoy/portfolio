@@ -6,18 +6,19 @@ const GiscusComments = () => {
   return (
     <Giscus
       id="comments"
-      repo="phucbm/nextra-blog-starter"
-      repoId="R_kgDONxvZHA"
+      repo="nhridoy/portfolio"
+      repoId="R_kgDOSKjMhQ"
       category="Announcements"
-      categoryId="DIC_kwDONxvZHM4Cmh3a"
+      categoryId="DIC_kwDOSKjMhc4C8fRZ"
       mapping="pathname"
-      term="Welcome to @giscus/react component!"
+      strict="1"
       reactionsEnabled="1"
       emitMetadata="0"
       inputPosition="top"
       theme="preferred_color_scheme"
       lang="en"
       loading="lazy"
+      // term="Welcome to @giscus/react component!"
     />
   );
 };
