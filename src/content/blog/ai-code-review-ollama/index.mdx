@@ -1,0 +1,99 @@
+---
+title: AI‑Powered Code Review with Ollama and Nextra
+date: '2026-05-10'
+tags: ['AI', 'Code Review', 'Ollama', 'JavaScript', 'TypeScript', 'React', 'Next.js']
+description: How to integrate a local Ollama LLM into your Next.js/Nextra blog workflow for automated code reviews.
+enableComment: true
+---
+
+import { Tabs, Callout, Steps } from 'nextra/components'
+
+# AI‑Powered Code Review with Ollama and Nextra
+
+Keeping code quality high in a fast‑moving JavaScript/TypeScript codebase can be a pain. In this post I’ll show how to wire up a **local Ollama** model to automatically review pull‑request‑style code snippets directly from a Next.js/Nextra blog. The result is a self‑hosted, no‑API‑key solution that you can run on a dev box or a small server.
+
+## Why Ollama?
+- **Local** – no external API keys, no rate limits.
+- **Fast** – runs on CPU/GPU and returns results in seconds.
+- **Pluggable** – works with any model from the Ollama catalog (`llama2`, `gemma`, `phi`, …).
+
+## Overview
+1. Install Ollama and pull a model.
+2. Add a tiny API wrapper (`/lib/ollama.ts`).
+3. Create a Nextra page that reads a code block, sends it to Ollama, and renders the review.
+4. Deploy the Next.js site – the review runs server‑side during build or on‑demand via API routes.
+
+## Step‑by‑Step Guide
+
+<Steps>
+#### Step 1: Install Ollama and Pull a Model
+```bash
+# macOS / Linux
+brew install ollama   # or follow https://ollama.com/install
+ollama pull llama2  # ~4 GB model; you can choose a smaller one like phi
+```
+
+> **Info**: The model runs on `localhost:11434` by default.
+
+#### Step 2: Create an API wrapper
+Create `src/lib/ollama.ts`:
+```ts
+import fetch from 'node-fetch';
+
+export async function reviewCode(code: string): Promise<string> {
+  const response = await fetch('http://localhost:11434/api/generate', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'llama2',
+      prompt: `You are a senior software engineer. Review the following JavaScript/TypeScript code for bugs, style, and best practices. Return a concise bullet‑point list.\n\n${code}`,
+      stream: false,
+    }),
+  });
+  const data = await response.json();
+  return data.response?.trim() ?? 'No review returned';
+}
+```
+
+#### Step 3: Add a review page in Nextra
+Create `src/pages/review.mdx` (or a sub‑folder). Here’s a minimal example using a component:
+```mdx
+import { useState } from 'react';
+import { reviewCode } from '../lib/ollama';
+
+# Live Code Review
+
+Enter a snippet of JavaScript/TypeScript and let Ollama give you feedback.
+
+<textarea id="code" rows="8" style="width:100%" placeholder="Paste code here…"></textarea>
+<button onClick={async () => {
+  const code = (document.getElementById('code') as HTMLTextAreaElement).value;
+  const result = await reviewCode(code);
+  document.getElementById('result')!.innerText = result;
+}}>Review</button>
+
+<pre id="result" style="margin-top:1rem; background:#f7f7f7; padding:1rem"></pre>
+```
+
+When the page is built, the component runs on the client, calling the local Ollama instance.
+
+#### Step 4: Deploy or run locally
+```bash
+npm run dev   # develop locally – Ollama must be running
+npm run build && npm start   # production build
+```
+The review works as long as the server can reach `localhost:11434`.
+
+## Tips & Gotchas
+- **Model selection**: Smaller models (`phi`, `qwen2`) are faster but less nuanced.
+- **Security**: The wrapper runs on the server; never expose the Ollama endpoint publicly.
+- **Caching**: For CI builds you might want to cache the review output to avoid hitting the model repeatedly.
+
+> **Callout**: This approach is excellent for personal projects, documentation sites, or internal dashboards where you want quick, AI‑driven feedback without paying for a cloud service.
+
+## Conclusion
+By coupling Ollama’s local LLM with a Next.js/Nextra site, you get an **instant, private code‑review assistant** that lives in the same repo as your blog. No keys, no cost, just a few shell commands and a bit of TypeScript. Give it a try and let the AI catch those subtle bugs before they ship!
+
+---
+
+*Written by Nahidujjaman Hridoy*
