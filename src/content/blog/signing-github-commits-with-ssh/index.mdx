@@ -1,0 +1,61 @@
+---
+title: Signing GitHub Commits with SSH Keys
+date: '2026-05-10'
+tags: ['Git', 'GitHub', 'SSH', 'Commit Signing', 'Security']
+description: A step‑by‑step guide to configure Git for SSH‑based commit signing and get the verified badge on GitHub.
+enableComment: true
+---
+
+import { Callout, Steps } from 'nextra/components'
+
+# Signing GitHub Commits with SSH Keys
+
+GitHub now supports **SSH‑based commit signing**, letting you prove that a commit truly comes from you without managing GPG keys. This guide walks through the setup on a typical development machine.
+
+## Prerequisites
+- An SSH key pair (e.g., `~/.ssh/id_ed25519`).
+- The public key added to your GitHub account as a **Signing Key** (see the earlier blog post for details).
+
+## Steps
+
+<Steps>
+#### Step 1: Tell Git to Use SSH for Signing
+```bash
+git config --global gpg.format ssh
+```
+
+#### Step 2: Set Your Default Signing Key
+```bash
+git config --global user.signingkey ~/.ssh/id_ed25519
+```
+
+#### Step 3: Enable Commit Signing by Default
+```bash
+git config --global commit.gpgsign true
+```
+
+> **Info**: If you manage multiple GitHub accounts, drop the `--global` flag and run the three commands inside the specific repository to use a different SSH key.
+
+#### Step 4: Make a Signed Commit
+You can sign explicitly with `-S` or rely on the global setting:
+```bash
+git commit -S -m "Your commit message"
+# or simply
+git commit -m "Your commit message"
+```
+
+#### Step 5: Push and Verify on GitHub
+```bash
+git push origin main
+```
+After the push, navigate to the repository’s commit history on GitHub. You should see a **Verified** badge next to your commit.
+
+</Steps>
+
+## Conclusion
+
+SSH‑based commit signing is a lightweight alternative to GPG, giving you a verified badge on GitHub with minimal setup. It’s especially handy when you already use SSH keys for repository authentication.
+
+---
+
+*Written by Nahidujjaman Hridoy*
