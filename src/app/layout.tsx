@@ -127,9 +127,9 @@ export default function RootLayout({
       )}
       suppressHydrationWarning={process.env.NODE_ENV === "production"}
     >
-      <SpeedInsights />
       <ReactLenis root />
       <body className="min-h-screen bg-background text-foreground">
+        <SpeedInsights />
         <Providers>
           {/* <Header /> */}
           <div className="bg-grain" />
