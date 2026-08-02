@@ -220,8 +220,8 @@ export const PROJECTS = [
       'Dokploy',
       'Oracle',
     ],
-    image: '/projects/oss.mailgrass.com.jpeg',
-    link: 'https://oss.mailgrass.com/',
+    image: '/projects/oss.iamnahid.com.jpeg',
+    link: 'https://oss.iamnahid.com/',
     category: 'Streaming Platform',
   },
   {
@@ -283,8 +283,8 @@ export const PROJECTS = [
       'Dokploy',
       'Oracle',
     ],
-    image: '/projects/usf.mailgrass.com.jpeg',
-    link: 'https://usf.mailgrass.com/',
+    image: '/projects/usf.iamnahid.com.jpeg',
+    link: 'https://usf.iamnahid.com/',
     category: 'Utility Tool',
   },
   {
