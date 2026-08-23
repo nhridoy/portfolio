@@ -1,16 +1,21 @@
 "use client";
 
 import { usePathname } from "next/navigation";
+import type { HTMLAttributes } from "react";
 import { cn } from "@/lib/utils";
 import { ThemeToggle } from "../theme-toggle";
 import { AnimatedLink } from "./animated-link";
 import { Caption } from "./typography";
 
-const Header = () => {
+const Header = ({
+  className,
+}: {
+  className?: HTMLAttributes<HTMLElement>["className"];
+}) => {
   const pathName = usePathname();
 
   return (
-    <header className="py-6 mb-14">
+    <header className={cn("py-6 mb-14", className)}>
       <nav className="flex justify-between items-start">
         <AnimatedLink href="/" className="hover:no-underline">
           <Caption>Portfolio</Caption>
