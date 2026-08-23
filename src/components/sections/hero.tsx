@@ -1,76 +1,82 @@
 "use client";
 
-import { ChevronDownIcon } from "lucide-react";
-import { BlurReveal } from "@/components/ui/blur-reveal";
-import { Button } from "@/components/ui/button";
+import { div as Div } from "framer-motion/m";
 import { Container } from "@/components/ui/container";
-import { TypingText } from "@/components/ui/typing-text";
-import { Caption } from "@/components/ui/typography";
 import { PERSONAL_INFO } from "@/lib/constants";
 import { AnimatedLink } from "../ui/animated-link";
+import { Button } from "../ui/button";
 import Header from "../ui/header";
 import { Section } from "../ui/section";
+import { TypingText } from "../ui/typing-text";
 
 export function Hero() {
   return (
     <Section id="hero" className="relative py-0 md:py-0 first:pt-0">
-      <Container className="min-h-screen flex flex-col justify-center">
+      <Container className="z-10 relative min-h-screen">
         <Header />
-
-        <h1 className="font-serif text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-medium tracking-tight leading-[0.95] mb-6">
+        <div className="flex gap-2 items-center">
+          <Div
+            className="bg-green-600 rounded-full size-2"
+            animate={{
+              scale: [1, 1.5, 1],
+              filter: [
+                "hue-rotate(0deg)",
+                "hue-rotate(360deg)",
+                "blur(1px)",
+                "blur(0px)",
+              ],
+            }}
+            transition={{ repeat: Infinity, duration: 1.5 }}
+          />
+          <span>Available for hire</span>
+        </div>
+        <h1 className="text-[9.3rem] uppercase -ml-2.5 -mt-2.5 leading-none text-black font-extrabold block">
           {PERSONAL_INFO.name}
         </h1>
 
-        <BlurReveal delay={0.15}>
-          <TypingText
-            text={PERSONAL_INFO.tagline}
-            className="font-sans text-lg sm:text-xl md:text-2xl text-muted-foreground block max-w-2xl"
-            speed={40}
-            delay={0.5}
-          />
-        </BlurReveal>
-
-        <BlurReveal delay={0.4}>
-          <Caption className="text-muted-foreground/80">
-            {PERSONAL_INFO.title}
-          </Caption>
-        </BlurReveal>
-
-        <BlurReveal delay={0.45}>
-          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-4">
+        <div className="absolute bottom-5 w-full flex justify-between">
+          <div className="flex gap-4">
             <Button
               onClick={() =>
                 document
                   .getElementById("contact")
                   ?.scrollIntoView({ behavior: "smooth" })
               }
-              style={{ cursor: "pointer" }}
+              variant="interactive"
+              className="uppercase font-bold"
             >
-              Contact Me
+              Discuss Your Project
             </Button>
             <Button
               nativeButton={false}
-              variant="secondary"
+              variant="interactive"
+              className="uppercase font-bold"
               render={
                 <AnimatedLink
                   href="https://drive.google.com/file/d/1u9o56taT9Q2C36u9kl1Lx950gYRVWN3V/view?usp=sharing"
                   external
                   className="hover:no-underline"
-                >
-                  Download CV
-                </AnimatedLink>
+                />
               }
-            />
+            >
+              Download CV
+            </Button>
           </div>
-        </BlurReveal>
-
-        <BlurReveal
-          delay={0.6}
-          className="absolute bottom-15 left-1/2 -translate-x-1/2"
-        >
-          <ChevronDownIcon className="animate-bounce" />
-        </BlurReveal>
+          <TypingText
+            className="text-3xl font-cormorant font-bold"
+            text={PERSONAL_INFO.tagline}
+            delay={0.5}
+          />
+        </div>
       </Container>
+      <div className="absolute inset-0">
+        <span className="absolute uppercase left-5 bottom-0 origin-top-left -translate-yfull -rotate-90">
+          Portfolio {new Date().getFullYear()}
+        </span>
+        <span className="absolute text-gray-200 origin-bottom-left bottom-0 leading-none -my-13.5 left-10 text-[30vw] font-extrabold">
+          NH
+        </span>
+      </div>
     </Section>
   );
 }

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import dynamic from "next/dynamic";
-import { Geist, Inter, Playfair_Display } from "next/font/google";
+import { Inter, Cormorant, Outfit, Playfair_Display } from "next/font/google";
 import "./globals.css";
 
 import { Analytics } from "@vercel/analytics/next";
@@ -20,8 +20,6 @@ const ReadingProgress = dynamic(
   },
 );
 
-const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
-
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
@@ -34,6 +32,20 @@ const playfair = Playfair_Display({
   subsets: ["latin"],
   display: "swap",
   weight: ["400", "500", "600", "700"],
+});
+
+const outfit = Outfit({
+  variable: "--font-outfit",
+  subsets: ["latin"],
+  display: "swap",
+  weight: ["300", "400", "500", "600", "700"],
+});
+
+const cormorant = Cormorant({
+  variable: "--font-cormorant",
+  subsets: ["latin"],
+  display: "swap",
+  weight: ["400"],
 });
 
 export const metadata: Metadata = {
@@ -122,19 +134,19 @@ export default function RootLayout({
       className={cn(
         inter.variable,
         playfair.variable,
-        "font-sans",
-        geist.variable,
+        outfit.variable,
+        cormorant.variable,
         "scroll-smooth",
       )}
       suppressHydrationWarning={process.env.NODE_ENV === "production"}
     >
       <ReactLenis root />
-      <body className="min-h-screen bg-background text-foreground">
+      <body className="min-h-screen">
         <Analytics />
         <SpeedInsights />
         <Providers>
           {/* <Header /> */}
-          <div className="bg-grain" />
+          {/* <div className="bg-grain" /> */}
           <ReadingProgress />
           {children}
           <Footer />

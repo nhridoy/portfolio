@@ -1,10 +1,13 @@
-import { Button as ButtonPrimitive } from "@base-ui/react/button"
-import { cva, type VariantProps } from "class-variance-authority"
+import { Button as ButtonPrimitive } from "@base-ui/react/button";
+import { cva, type VariantProps } from "class-variance-authority";
+import { span as Span } from "framer-motion/m";
+import { ArrowRight, ArrowUpRight } from "lucide-react";
+import { useLayoutEffect, useRef, useState } from "react";
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "group/button inline-flex shrink-0 items-center justify-center rounded-md border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+  "group/button cursor-pointer inline-flex shrink-0 items-center justify-center rounded-md border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
   {
     variants: {
       variant: {
@@ -16,8 +19,9 @@ const buttonVariants = cva(
         ghost:
           "hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50",
         destructive:
-          "bg-destructive/10 text-destructive hover:bg-destructive/20 focus-visible:border-destructive/40 focus-visible:ring-destructive/20 dark:bg-destructive/20 dark:hover:bg-destructive/30 dark:focus-visible:ring-destructive/40",
+          "bg-destructive/10 text-destructive hover:bg-destructive/20 focus-visible:border-destructive/40 focus-visible:ring-destructive/20 dark:bg-destructive/20 dark:hover:bg-destructive/30",
         link: "text-primary underline-offset-4 hover:underline",
+        interactive: "text-primary",
       },
       size: {
         default:
@@ -37,13 +41,145 @@ const buttonVariants = cva(
       variant: "default",
       size: "default",
     },
-  }
-)
+  },
+);
+
+const DURATION = 0.7;
+const STAGGER = 0.025;
+
+const transition = {
+  duration: DURATION,
+  ease: "easeInOut" as const,
+};
+
+function InteractiveText({
+  children,
+  hovered,
+}: {
+  children: React.ReactNode;
+  hovered: boolean;
+}) {
+  const containerRef = useRef<HTMLSpanElement>(null);
+  const textRef = useRef<HTMLSpanElement>(null);
+  const [shiftDistance, setShiftDistance] = useState(0);
+
+  const text = String(children);
+  const characters = text.split("");
+  const total = characters.length;
+
+  useLayoutEffect(() => {
+    if (containerRef.current && textRef.current) {
+      const containerWidth = containerRef.current.getBoundingClientRect().width;
+      const textWidth = textRef.current.getBoundingClientRect().width;
+      setShiftDistance(Math.max(0, containerWidth - textWidth));
+    }
+  }, []);
+
+  return (
+    <span
+      ref={containerRef}
+      className="relative inline-flex w-full overflow-hidden select-none"
+    >
+      <span ref={textRef} className="inline-flex whitespace-pre">
+        {characters.map((character, index) => {
+          // Last character moves first on hover (t -> e -> x -> t -> ...)
+          const reverseIndex = total - 1 - index;
+          return (
+            <Span
+              // biome-ignore lint/suspicious/noArrayIndexKey: <Not a bug>
+              key={`${character}-${index}`}
+              animate={{ x: hovered ? shiftDistance : 0 }}
+              transition={{
+                ...transition,
+                delay: hovered ? reverseIndex * STAGGER : index * STAGGER,
+              }}
+              className="relative inline-block"
+            >
+              {character === " " ? "\u00A0" : character}
+            </Span>
+          );
+        })}
+      </span>
+    </span>
+  );
+}
+
+function InteractiveButton({ children }: { children: React.ReactNode }) {
+  const [hovered, setHovered] = useState(false);
+
+  const characterCount = String(children).length;
+  const lastIndex = characterCount - 1;
+
+  return (
+    <Span
+      onHoverStart={() => setHovered(true)}
+      onHoverEnd={() => setHovered(false)}
+      className="relative flex items-center overflow- w-50"
+    >
+      {/* Left Arrow */}
+      <span className="absolute left-0 size-full overflow-hidden">
+        <Span
+          animate={{ x: hovered ? 0 : -20 }}
+          transition={{
+            ...transition,
+            delay: hovered ? lastIndex * STAGGER : 0,
+          }}
+          className="absolute left-0"
+        >
+          <ArrowRight />
+        </Span>
+      </span>
+      {/* Text */}
+      <InteractiveText hovered={hovered}>{children}</InteractiveText>
+
+      {/* Right Arrow */}
+      <span className="absolute right-0 size-full overflow-hidden">
+        <Span
+          animate={hovered ? { x: 16, y: -16 } : { x: [-16, 0], y: [16, 0] }}
+          transition={{
+            ...transition,
+            delay: hovered ? 0 : lastIndex * STAGGER,
+          }}
+          className="absolute right-0"
+        >
+          <ArrowUpRight />
+        </Span>
+      </span>
+
+      {/* Underline */}
+      <span className="absolute inset-x-0 -bottom-0.5 h-px overflow-hidden">
+        {/* Underline associated with FIRST character */}
+        <Span
+          animate={{
+            x: hovered ? "100%" : "0%",
+          }}
+          transition={{
+            ...transition,
+            delay: hovered ? 0 : lastIndex * STAGGER,
+          }}
+          className="absolute inset-0 bg-current"
+        />
+        {/* Underline associated with LAST character */}
+        <Span
+          animate={{
+            x: hovered ? "0%" : "-100%",
+          }}
+          transition={{
+            ...transition,
+            delay: hovered ? lastIndex * STAGGER : 0,
+          }}
+          className="absolute inset-0 bg-current"
+        />
+      </span>
+    </Span>
+  );
+}
 
 function Button({
   className,
   variant = "default",
   size = "default",
+  children,
   ...props
 }: ButtonPrimitive.Props & VariantProps<typeof buttonVariants>) {
   return (
@@ -51,8 +187,14 @@ function Button({
       data-slot="button"
       className={cn(buttonVariants({ variant, size, className }))}
       {...props}
-    />
-  )
+    >
+      {variant === "interactive" ? (
+        <InteractiveButton>{children}</InteractiveButton>
+      ) : (
+        children
+      )}
+    </ButtonPrimitive>
+  );
 }
 
-export { Button, buttonVariants }
+export { Button, buttonVariants };

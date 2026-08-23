@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 interface AnimatedLinkProps
   extends React.LinkHTMLAttributes<HTMLAnchorElement> {
   href: string;
-  children: React.ReactNode;
+  children?: React.ReactNode;
   external?: boolean;
   className?: string;
 }

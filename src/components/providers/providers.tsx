@@ -1,10 +1,7 @@
 "use client";
 
-import { CursorifyProvider } from "@cursorify/react";
 import { LazyMotion } from "framer-motion";
 import { useEffect, useState } from "react";
-import { CustomCursor } from "@/components/ui/cursor";
-import { ThemeProvider } from "./theme-provider";
 
 export function Providers({
   children,
@@ -20,23 +17,25 @@ export function Providers({
   }, []);
 
   return (
-    <ThemeProvider
+    <>
+      {/* <ThemeProvider
       attribute="class"
       defaultTheme="dark"
       enableSystem
       disableTransitionOnChange
       storageKey="portfolio-theme"
-    >
+    > */}
       <LazyMotion strict={true} features={loadFeatures}>
-        <CursorifyProvider
+        {/* <CursorifyProvider
           enabled={!isTouchDevice}
           cursor={<CustomCursor />}
           delay={5}
           defaultCursorVisible={false}
-        >
-          {children}
-        </CursorifyProvider>
+        > */}
+        {children}
+        {/* </CursorifyProvider> */}
       </LazyMotion>
-    </ThemeProvider>
+      {/* </ThemeProvider> */}
+    </>
   );
 }
