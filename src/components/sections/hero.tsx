@@ -2,7 +2,6 @@
 
 import { div as Div } from "framer-motion/m";
 import Image from "next/image";
-import { Container } from "@/components/ui/container";
 import { PERSONAL_INFO } from "@/lib/constants";
 import Watermark from "../../assets/watermark.webp";
 import { AnimatedLink } from "../ui/animated-link";
@@ -14,13 +13,13 @@ import { TypingText } from "../ui/typing-text";
 export function Hero() {
   return (
     <Section id="hero" className="relative py-0 md:py-0 first:pt-0">
-      <Container className="z-10 relative min-h-screen flex flex-col justify-center">
+      <div className="theme-container z-10 relative min-h-screen flex flex-col justify-center">
         <Header className="absolute top-0 left-0 w-full" />
-        <div className="flex flex-col gap-5 md:gap-0">
-          <div className="flex flex-col @container">
-            <div className="flex gap-2 items-center">
+        <div className="flex flex-col gap-0">
+          <div className="flex flex-col border-theme-2.5 border-red-500">
+            <div className="flex gap-theme-2 items-center">
               <Div
-                className="bg-green-600 rounded-full size-2"
+                className="bg-green-600 rounded-theme-full size-theme-2"
                 animate={{
                   scale: [1, 1.5, 1],
                   filter: [
@@ -32,11 +31,9 @@ export function Hero() {
                 }}
                 transition={{ repeat: Infinity, duration: 1.5 }}
               />
-              <span className="text-[clamp(1rem,2.5cqw,10rem)]">
-                Available for hire
-              </span>
+              <span className="text-theme-base">Available for hire</span>
             </div>
-            <h1 className="text-[clamp(2rem,13.4cqw,20.3rem)] uppercase md:-ml-2.5 leading-none text-black font-extrabold block text-left">
+            <h1 className="text-theme-10xl uppercase -ml-theme-2.5 leading-none text-black font-extrabold block">
               {PERSONAL_INFO.name}
             </h1>
           </div>
@@ -76,7 +73,7 @@ export function Hero() {
             />
           </div>
         </div>
-      </Container>
+      </div>
       <div className="absolute inset-0">
         <span className="absolute z-10 uppercase left-5 bottom-0 origin-top-left -translate-yfull -rotate-90">
           Portfolio {new Date().getFullYear()}

@@ -85,6 +85,26 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+
+/*
+|--------------------------------------------------------------------------
+| Theme scale
+|--------------------------------------------------------------------------
+|
+| Reference viewport: 1440px
+|
+| 1 theme unit = 1px at 1440px
+|
+| 720px  -> 0.5px
+| 1440px -> 1px
+| 2880px -> 2px
+| 5760px -> 4px
+|
+|--------------------------------------------------------------------------
+*/
+
+  --theme-design-width: 1440;
+  --theme-unit: calc(100vw / var(--theme-design-width));
 }
 
 .dark {
@@ -136,7 +156,7 @@
   }
 }
 
-@utility container {
+/* @utility container {
   width: 100%;
   padding-inline: 20px;
 
@@ -159,6 +179,330 @@
   @variant 2xl {
     max-width: 85rem;
   }
+} */
+
+/*
+|--------------------------------------------------------------------------
+| Theme utilities
+|--------------------------------------------------------------------------
+*/
+
+@utility text-theme-xs {
+  font-size: calc(12 * var(--theme-unit));
+  line-height: calc(16 * var(--theme-unit));
+}
+
+@utility text-theme-sm {
+  font-size: calc(14 * var(--theme-unit));
+  line-height: calc(20 * var(--theme-unit));
+}
+
+@utility text-theme-base {
+  font-size: calc(16 * var(--theme-unit));
+  line-height: calc(24 * var(--theme-unit));
+}
+
+@utility text-theme-lg {
+  font-size: calc(18 * var(--theme-unit));
+  line-height: calc(28 * var(--theme-unit));
+}
+
+@utility text-theme-xl {
+  font-size: calc(20 * var(--theme-unit));
+  line-height: calc(28 * var(--theme-unit));
+}
+
+@utility text-theme-2xl {
+  font-size: calc(24 * var(--theme-unit));
+  line-height: calc(32 * var(--theme-unit));
+}
+
+@utility text-theme-3xl {
+  font-size: calc(30 * var(--theme-unit));
+  line-height: calc(36 * var(--theme-unit));
+}
+
+@utility text-theme-4xl {
+  font-size: calc(36 * var(--theme-unit));
+  line-height: calc(40 * var(--theme-unit));
+}
+
+@utility text-theme-5xl {
+  font-size: calc(48 * var(--theme-unit));
+  line-height: calc(48 * var(--theme-unit));
+}
+
+@utility text-theme-6xl {
+  font-size: calc(60 * var(--theme-unit));
+  line-height: calc(60 * var(--theme-unit));
+}
+
+@utility text-theme-7xl {
+  font-size: calc(72 * var(--theme-unit));
+  line-height: calc(72 * var(--theme-unit));
+}
+
+@utility text-theme-8xl {
+  font-size: calc(96 * var(--theme-unit));
+  line-height: calc(96 * var(--theme-unit));
+}
+
+@utility text-theme-9xl {
+  font-size: calc(128 * var(--theme-unit));
+  line-height: calc(128 * var(--theme-unit));
+}
+
+@utility text-theme-10xl {
+  font-size: calc(170.667 * var(--theme-unit));
+  line-height: calc(170.667 * var(--theme-unit));
+}
+
+@utility text-theme-11xl {
+  font-size: calc(227.556 * var(--theme-unit));
+  line-height: calc(227.556 * var(--theme-unit));
+}
+
+@utility text-theme-12xl {
+  font-size: calc(303.407 * var(--theme-unit));
+  line-height: calc(303.407 * var(--theme-unit));
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| Theme spacing
+|--------------------------------------------------------------------------
+|
+| Base Tailwind spacing scale:
+|
+| 1 = 4px
+| 2 = 8px
+| 3 = 12px
+| 4 = 16px
+| ...
+|
+|--------------------------------------------------------------------------
+*/
+
+@utility space-x-theme-* {
+  & > :not(:last-child) {
+    --tw-space-x-reverse: 0;
+
+    margin-inline-start: calc(
+      --value(number) * 4 * var(--theme-unit) * var(--tw-space-x-reverse)
+    );
+
+    margin-inline-end: calc(
+      --value(number) * 4 * var(--theme-unit) *
+      (1 - var(--tw-space-x-reverse))
+    );
+  }
+}
+
+@utility space-y-theme-* {
+  & > :not(:last-child) {
+    --tw-space-y-reverse: 0;
+
+    margin-block-start: calc(
+      --value(number) * 4 * var(--theme-unit) * var(--tw-space-y-reverse)
+    );
+
+    margin-block-end: calc(
+      --value(number) * 4 * var(--theme-unit) *
+      (1 - var(--tw-space-y-reverse))
+    );
+  }
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| Padding
+|--------------------------------------------------------------------------
+*/
+
+@utility p-theme-* {
+  padding: calc(--value(number) * 4 * var(--theme-unit));
+}
+
+@utility px-theme-* {
+  padding-inline: calc(--value(number) * 4 * var(--theme-unit));
+}
+
+@utility py-theme-* {
+  padding-block: calc(--value(number) * 4 * var(--theme-unit));
+}
+
+@utility pt-theme-* {
+  padding-top: calc(--value(number) * 4 * var(--theme-unit));
+}
+
+@utility pr-theme-* {
+  padding-right: calc(--value(number) * 4 * var(--theme-unit));
+}
+
+@utility pb-theme-* {
+  padding-bottom: calc(--value(number) * 4 * var(--theme-unit));
+}
+
+@utility pl-theme-* {
+  padding-left: calc(--value(number) * 4 * var(--theme-unit));
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| Margin
+|--------------------------------------------------------------------------
+*/
+
+@utility m-theme-* {
+  margin: calc(--value(number) * 4 * var(--theme-unit));
+}
+
+@utility mx-theme-* {
+  margin-inline: calc(--value(number) * 4 * var(--theme-unit));
+}
+
+@utility my-theme-* {
+  margin-block: calc(--value(number) * 4 * var(--theme-unit));
+}
+
+@utility mt-theme-* {
+  margin-top: calc(--value(number) * 4 * var(--theme-unit));
+}
+
+@utility mr-theme-* {
+  margin-right: calc(--value(number) * 4 * var(--theme-unit));
+}
+
+@utility mb-theme-* {
+  margin-bottom: calc(--value(number) * 4 * var(--theme-unit));
+}
+
+@utility ml-theme-* {
+  margin-left: calc(--value(number) * 4 * var(--theme-unit));
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| Gap
+|--------------------------------------------------------------------------
+*/
+
+@utility gap-theme-* {
+  gap: calc(--value(number) * 4 * var(--theme-unit));
+}
+
+@utility gap-x-theme-* {
+  column-gap: calc(--value(number) * 4 * var(--theme-unit));
+}
+
+@utility gap-y-theme-* {
+  row-gap: calc(--value(number) * 4 * var(--theme-unit));
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| Width / Height
+|--------------------------------------------------------------------------
+*/
+
+@utility size-theme-* {
+  width: calc(--value(number) * 4 * var(--theme-unit));
+  height: calc(--value(number) * 4 * var(--theme-unit));
+}
+
+@utility w-theme-* {
+  width: calc(--value(number) * 4 * var(--theme-unit));
+}
+
+@utility h-theme-* {
+  height: calc(--value(number) * 4 * var(--theme-unit));
+}
+
+@utility min-w-theme-* {
+  min-width: calc(--value(number) * 4 * var(--theme-unit));
+}
+
+@utility max-w-theme-* {
+  max-width: calc(--value(number) * 4 * var(--theme-unit));
+}
+
+@utility min-h-theme-* {
+  min-height: calc(--value(number) * 4 * var(--theme-unit));
+}
+
+@utility max-h-theme-* {
+  max-height: calc(--value(number) * 4 * var(--theme-unit));
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| Border radius
+|--------------------------------------------------------------------------
+*/
+
+@utility rounded-theme-sm {
+  border-radius: calc(4 * var(--theme-unit));
+}
+
+@utility rounded-theme-md {
+  border-radius: calc(6 * var(--theme-unit));
+}
+
+@utility rounded-theme-lg {
+  border-radius: calc(8 * var(--theme-unit));
+}
+
+@utility rounded-theme-xl {
+  border-radius: calc(12 * var(--theme-unit));
+}
+
+@utility rounded-theme-2xl {
+  border-radius: calc(16 * var(--theme-unit));
+}
+
+@utility rounded-theme-3xl {
+  border-radius: calc(24 * var(--theme-unit));
+}
+
+@utility rounded-theme-full {
+  /* border-radius: 9999px; */
+  @apply rounded-full;
+}
+
+@utility inset-theme-* {
+  inset: calc(--value(number) * 4 * var(--theme-unit));
+}
+
+@utility top-theme-* {
+  top: calc(--value(number) * 4 * var(--theme-unit));
+}
+
+@utility right-theme-* {
+  right: calc(--value(number) * 4 * var(--theme-unit));
+}
+
+@utility bottom-theme-* {
+  bottom: calc(--value(number) * 4 * var(--theme-unit));
+}
+
+@utility left-theme-* {
+  left: calc(--value(number) * 4 * var(--theme-unit));
+}
+
+@utility border-theme-* {
+  border-width: calc(--value(number) * var(--theme-unit));
+}
+
+@utility theme-container {
+  width: calc(1280 * var(--theme-unit));
+  margin-inline: auto;
+  box-sizing: border-box;
 }
 
 
