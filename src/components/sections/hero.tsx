@@ -15,11 +15,11 @@ export function Hero() {
     <Section id="hero" className="relative py-0 md:py-0 first:pt-0">
       <div className="theme-container z-10 relative min-h-screen flex flex-col justify-center">
         <Header className="absolute top-0 left-0 w-full" />
-        <div className="flex flex-col gap-0">
-          <div className="flex flex-col border-theme-2.5 border-red-500">
-            <div className="flex gap-theme-2 items-center">
+        <div className="flex flex-col gap-5 md:gap-0">
+          <div className="flex flex-col">
+            <div className="flex gap-2 items-center">
               <Div
-                className="bg-green-600 rounded-theme-full size-theme-2"
+                className="bg-green-600 rounded-full size-2"
                 animate={{
                   scale: [1, 1.5, 1],
                   filter: [
@@ -33,13 +33,13 @@ export function Hero() {
               />
               <span>Available for hire</span>
             </div>
-            <h1 className="text-theme-10xl uppercase -ml-theme-2.5 leading-none text-black font-extrabold block">
+            <h1 className="text-10xl uppercase -ml-2.5 leading-none text-black font-extrabold block">
               {PERSONAL_INFO.name}
             </h1>
           </div>
 
-          <div className="absolute bottom-theme-5 left-theme-0 w-full flex gap-theme-20 flex-col-reverse md:flex-row items-start md:justify-between mt-auto md:mt-0">
-            <div className="flex flex-col md:flex-row gap-theme-8">
+          <div className="absolute top-2/3 lg:top-auto lg:bottom-5 left-0 w-full flex gap-20 flex-col-reverse lg:flex-row items-start lg:justify-between mt-auto lg:mt-0">
+            <div className="flex flex-col md:flex-row md:gap-8">
               <Button
                 onClick={() =>
                   document
@@ -67,13 +67,14 @@ export function Hero() {
               </Button>
             </div>
             <TypingText
-              className="text-theme-3xl font-cormorant font-bold"
+              className="text-2xl font-cormorant font-bold"
               text={PERSONAL_INFO.tagline}
               delay={0.5}
             />
           </div>
         </div>
       </div>
+
       <div className="theme-container relative">
         <Image
           src={Watermark}
@@ -81,8 +82,9 @@ export function Hero() {
           className="absolute bottom-0 left-0 w-full md:w-md"
         />
       </div>
-      <div className="absolute inset-0">
-        <span className="absolute z-10 uppercase left-5 bottom-0 origin-top-left -translate-yfull -rotate-90">
+
+      <div className="absolute inset-0 hidden md:block">
+        <span className="absolute z-10 uppercase left-5 bottom-0 origin-top-left -rotate-90">
           Portfolio {new Date().getFullYear()}
         </span>
       </div>
