@@ -30,7 +30,8 @@
     ".next/dev/types/**/*.ts",
     "src/app/page.sx",
     "next.config.mts",
-    "src/app/(blog)/[...route]/page.tsxz"
+    "src/app/(blog)/[...route]/page.tsxz",
+    "src/app/(blog)/[...route]/page.tsxs"
   ],
   "exclude": ["node_modules", ".next"]
 }

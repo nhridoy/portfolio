@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import dynamic from "next/dynamic";
-import { Inter, Cormorant, Outfit, Playfair_Display } from "next/font/google";
+import { Cormorant, Inter, Outfit, Playfair_Display } from "next/font/google";
 import "./globals.css";
 
 import { Analytics } from "@vercel/analytics/next";
@@ -137,6 +137,7 @@ export default function RootLayout({
         outfit.variable,
         cormorant.variable,
         "scroll-smooth",
+        "no-scrollbar",
       )}
       suppressHydrationWarning={process.env.NODE_ENV === "production"}
     >

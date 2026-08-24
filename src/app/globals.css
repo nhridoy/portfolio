@@ -605,6 +605,14 @@
   box-sizing: border-box;
 }
 
+@utility no-scrollbar {
+  scrollbar-width: none; /* Targets modern Firefox and Chrome */
+  
+  &::-webkit-scrollbar {
+    display: none; /* Targets Safari and older WebKit browsers */
+  }
+}
+
 /* Noise grain texture */
 .bg-grain {
   position: fixed;
