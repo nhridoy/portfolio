@@ -31,15 +31,15 @@ export function Hero() {
                 }}
                 transition={{ repeat: Infinity, duration: 1.5 }}
               />
-              <span className="text-theme-base">Available for hire</span>
+              <span>Available for hire</span>
             </div>
             <h1 className="text-theme-10xl uppercase -ml-theme-2.5 leading-none text-black font-extrabold block">
               {PERSONAL_INFO.name}
             </h1>
           </div>
 
-          <div className="md:absolute md:bottom-5 md:left-0 w-full flex gap-20 flex-col-reverse md:flex-row items-start md:justify-between mt-auto md:mt-0">
-            <div className="flex flex-col md:flex-row gap-4 md:gap-8">
+          <div className="absolute bottom-theme-5 left-theme-0 w-full flex gap-theme-20 flex-col-reverse md:flex-row items-start md:justify-between mt-auto md:mt-0">
+            <div className="flex flex-col md:flex-row gap-theme-8">
               <Button
                 onClick={() =>
                   document
@@ -67,25 +67,24 @@ export function Hero() {
               </Button>
             </div>
             <TypingText
-              className="text-3xl font-cormorant font-bold"
+              className="text-theme-3xl font-cormorant font-bold"
               text={PERSONAL_INFO.tagline}
               delay={0.5}
             />
           </div>
         </div>
       </div>
+      <div className="theme-container relative">
+        <Image
+          src={Watermark}
+          alt="Background Hero Watermark"
+          className="absolute bottom-0 left-0 w-full md:w-md"
+        />
+      </div>
       <div className="absolute inset-0">
         <span className="absolute z-10 uppercase left-5 bottom-0 origin-top-left -translate-yfull -rotate-90">
           Portfolio {new Date().getFullYear()}
         </span>
-        <Image
-          src={Watermark}
-          alt="Background Hero Watermark"
-          className="absolute px-5 md:px-0 bottom-0 left-0 md:left-15 w-full md:w-md"
-        />
-        {/* <span className="absolute text-gray-200 origin-bottom-left bottom-0 leading-none -my-13.5 left-10 text-[60vw] md:text-[30vw] font-extrabold">
-          NH
-        </span> */}
       </div>
     </Section>
   );

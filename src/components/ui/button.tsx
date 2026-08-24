@@ -21,7 +21,7 @@ const buttonVariants = cva(
         destructive:
           "bg-destructive/10 text-destructive hover:bg-destructive/20 focus-visible:border-destructive/40 focus-visible:ring-destructive/20 dark:bg-destructive/20 dark:hover:bg-destructive/30",
         link: "text-primary underline-offset-4 hover:underline",
-        interactive: "text-primary p-0!",
+        interactive: "text-primary w-theme-75 p-0!",
       },
       size: {
         default:
@@ -114,19 +114,19 @@ function InteractiveButton({ children }: { children: React.ReactNode }) {
     <Span
       onHoverStart={() => setHovered(true)}
       onHoverEnd={() => setHovered(false)}
-      className="relative flex items-center overflow- w-50"
+      className="relative flex items-center w-full"
     >
       {/* Left Arrow */}
       <span className="absolute left-0 size-full overflow-hidden">
         <Span
-          animate={{ x: hovered ? 0 : -20 }}
+          animate={{ x: hovered ? 0 : "calc(var(--theme-motion-shift) * -1)" }}
           transition={{
             ...transition,
             delay: hovered ? lastIndex * STAGGER : 0,
           }}
-          className="absolute left-0"
+          className="absolute left-0 top-1/2 -translate-y-1/2"
         >
-          <ArrowRight />
+          <ArrowRight className="size-theme-6" />
         </Span>
       </span>
       {/* Text */}
@@ -135,19 +135,29 @@ function InteractiveButton({ children }: { children: React.ReactNode }) {
       {/* Right Arrow */}
       <span className="absolute right-0 size-full overflow-hidden">
         <Span
-          animate={hovered ? { x: 16, y: -16 } : { x: [-16, 0], y: [16, 0] }}
+          animate={
+            hovered
+              ? {
+                  x: "var(--theme-motion-shift)",
+                  y: "calc(var(--theme-motion-shift) * -1)",
+                }
+              : {
+                  x: ["calc(var(--theme-motion-shift) * -1)", 0],
+                  y: ["var(--theme-motion-shift)", 0],
+                }
+          }
           transition={{
             ...transition,
             delay: hovered ? 0 : lastIndex * STAGGER,
           }}
-          className="absolute right-0"
+          className="absolute right-0 top-1/2 -translate-y-1/2"
         >
-          <ArrowUpRight />
+          <ArrowUpRight className="size-theme-6" />
         </Span>
       </span>
 
       {/* Underline */}
-      <span className="absolute inset-x-0 -bottom-0.5 h-px overflow-hidden">
+      <span className="absolute inset-x-0 -bottom-theme-0.5 h-px overflow-hidden">
         {/* Underline associated with FIRST character */}
         <Span
           animate={{

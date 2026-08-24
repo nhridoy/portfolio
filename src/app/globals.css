@@ -105,6 +105,8 @@
 
   --theme-design-width: 1440;
   --theme-unit: calc(100vw / var(--theme-design-width));
+
+  --theme-motion-shift: calc(5 * 4 * var(--theme-unit));
 }
 
 .dark {
@@ -143,7 +145,7 @@
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    @apply border-border outline-ring/50 text-theme-xl;
   }
   body {
     @apply antialiased;
@@ -180,10 +182,15 @@
     max-width: 85rem;
   }
 } */
-
 /*
 |--------------------------------------------------------------------------
 | Theme utilities
+|--------------------------------------------------------------------------
+*/
+
+/*
+|--------------------------------------------------------------------------
+| Typography
 |--------------------------------------------------------------------------
 */
 
@@ -270,17 +277,7 @@
 
 /*
 |--------------------------------------------------------------------------
-| Theme spacing
-|--------------------------------------------------------------------------
-|
-| Base Tailwind spacing scale:
-|
-| 1 = 4px
-| 2 = 8px
-| 3 = 12px
-| 4 = 16px
-| ...
-|
+| Space Between
 |--------------------------------------------------------------------------
 */
 
@@ -387,6 +384,41 @@
 
 /*
 |--------------------------------------------------------------------------
+| Negative Margin
+|--------------------------------------------------------------------------
+*/
+
+@utility -m-theme-* {
+  margin: calc(--value(number) * -4 * var(--theme-unit));
+}
+
+@utility -mx-theme-* {
+  margin-inline: calc(--value(number) * -4 * var(--theme-unit));
+}
+
+@utility -my-theme-* {
+  margin-block: calc(--value(number) * -4 * var(--theme-unit));
+}
+
+@utility -mt-theme-* {
+  margin-top: calc(--value(number) * -4 * var(--theme-unit));
+}
+
+@utility -mr-theme-* {
+  margin-right: calc(--value(number) * -4 * var(--theme-unit));
+}
+
+@utility -mb-theme-* {
+  margin-bottom: calc(--value(number) * -4 * var(--theme-unit));
+}
+
+@utility -ml-theme-* {
+  margin-left: calc(--value(number) * -4 * var(--theme-unit));
+}
+
+
+/*
+|--------------------------------------------------------------------------
 | Gap
 |--------------------------------------------------------------------------
 */
@@ -442,7 +474,7 @@
 
 /*
 |--------------------------------------------------------------------------
-| Border radius
+| Border Radius
 |--------------------------------------------------------------------------
 */
 
@@ -471,9 +503,15 @@
 }
 
 @utility rounded-theme-full {
-  /* border-radius: 9999px; */
   @apply rounded-full;
 }
+
+
+/*
+|--------------------------------------------------------------------------
+| Positioning
+|--------------------------------------------------------------------------
+*/
 
 @utility inset-theme-* {
   inset: calc(--value(number) * 4 * var(--theme-unit));
@@ -495,16 +533,62 @@
   left: calc(--value(number) * 4 * var(--theme-unit));
 }
 
+
+/*
+|--------------------------------------------------------------------------
+| Negative Positioning
+|--------------------------------------------------------------------------
+*/
+
+@utility -inset-theme-* {
+  inset: calc(--value(number) * -4 * var(--theme-unit));
+}
+
+@utility -top-theme-* {
+  top: calc(--value(number) * -4 * var(--theme-unit));
+}
+
+@utility -right-theme-* {
+  right: calc(--value(number) * -4 * var(--theme-unit));
+}
+
+@utility -bottom-theme-* {
+  bottom: calc(--value(number) * -4 * var(--theme-unit));
+}
+
+@utility -left-theme-* {
+  left: calc(--value(number) * -4 * var(--theme-unit));
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| Border Width
+|--------------------------------------------------------------------------
+|
+| Border uses a 1px base instead of Tailwind's 4px spacing scale.
+|
+*/
+
 @utility border-theme-* {
   border-width: calc(--value(number) * var(--theme-unit));
 }
+
+
+/*
+|--------------------------------------------------------------------------
+| Container
+|--------------------------------------------------------------------------
+|
+| 1280px at the 1440px reference viewport.
+|
+*/
 
 @utility theme-container {
   width: calc(1280 * var(--theme-unit));
   margin-inline: auto;
   box-sizing: border-box;
 }
-
 
 /* Noise grain texture */
 .bg-grain {
