@@ -26,7 +26,7 @@ const nextConfig = {
       },
     ],
   },
-  output: "standalone",
+  // output: "standalone",
   experimental: {
     inlineCss: true,
     optimizeCss: true,
