@@ -13,7 +13,7 @@ const Footer = dynamic(() => import("@/components/ui/footer"), {
   ssr: true,
 });
 
-const Intro = dynamic(() => import("@/components/sections/intro"), {
+const Intro = dynamic(() => import("@/components/sections/Intro"), {
   ssr: true,
 });
 

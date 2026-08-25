@@ -7,13 +7,12 @@ import Watermark from "../../assets/watermark.webp";
 import { AnimatedLink } from "../ui/animated-link";
 import { Button } from "../ui/button";
 import Header from "../ui/header";
-import { Section } from "../ui/section";
 import { TypingText } from "../ui/typing-text";
 
 export function Hero() {
   return (
-    <Section id="hero" className="relative py-0 md:py-0 first:pt-0">
-      <div className="theme-container z-10 relative min-h-screen flex flex-col justify-center">
+    <section id="hero" className="relative">
+      <div className="theme-container z-10 relative min-h-svh flex flex-col justify-center">
         <Header className="absolute top-0 left-0 w-full" />
         <div className="flex flex-col gap-5 md:gap-0">
           <div className="flex flex-col">
@@ -89,6 +88,6 @@ export function Hero() {
           Portfolio {new Date().getFullYear()}
         </span>
       </div>
-    </Section>
+    </section>
   );
 }

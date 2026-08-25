@@ -1,24 +1,28 @@
 import dynamic from "next/dynamic";
-import { Hero } from "@/components/sections/hero";
+import { Hero } from "@/components/sections/Hero";
 import { SectionDots } from "@/components/ui/section-dots";
 
-const About = dynamic(() => import("@/components/sections/about"), {
+const About = dynamic(() => import("@/components/sections/About"), {
   ssr: true,
 });
 
-const Experience = dynamic(() => import("@/components/sections/experience"), {
+const ShortInfo = dynamic(() => import("@/components/sections/ShortInfo"), {
   ssr: true,
 });
 
-const Skills = dynamic(() => import("@/components/sections/skills"), {
+const Experience = dynamic(() => import("@/components/sections/Experience"), {
   ssr: true,
 });
 
-const Projects = dynamic(() => import("@/components/sections/projects"), {
+const Skills = dynamic(() => import("@/components/sections/Skills"), {
   ssr: true,
 });
 
-const Contact = dynamic(() => import("@/components/sections/contact"), {
+const Projects = dynamic(() => import("@/components/sections/Projects"), {
+  ssr: true,
+});
+
+const Contact = dynamic(() => import("@/components/sections/Contact"), {
   ssr: true,
 });
 
@@ -64,6 +68,7 @@ export default function Home() {
       />
       <SectionDots />
       <Hero />
+      <ShortInfo />
       <About />
       <Experience />
       <Skills />
