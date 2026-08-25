@@ -9,9 +9,12 @@ import {
 } from "framer-motion";
 import { div as Div, span as Span } from "framer-motion/m";
 import { useLayoutEffect, useRef, useState } from "react";
-import { PERSONAL_INFO } from "@/lib/constants";
 
-const SlidingText = ({ text }: { text: string }) => {
+interface SlidingTextProps {
+  text: string;
+}
+
+const SlidingText = ({ text }: SlidingTextProps) => {
   const sectionRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLSpanElement>(null);
