@@ -12,7 +12,7 @@ import { TypingText } from "../ui/typing-text";
 export function Hero() {
   return (
     <section id="hero" className="relative">
-      <div className="theme-container z-10 relative min-h-svh flex flex-col justify-center">
+      <div className="theme-container z-10 relative min-h-dvh flex flex-col justify-center">
         <Header className="absolute top-0 left-0 w-full" />
         <div className="flex flex-col gap-5 md:gap-0">
           <div className="flex flex-col">

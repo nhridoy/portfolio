@@ -81,10 +81,10 @@ const ShortInfo = () => {
         height: scrollHeight || "250vh",
       }}
     >
-      <Div className="sticky top-0 h-svh w-full overflow-hidden bg-transparent">
+      <Div className="sticky top-0 h-dvh w-full overflow-hidden bg-transparent">
         <Div
           ref={containerRef}
-          className="theme-container flex min-h-svh items-center justify-center overflow-hidden bg-foreground text-background"
+          className="theme-container flex min-h-dvh items-center justify-center overflow-hidden bg-foreground text-background"
           style={{
             scaleX,
             borderRadius,
