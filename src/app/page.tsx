@@ -1,12 +1,13 @@
 import dynamic from "next/dynamic";
 import { Hero } from "@/components/sections/Hero";
 import { SectionDots } from "@/components/ui/section-dots";
+import { PERSONAL_INFO } from "@/lib/constants";
 
 const About = dynamic(() => import("@/components/sections/About"), {
   ssr: true,
 });
 
-const ShortInfo = dynamic(() => import("@/components/sections/ShortInfo"), {
+const SlidingText = dynamic(() => import("@/components/sections/SlidingText"), {
   ssr: true,
 });
 
@@ -68,7 +69,7 @@ export default function Home() {
       />
       <SectionDots />
       <Hero />
-      <ShortInfo />
+      <SlidingText text={PERSONAL_INFO.tagline} />
       <About />
       <Experience />
       <Skills />

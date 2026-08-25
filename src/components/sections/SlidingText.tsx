@@ -11,7 +11,7 @@ import { div as Div, span as Span } from "framer-motion/m";
 import { useLayoutEffect, useRef, useState } from "react";
 import { PERSONAL_INFO } from "@/lib/constants";
 
-const ShortInfo = () => {
+const SlidingText = ({ text }: { text: string }) => {
   const sectionRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLSpanElement>(null);
@@ -130,7 +130,7 @@ const ShortInfo = () => {
               skewX: skewXSpring,
             }}
           >
-            {PERSONAL_INFO.shortInfo}
+            {text}
           </Span>
         </Div>
       </Div>
@@ -138,4 +138,4 @@ const ShortInfo = () => {
   );
 };
 
-export default ShortInfo;
+export default SlidingText;
