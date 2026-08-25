@@ -1,6 +1,12 @@
 "use client";
 
-import { useScroll, useTransform } from "framer-motion";
+import {
+  useReducedMotion,
+  useScroll,
+  useSpring,
+  useTransform,
+  useVelocity,
+} from "framer-motion";
 import { div as Div, span as Span } from "framer-motion/m";
 import { useLayoutEffect, useRef, useState } from "react";
 import { PERSONAL_INFO } from "@/lib/constants";
@@ -14,6 +20,8 @@ const ShortInfo = () => {
   const [viewportWidth, setViewportWidth] = useState(0);
   const [textWidth, setTextWidth] = useState(0);
   const [scrollHeight, setScrollHeight] = useState(0);
+
+  const shouldReduceMotion = useReducedMotion();
 
   useLayoutEffect(() => {
     const measure = () => {
@@ -29,12 +37,10 @@ const ShortInfo = () => {
       setViewportWidth(vWidth);
       setTextWidth(tWidth);
 
-      // Replaced your scale formula to ensure scaleX triggers properly
       if (containerWidth > 0) {
         setFullScreenScale(vWidth / containerWidth);
       }
 
-      // Calculate vertical height based on text distance
       const totalTextTravel = vWidth + tWidth;
       setScrollHeight(totalTextTravel * 1.2 + window.innerHeight);
     };
@@ -48,7 +54,7 @@ const ShortInfo = () => {
     return () => ro.disconnect();
   }, []);
 
-  // 1. SCALE SCROLL TRACK (Your original working setup)
+  // 1. SCALE SCROLL TRACK (plain, untouched)
   const { scrollYProgress: scaleProgress } = useScroll({
     target: sectionRef,
     offset: ["start 80%", "start 5%"],
@@ -63,14 +69,39 @@ const ShortInfo = () => {
     offset: ["start start", "end end"],
   });
 
-  const startX = viewportWidth / 2 + textWidth / 2;
-  const endX = -(viewportWidth / 2 + textWidth / 2);
+  // Lock the slide progress at 0 until the container has fully scaled to fullscreen.
+  // This guarantees the text can't start sliding/appearing mid-scale.
+  const revealProgress = useTransform(
+    [scaleProgress, mainProgress],
+    ([s, m]: number[]) => (s < 0.999 ? 0 : m),
+  );
 
-  // 1. TEXT: Slides from startX (off-screen right) to endX (off-screen left) immediately from 0% scroll progress
-  const textX = useTransform(mainProgress, [0, 0.95], [startX, endX]);
+  const smoothProgress = useSpring(revealProgress, {
+    stiffness: 300,
+    damping: 40,
+    mass: 1,
+  });
 
-  // 2. CONTAINER EXIT: Stays pinned until 95%, then slides up vertically
+  // Base position is now `left-full` (already outside the container's right edge),
+  // so travel is just 0 -> -(full sweep distance), no center-based math needed.
+  const travelDistance = viewportWidth + textWidth;
+
+  const textX = useTransform(
+    smoothProgress,
+    [0, 0.95],
+    shouldReduceMotion ? [0, 0] : [0, -travelDistance],
+  );
+
   const containerY = useTransform(mainProgress, [0.95, 1], ["0%", "-100%"]);
+
+  const velocity = useVelocity(smoothProgress);
+  const skewX = useTransform(
+    velocity,
+    [-2, 2],
+    shouldReduceMotion ? [0, 0] : [8, -8],
+    { clamp: true },
+  );
+  const skewXSpring = useSpring(skewX, { stiffness: 400, damping: 30 });
 
   return (
     <section
@@ -93,9 +124,10 @@ const ShortInfo = () => {
         >
           <Span
             ref={textRef}
-            className="absolute whitespace-nowrap text-10xl font-extrabold uppercase leading-none text-current select-none -ml-2.5 will-change-transform"
+            className="absolute left-full top-1/2 -translate-y-1/2 whitespace-nowrap text-10xl font-extrabold uppercase leading-none text-current select-none will-change-transform"
             style={{
               x: textX,
+              skewX: skewXSpring,
             }}
           >
             {PERSONAL_INFO.shortInfo}
