@@ -13,6 +13,10 @@ const Footer = dynamic(() => import("@/components/ui/footer"), {
   ssr: true,
 });
 
+const Intro = dynamic(() => import("@/components/sections/intro"), {
+  ssr: true,
+});
+
 const ReadingProgress = dynamic(
   () => import("@/components/ui/reading-progress"),
   {
@@ -149,6 +153,7 @@ export default function RootLayout({
           {/* <Header /> */}
           {/* <div className="bg-grain" /> */}
           <ReadingProgress />
+          <Intro />
           {children}
           <Footer />
         </Providers>

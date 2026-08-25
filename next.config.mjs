@@ -29,7 +29,7 @@ const nextConfig = {
   // output: "standalone",
   experimental: {
     inlineCss: true,
-    optimizeCss: true,
+    // optimizeCss: true,
   },
 };
 

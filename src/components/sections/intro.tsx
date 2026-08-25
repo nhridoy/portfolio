@@ -117,6 +117,7 @@ export default function Intro() {
   }, [show, reduceMotion]);
 
   useEffect(() => {
+    // return; // TEMP: freeze intro while editing
     if (count < 100 || !pageLoaded || exiting) return;
     const timeout = setTimeout(
       () => setExiting(true),
@@ -164,7 +165,7 @@ export default function Intro() {
             transition={{ duration: 0.4, delay: 0.3 }}
             aria-live="polite"
           >
-            {count < 100 ? "Loading experience" : "Ready"}
+            {count < 100 ? "Loading..." : "Ready"}
           </Span>
         </Div>
 

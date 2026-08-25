@@ -78,6 +78,7 @@ export function Hero() {
       <div className="theme-container relative">
         <Image
           src={Watermark}
+          loading="eager"
           alt="Background Hero Watermark"
           className="absolute bottom-0 left-0 w-full md:w-md"
         />
