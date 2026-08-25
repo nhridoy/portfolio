@@ -1,21 +1,17 @@
-import { BlurReveal } from "@/components/ui/blur-reveal";
-import { Container } from "@/components/ui/container";
-import { Section } from "@/components/ui/section";
-import { Body, H2 } from "@/components/ui/typography";
-import { PERSONAL_INFO } from "@/lib/constants";
+import AnimatedSmallText from "./AnimatedSmallText";
 
 export default function About() {
   return (
-    <Section id="about">
-      <Container>
-        <BlurReveal>
-          <H2>About</H2>
-        </BlurReveal>
-
-        <BlurReveal delay={0.1}>
-          <Body className="max-w-3xl leading-8">{PERSONAL_INFO.bio}</Body>
-        </BlurReveal>
-      </Container>
-    </Section>
+    <section id="about">
+      <div className="theme-container">
+        <div className="border-t-[0.0625rem] border-b-[0.0625rem] border-foreground/30 py-12">
+          <AnimatedSmallText text="The Narrative" />
+          <h2 className="text-6xl uppercase font-bold">
+            <span className="block [font-size:inherit]">Decoding</span>
+            <span className="block [font-size:inherit]">Architecture</span>
+          </h2>
+        </div>
+      </div>
+    </section>
   );
 }
