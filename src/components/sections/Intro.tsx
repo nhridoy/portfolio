@@ -4,6 +4,7 @@ import { animate, type Easing, useReducedMotion } from "framer-motion";
 import { div as Div, span as Span } from "framer-motion/m";
 import { Fragment, useEffect, useRef, useState } from "react";
 import { PERSONAL_INFO } from "@/lib/constants";
+import { buildTextChars } from "@/lib/utils";
 
 const COUNTER_DURATION = 2;
 const HOLD_AT_100 = 0.35;
@@ -17,14 +18,6 @@ const CURTAINS = [
   { color: "bg-white", z: 20, times: [0.066, 0.266, 0.566, 0.833] },
   { color: "bg-black", z: 30, times: [0.133, 0.333, 0.466, 0.733] },
 ];
-
-function buildNameChars(name: string) {
-  let id = 0;
-  return name.split(" ").map((word) => ({
-    word,
-    chars: [...word].map((char) => ({ char, id: id++ })),
-  }));
-}
 
 export default function Intro() {
   const [show, setShow] = useState(true);
@@ -175,7 +168,7 @@ export default function Intro() {
           transition={{ duration: 0.4, ease: "easeIn", delay: 0.6 }}
         >
           <h1 className="text-10xl uppercase -ml-2.5 text-black font-extrabold block">
-            {buildNameChars(PERSONAL_INFO.name).map(
+            {buildTextChars(PERSONAL_INFO.name).map(
               ({ word, chars }, wordIndex, words) => (
                 <Fragment key={word}>
                   <span className="inline-flex overflow-hidden [font-size:inherit]">

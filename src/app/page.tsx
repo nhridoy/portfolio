@@ -11,6 +11,13 @@ const SlidingText = dynamic(() => import("@/components/sections/SlidingText"), {
   ssr: true,
 });
 
+const RevealingText = dynamic(
+  () => import("@/components/sections/RevealingText"),
+  {
+    ssr: true,
+  },
+);
+
 const Experience = dynamic(() => import("@/components/sections/Experience"), {
   ssr: true,
 });
@@ -70,6 +77,7 @@ export default function Home() {
       <SectionDots />
       <Hero />
       <SlidingText text={PERSONAL_INFO.tagline} />
+      <RevealingText text={PERSONAL_INFO.shortInfo} />
       <About />
       <Experience />
       <Skills />
