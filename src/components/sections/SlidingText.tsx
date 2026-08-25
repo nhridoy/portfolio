@@ -44,6 +44,10 @@ const SlidingText = ({ text }: SlidingTextProps) => {
         setFullScreenScale(vWidth / containerWidth);
       }
 
+      // The `+ window.innerHeight` here reserves exactly one viewport's worth
+      // of extra scroll distance at the end of the section. That reserved
+      // distance is what lets the sticky wrapper naturally unpin and slide
+      // away at the end — no JS-driven exit transform needed.
       const totalTextTravel = vWidth + tWidth;
       setScrollHeight(totalTextTravel * 1.2 + window.innerHeight);
     };
@@ -66,7 +70,7 @@ const SlidingText = ({ text }: SlidingTextProps) => {
   const scaleX = useTransform(scaleProgress, [0, 1], [1, fullScreenScale]);
   const borderRadius = useTransform(scaleProgress, [0, 1], [32, 0]);
 
-  // 2. TEXT SLIDE & SLIDE UP TRACK
+  // 2. TEXT SLIDE TRACK
   const { scrollYProgress: mainProgress } = useScroll({
     target: sectionRef,
     offset: ["start start", "end end"],
@@ -91,17 +95,33 @@ const SlidingText = ({ text }: SlidingTextProps) => {
 
   const textX = useTransform(
     smoothProgress,
-    [0, 0.95],
+    [0.05, 0.95],
     shouldReduceMotion ? [0, 0] : [0, -travelDistance],
   );
 
-  const containerY = useTransform(mainProgress, [0.95, 1], ["0%", "-100%"]);
+  // NOTE: There is intentionally NO JS-driven exit/containerY transform here.
+  //
+  // The outer wrapper below is `sticky top-0 h-dvh`. Once the section (its
+  // parent, height = scrollHeight) runs out of extra scroll room, the browser
+  // itself pushes the sticky wrapper off-screen as a normal part of document
+  // flow, at a 1:1 rate with scroll. That native push is what should carry
+  // the black box away — it already covers exactly the last `innerHeight` of
+  // scroll we reserved above.
+  //
+  // Previously, a `containerY` transform (0% -> -100%) was ALSO applied to
+  // the inner black box over roughly that same window. That stacked on top
+  // of the native sticky push, so the inner box moved at ~2x speed and was
+  // fully gone before the sticky wrapper itself finished being pushed away.
+  // The wrapper (still empty/transparent) then lagged behind for the
+  // remaining scroll distance before finally unpinning — that lag was the
+  // visible gap. Removing the transform lets both move together at 1x,
+  // in sync, with no gap.
 
   const velocity = useVelocity(smoothProgress);
   const skewX = useTransform(
     velocity,
-    [-2, 2],
-    shouldReduceMotion ? [0, 0] : [8, -8],
+    [-1, 1],
+    shouldReduceMotion ? [0, 0] : [30, -30],
     { clamp: true },
   );
   const skewXSpring = useSpring(skewX, { stiffness: 400, damping: 30 });
@@ -122,7 +142,6 @@ const SlidingText = ({ text }: SlidingTextProps) => {
           style={{
             scaleX,
             borderRadius,
-            y: containerY,
           }}
         >
           <Span
