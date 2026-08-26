@@ -5,7 +5,7 @@ import { div as Div, h2 as H2 } from "framer-motion/m";
 import { useEffect, useRef, useState } from "react";
 
 // ---------------------------------------------------------------------------
-// DUMMY EXPERIENCE DATA
+// EXPERIENCES DATA
 // ---------------------------------------------------------------------------
 const EXPERIENCES = [
   {
@@ -47,7 +47,7 @@ const EXPERIENCES = [
 ];
 
 // ---------------------------------------------------------------------------
-// TIMING CONFIG (Normalized scroll progress fractions 0 -> 1)
+// TIMING CONFIG (Normalized scroll progress 0 -> 1)
 // ---------------------------------------------------------------------------
 const TEXT_REVEAL_START = 0.02;
 const TEXT_REVEAL_END = 0.12;
@@ -58,8 +58,12 @@ const OUTRO_END = 0.28;
 const RESIZE_START = 0.28;
 const RESIZE_END = 0.38;
 
-const TIMELINE_START = 0.4;
-const TIMELINE_END = 0.95;
+const TIMELINE_START = 0.38;
+const TIMELINE_END = 0.8;
+
+// Phase 6: Expand line to full-screen curtain (0.80 -> 0.98)
+const EXIT_EXPAND_START = 0.8;
+const EXIT_EXPAND_END = 0.98;
 // ---------------------------------------------------------------------------
 
 export default function Experience() {
@@ -130,13 +134,14 @@ export default function Experience() {
     [1, 1, 2.5, 2.5],
   );
 
+  // Bar expands from thin line (0.05) to full viewport curtain (12)
   const barScaleY = useTransform(
     scrollYProgress,
-    [0, RESIZE_START, RESIZE_END, 1],
-    [1, 1, 0.05, 0.05],
+    [0, RESIZE_START, RESIZE_END, EXIT_EXPAND_START, EXIT_EXPAND_END, 1],
+    [1, 1, 0.05, 0.05, 12, 12],
   );
 
-  // Numeric pixel values guarantee smooth Framer Motion interpolation
+  // Timeline Scroll Motion
   const startX = dimensions.windowWidth || 1000;
   const endX = dimensions.scrollWidth ? -(dimensions.scrollWidth + 100) : -3000;
 
@@ -159,14 +164,14 @@ export default function Experience() {
       className="relative bg-background text-foreground w-full"
     >
       <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center justify-center">
-        {/* Central Bar */}
+        {/* Full-Screen Curtain Bar */}
         <Div
           style={{
             rotate: barRotate,
             scaleX: barScaleX,
             scaleY: barScaleY,
           }}
-          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[10vw] h-screen bg-foreground origin-center pointer-events-none z-10"
+          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[10vw] h-screen bg-foreground origin-center pointer-events-none z-30"
         />
 
         {/* Header Text */}
