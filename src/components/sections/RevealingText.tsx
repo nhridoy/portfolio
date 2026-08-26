@@ -142,7 +142,7 @@ const RevealingText = ({ text }: RevealingTextProps) => {
     <section
       id="short-info"
       ref={sectionRef}
-      className="relative w-full"
+      className="relative w-full bg-background"
       style={{
         height: scrollHeight || "250vh",
       }}
