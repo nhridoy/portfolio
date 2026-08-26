@@ -122,18 +122,24 @@ export default function Experience() {
     [50, 50, 0, 0, 30, 30],
   );
 
-  // Rotation and Resizing Transforms
+  // Rotation Transform
   const barRotate = useTransform(
     scrollYProgress,
     [0, OUTRO_START, OUTRO_END, 1],
     [0, 0, 90, 90],
   );
 
-  // Calculate dynamic scale factor to span exactly 100% of viewport width
+  // Scale X: Covers 100% of viewport width after 90deg rotation
   const targetScaleX =
     dimensions.windowWidth && dimensions.windowHeight
       ? dimensions.windowWidth / dimensions.windowHeight
       : 1.78;
+
+  // Scale Y: Covers 100% of viewport height during the exit curtain expansion
+  const targetScaleY =
+    dimensions.windowWidth && dimensions.windowHeight
+      ? (10 * dimensions.windowHeight) / dimensions.windowWidth
+      : 12;
 
   const barScaleX = useTransform(
     scrollYProgress,
@@ -141,11 +147,11 @@ export default function Experience() {
     [1, 1, targetScaleX, targetScaleX],
   );
 
-  // Bar expands from thin line (0.05) to full viewport curtain (12)
+  // Bar shrinks to thin line (0.05), then dynamically expands to full viewport curtain
   const barScaleY = useTransform(
     scrollYProgress,
     [0, RESIZE_START, RESIZE_END, EXIT_EXPAND_START, EXIT_EXPAND_END, 1],
-    [1, 1, 0.05, 0.05, 12, 12],
+    [1, 1, 0.05, 0.05, targetScaleY, targetScaleY],
   );
 
   // Timeline Scroll Motion
