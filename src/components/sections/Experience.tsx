@@ -59,11 +59,14 @@ const RESIZE_START = 0.28;
 const RESIZE_END = 0.38;
 
 const TIMELINE_START = 0.38;
-const TIMELINE_END = 0.8;
+const TIMELINE_END = 0.75;
 
-// Phase 6: Expand line to full-screen curtain (0.80 -> 0.98)
-const EXIT_EXPAND_START = 0.8;
-const EXIT_EXPAND_END = 0.98;
+// Phase 6: Expand line to full-screen curtain (0.75 -> 0.88)
+const EXIT_EXPAND_START = 0.75;
+const EXIT_EXPAND_END = 0.88;
+
+// Phase 7: Breathing / Hold Space (0.88 -> 1.00)
+// Curtain remains fully expanded on screen, giving the user room to scroll
 // ---------------------------------------------------------------------------
 
 export default function Experience() {
@@ -129,13 +132,12 @@ export default function Experience() {
     [0, 0, 90, 90],
   );
 
-  // Scale X: Covers 100% of viewport width after 90deg rotation
+  // Dynamic calculations for full viewport coverage
   const targetScaleX =
     dimensions.windowWidth && dimensions.windowHeight
       ? dimensions.windowWidth / dimensions.windowHeight
       : 1.78;
 
-  // Scale Y: Covers 100% of viewport height during the exit curtain expansion
   const targetScaleY =
     dimensions.windowWidth && dimensions.windowHeight
       ? (10 * dimensions.windowHeight) / dimensions.windowWidth
@@ -147,7 +149,7 @@ export default function Experience() {
     [1, 1, targetScaleX, targetScaleX],
   );
 
-  // Bar shrinks to thin line (0.05), then dynamically expands to full viewport curtain
+  // Bar expands to curtain by 0.88, then holds full width through 1.00
   const barScaleY = useTransform(
     scrollYProgress,
     [0, RESIZE_START, RESIZE_END, EXIT_EXPAND_START, EXIT_EXPAND_END, 1],
