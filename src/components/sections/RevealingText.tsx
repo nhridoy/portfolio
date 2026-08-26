@@ -148,7 +148,7 @@ const RevealingText = ({ text }: RevealingTextProps) => {
       }}
     >
       <Div
-        ref={containerRef}
+        // ref={containerRef}
         className="sticky top-0 h-dvh theme-container flex flex-col items-center justify-center"
       >
         <Span

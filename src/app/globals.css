@@ -488,8 +488,8 @@
   max-height: calc(--value(number) * 4 * var(--theme-unit));
 } */
 
-@utility h-theme-px {
-  height: calc(2 * var(--theme-unit));
+@utility w-theme-px {
+  width: calc(2 * var(--theme-unit));
 }
 
 @utility h-theme-px {
