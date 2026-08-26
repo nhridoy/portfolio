@@ -70,10 +70,10 @@ export default function Experience() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
 
-  // Measure exact viewport width and track scroll width in pixels
   const [dimensions, setDimensions] = useState({
     scrollWidth: 0,
     windowWidth: 0,
+    windowHeight: 0,
   });
 
   useEffect(() => {
@@ -82,6 +82,7 @@ export default function Experience() {
         setDimensions({
           scrollWidth: trackRef.current.scrollWidth,
           windowWidth: window.innerWidth,
+          windowHeight: window.innerHeight,
         });
       }
     };
@@ -128,10 +129,16 @@ export default function Experience() {
     [0, 0, 90, 90],
   );
 
+  // Calculate dynamic scale factor to span exactly 100% of viewport width
+  const targetScaleX =
+    dimensions.windowWidth && dimensions.windowHeight
+      ? dimensions.windowWidth / dimensions.windowHeight
+      : 1.78;
+
   const barScaleX = useTransform(
     scrollYProgress,
     [0, RESIZE_START, RESIZE_END, 1],
-    [1, 1, 2.5, 2.5],
+    [1, 1, targetScaleX, targetScaleX],
   );
 
   // Bar expands from thin line (0.05) to full viewport curtain (12)
@@ -151,7 +158,6 @@ export default function Experience() {
     [startX, endX],
   );
 
-  // Dynamic Height: 200vh intro phase + screen travel distance
   const dynamicSectionHeight = dimensions.scrollWidth
     ? `calc(200vh + ${dimensions.scrollWidth + dimensions.windowWidth}px)`
     : "600vh";
