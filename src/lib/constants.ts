@@ -7,34 +7,67 @@ export const PERSONAL_INFO = {
   bio: "I'm a Software Engineer with expertise in React, Next.js, Django, and AWS. I specialize in building full-stack applications with a focus on performance, security, and best practices. Having worked with Swiss, US, South Korean, and Bangladesh clients, I bring diverse experience in e-commerce, streaming platforms, ERP systems, and mobile applications.",
 };
 
-export const EXPERIENCE = [
+export const EXPERIENCES = [
   {
+    id: "exp-1",
     role: "Software Engineer",
     company: "SELISE Bangladesh",
     period: "Feb 2023 – Present",
     description:
       "Developing enterprise-grade web applications and scalable solutions for international clients. Focused on performance, security, best practices, and SEO across multiple projects using modern web technologies.",
+    skills: [
+      "React",
+      "Next.js",
+      "TypeScript",
+      "Django",
+      "Python",
+      "AWS",
+      "Docker",
+    ],
   },
   {
+    id: "exp-2",
     role: "Senior Backend Developer",
     company: "Potential",
     period: "Apr 2024 – Aug 2025",
     description:
       "Led backend development for diverse applications including fitness trackers, e-commerce platforms, and video streaming services. Optimized API performance through caching and database tuning. Integrated payment gateways and social authentication. Worked extensively with Django REST Framework, PostgreSQL, Redis, and AWS cloud services.",
+    skills: [
+      "Python",
+      "Django",
+      "Django REST Framework",
+      "PostgreSQL",
+      "Redis",
+      "AWS",
+    ],
   },
   {
+    id: "exp-3",
     role: "Full Stack Developer",
     company: "Nexis Ltd",
     period: "Apr 2022 – Feb 2023",
     description:
       "Built full-stack applications including websites and HR Management Software with custom SSO systems. Integrated hardware devices like fingerprint attendance systems and automated document generation. Worked with Django, FastAPI, React, and cloud infrastructure.",
+    skills: [
+      "Python",
+      "JavaScript",
+      "TypeScript",
+      "Django",
+      "React",
+      "Next.js",
+      "PostgreSQL",
+      "Redis",
+      "Docker",
+    ],
   },
   {
+    id: "exp-4",
     role: "Backend Developer",
     company: "Techforing Ltd",
     period: "Sep 2021 – Apr 2022",
     description:
       "Built backend systems and internal enterprise software. Developed company website and HR management & recruitment platforms.",
+    skills: ["Python", "Django", "Django REST Framework", "PostgreSQL", "AWS"],
   },
 ];
 

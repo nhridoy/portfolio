@@ -3,48 +3,7 @@
 import { useScroll, useSpring, useTransform } from "framer-motion";
 import { div as Div, h2 as H2 } from "framer-motion/m";
 import { useEffect, useRef, useState } from "react";
-
-// ---------------------------------------------------------------------------
-// EXPERIENCES DATA
-// ---------------------------------------------------------------------------
-const EXPERIENCES = [
-  {
-    id: "exp-1",
-    role: "Lead Interactive Developer",
-    company: "Studio Elevate",
-    period: "2023 — Present",
-    description:
-      "Architecting award-winning web applications with WebGL, Framer Motion, and Next.js for high-end global brands.",
-    skills: ["Next.js", "Three.js", "Framer Motion", "Tailwind CSS"],
-  },
-  {
-    id: "exp-2",
-    role: "Senior Frontend Engineer",
-    company: "Aether Dynamics",
-    period: "2022 — 2023",
-    description:
-      "Engineered high-performance design systems and micro-animation frameworks powering enterprise platforms.",
-    skills: ["React", "TypeScript", "GSAP", "Design Systems"],
-  },
-  {
-    id: "exp-3",
-    role: "Creative Technologist",
-    company: "Vanguard Studio",
-    period: "2021 — 2022",
-    description:
-      "Pioneered interactive digital experiences, motion graphics, and canvas-driven UI components.",
-    skills: ["Creative Coding", "WebGL", "Tailwind", "Figma"],
-  },
-  {
-    id: "exp-4",
-    role: "UI/UX Developer",
-    company: "Monolith Labs",
-    period: "2021",
-    description:
-      "Crafted fluid component libraries and responsive motion prototypes for client product launches.",
-    skills: ["React", "JavaScript", "CSS Architecture", "Motion"],
-  },
-];
+import { EXPERIENCES } from "@/lib/constants";
 
 // ---------------------------------------------------------------------------
 // TIMING CONFIG (Normalized scroll progress 0 -> 1)
