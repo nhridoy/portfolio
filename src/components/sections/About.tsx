@@ -14,16 +14,31 @@ import AnimatedSmallText from "./AnimatedSmallText";
 // ---------------------------------------------------------------------------
 // BREATHING & ANIMATION CONFIG (PERCENTAGE-BASED)
 // ---------------------------------------------------------------------------
-// Percentage of scroll distance to pause at the beginning (0.15 = 15%)
-const START_BREATHING_PERCENT = 0.15;
+// Percentage of scroll distance to pause at the beginning (0.05 = 05%)
+const START_BREATHING_PERCENT = 0.05;
 
 // Percentage of scroll distance where the reveal completes (0.85 = 85%)
 // Remaining 15% (from 85% to 100%) acts as the ending pause buffer.
 const END_BREATHING_PERCENT = 0.85;
 
-// Extra scroll track length added at the start/end, as a multiple of 100vh
-// (1.0 = one extra viewport height of "resting" scroll on each side)
-const EXTRA_BREATHING_HEIGHT_PERCENT = 0.6;
+// Extra scroll track length added at the start, as a multiple of 100vh
+const START_BREATHING_HEIGHT_PERCENT = 0.6;
+
+// Extra scroll track length added at the end, as a multiple of 100vh.
+const END_BREATHING_HEIGHT_PERCENT = 1.6;
+
+// ---------------------------------------------------------------------------
+// OUTRO TRANSITION CONFIG
+// ---------------------------------------------------------------------------
+// All values below are fractions of outroProgress (0 -> 1).
+const OUTRO_CONTENT_FADE_START = 0.05; // content starts fading out
+const OUTRO_CONTENT_FADE_END = 0.3; // content fully faded out by here
+const OUTRO_BAR_GROW_START = 0.08; // white bars start growing inward
+const OUTRO_BAR_GROW_END = 0.85; // white bars reach their resting inset
+// Each bar grows to 45% of screen width, leaving 10% of screen as black gap
+const OUTRO_BAR_INSET = "45%";
+const OUTRO_BLACKEN_START = 0.08; // gap starts turning solid black
+const OUTRO_BLACKEN_END = 0.35; // gap is fully solid black
 // ---------------------------------------------------------------------------
 
 function SkillCard({
@@ -100,9 +115,6 @@ function Cross({ className = "" }: { className?: string }) {
   );
 }
 
-// A "+" left behind on the track once the leading cross has scrolled past
-// its position. Hidden by default, fades in right as the leading cross
-// reaches (and departs from) this spot.
 function TrailMarker({
   position,
   scrollYProgress,
@@ -137,37 +149,25 @@ export default function About() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const totalCards = Object.keys(SKILLS).length;
 
-  // Base scroll distance needed for the card-by-card reveal itself.
   const cardsHeightVh = totalCards * 100;
+  const startBreathingVh = 100 * START_BREATHING_HEIGHT_PERCENT;
+  const endBreathingVh = 100 * END_BREATHING_HEIGHT_PERCENT;
+  const totalHeightVh = cardsHeightVh + startBreathingVh + endBreathingVh;
 
-  // Extra "resting" scroll distance appended at the start and end so the
-  // section pauses before the reveal begins and after it finishes.
-  const breathingVh = 100 * EXTRA_BREATHING_HEIGHT_PERCENT;
-  const totalHeightVh = cardsHeightVh + breathingVh * 2;
-
-  // Raw scroll progress across the ENTIRE section (breathing zones included).
   const { scrollYProgress: rawProgress } = useScroll({
     target: sectionRef,
     offset: ["start start", "end end"],
   });
 
-  // Fractions of the total track where the breathing padding lives, derived
-  // from the actual vh amounts so the pause length matches real scroll
-  // distance rather than an arbitrary percentage of the whole track.
-  const breathingStartFraction = breathingVh / totalHeightVh;
-  const breathingEndFraction = 1 - breathingVh / totalHeightVh;
+  const breathingStartFraction = startBreathingVh / totalHeightVh;
+  const breathingEndFraction = 1 - endBreathingVh / totalHeightVh;
 
-  // Remap raw progress so 0 -> 1 only spans the "active" middle zone.
-  // Outside that zone useTransform clamps to 0 or 1, i.e. it holds still.
   const activeProgress = useTransform(
     rawProgress,
     [breathingStartFraction, breathingEndFraction],
     [0, 1],
   );
 
-  // Within the active zone, apply the same start/end breathing percentages
-  // used in the inspiration file so the reveal itself also has a soft
-  // lead-in/lead-out instead of snapping straight to motion.
   const shapedProgress = useTransform(activeProgress, (p) => {
     if (p <= START_BREATHING_PERCENT) return 0;
     if (p >= END_BREATHING_PERCENT) return 1;
@@ -183,18 +183,57 @@ export default function About() {
     mass: 1,
   });
 
-  // Trailing line grows behind the leading cross as it moves right.
+  // --------------------------------------------------------------------- //
+  // OUTRO PROGRESS
+  //
+  // To ensure a resting pause after cards finish revealing, `outroRaw`
+  // starts at `breathingEndFraction` rather than `rawFractionAtRevealComplete`.
+  // --------------------------------------------------------------------- //
+  const rawFractionAtOutroStart = breathingEndFraction;
+
+  const outroRaw = useTransform(
+    rawProgress,
+    [rawFractionAtOutroStart, 1],
+    [0, 1],
+  );
+
+  const outroProgress = useSpring(outroRaw, {
+    stiffness: 300,
+    damping: 40,
+    mass: 1,
+  });
+
+  // Stage 1: content fades out as curtain starts coming in
+  const contentOpacity = useTransform(
+    outroProgress,
+    [0, OUTRO_CONTENT_FADE_START, OUTRO_CONTENT_FADE_END, 1],
+    [1, 1, 0, 0],
+  );
+
+  // Stage 1: white bars grow inward from each edge
+  const barInset = useTransform(
+    outroProgress,
+    [0, OUTRO_BAR_GROW_START, OUTRO_BAR_GROW_END, 1],
+    ["0%", "0%", OUTRO_BAR_INSET, OUTRO_BAR_INSET],
+  );
+
+  // Stage 1: gap between bars turns solid black
+  const gapOpacity = useTransform(
+    outroProgress,
+    [0, OUTRO_BLACKEN_START, OUTRO_BLACKEN_END, 1],
+    [0, 0, 1, 1],
+  );
+
+  const outroOverlayOpacity = useTransform(
+    outroProgress,
+    [0, OUTRO_BAR_GROW_START],
+    [0, 1],
+  );
+
   const lineWidth = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
-
-  // Leading cross moves left -> right along the track
   const crossPosition = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
-
-  // Leading cross spins 360 degrees as you scroll
   const rotateCross = useTransform(scrollYProgress, [0, 1], [0, 360]);
 
-  // Evenly spaced marker positions, one per card, spanning the full track
-  // (0%, ..., 100%). Each one is revealed only once the leading cross has
-  // scrolled past it.
   const markerPositions = useMemo(() => {
     if (totalCards <= 1) return [0];
     return Array.from({ length: totalCards }, (_, i) => i / (totalCards - 1));
@@ -210,67 +249,109 @@ export default function About() {
       }}
     >
       <div className="sticky top-0 theme-container py-12 px-6 md:px-12 h-screen flex flex-col justify-between overflow-hidden">
-        {/* Upper Header Section */}
-        <div className="border-t-[0.0625rem] border-b-[0.0625rem] border-background/20 py-8 shrink-0">
-          <AnimatedSmallText text="The Narrative" />
-          <h2 className="text-4xl sm:text-6xl uppercase font-bold text-background leading-none">
-            <span className="block [font-size:inherit]">Skills &</span>
-            <span className="block [font-size:inherit]">Interests</span>
-          </h2>
-        </div>
+        {/* Main content layer */}
+        <Div
+          style={{ opacity: contentOpacity }}
+          className="flex flex-col justify-between h-full"
+        >
+          {/* Header */}
+          <div className="border-t-[0.0625rem] border-b-[0.0625rem] border-background/20 py-8 shrink-0">
+            <AnimatedSmallText text="The Narrative" />
+            <h2 className="text-4xl sm:text-6xl uppercase font-bold text-background leading-none">
+              <span className="block [font-size:inherit]">Skills &</span>
+              <span className="block [font-size:inherit]">Interests</span>
+            </h2>
+          </div>
 
-        {/* Middle Main Content - Step Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 my-auto mt-5 gap-5">
-          {Object.entries(SKILLS).map(([category, skills], index) => (
-            <SkillCard
-              key={category}
-              card={{
-                title: category,
-                description: skills.join(", "),
-              }}
-              index={index}
-              total={totalCards}
-              scrollYProgress={scrollYProgress}
-            />
-          ))}
-        </div>
-
-        {/* Lower Animated Line with Moving/Rotating Cross */}
-        <div className="absolute bottom-16 left-6 right-6 md:left-12 md:right-12">
-          {/* No static track by default — just the trailing line + crosses */}
-          <div className="w-full h-theme-px relative">
-            {/* Trailing line, grows behind the leading cross */}
-            <Div
-              style={{ width: lineWidth }}
-              className="h-full bg-background/20"
-            />
-
-            {/* "+" marks left behind once the leading cross passes each one */}
-            {markerPositions.map((position, i) => (
-              <TrailMarker
-                // biome-ignore lint/suspicious/noArrayIndexKey: positions are static per render
-                key={i}
-                position={position}
+          {/* Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-3 my-auto mt-5 gap-5">
+            {Object.entries(SKILLS).map(([category, skills], index) => (
+              <SkillCard
+                key={category}
+                card={{
+                  title: category,
+                  description: skills.join(", "),
+                }}
+                index={index}
+                total={totalCards}
                 scrollYProgress={scrollYProgress}
               />
             ))}
-
-            {/* Leading cross: moves right and rotates as you scroll */}
-            <Div
-              style={{
-                top: "50%",
-                left: crossPosition,
-                x: "-50%",
-                y: "-50%",
-                rotate: rotateCross,
-              }}
-              className="absolute pointer-events-none"
-            >
-              <Cross />
-            </Div>
           </div>
-        </div>
+
+          {/* Animated Line & Track Crosses */}
+          <div className="absolute bottom-16 left-6 right-6 md:left-12 md:right-12">
+            <div className="w-full h-theme-px relative">
+              <Div
+                style={{ width: lineWidth }}
+                className="h-full bg-background/20"
+              />
+
+              {markerPositions.map((position, i) => (
+                <TrailMarker
+                  // biome-ignore lint/suspicious/noArrayIndexKey: positions are static per render
+                  key={i}
+                  position={position}
+                  scrollYProgress={scrollYProgress}
+                />
+              ))}
+
+              <Div
+                style={{
+                  top: "50%",
+                  left: crossPosition,
+                  x: "-50%",
+                  y: "-50%",
+                  rotate: rotateCross,
+                }}
+                className="absolute pointer-events-none"
+              >
+                <Cross />
+              </Div>
+            </div>
+          </div>
+        </Div>
       </div>
+
+      {/* Outro Transition Overlay */}
+      <Div
+        style={{ opacity: outroOverlayOpacity }}
+        className="sticky top-0 h-screen w-full pointer-events-none"
+      >
+        <Div
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            height: "100%",
+            width: barInset,
+          }}
+          className="bg-background"
+        />
+
+        <Div
+          style={{
+            position: "absolute",
+            top: 0,
+            right: 0,
+            height: "100%",
+            width: barInset,
+          }}
+          className="bg-background"
+        />
+
+        <Div
+          style={{
+            position: "absolute",
+            top: 0,
+            left: barInset,
+            right: barInset,
+            height: "100%",
+            opacity: gapOpacity,
+          }}
+          className="bg-foreground"
+        />
+      </Div>
     </section>
   );
 }
