@@ -76,8 +76,8 @@ export default function Home() {
       />
       <SectionDots />
       <Hero />
-      <SlidingText text={PERSONAL_INFO.tagline} />
       <RevealingText text={PERSONAL_INFO.shortInfo} />
+      <SlidingText text={PERSONAL_INFO.tagline} />
       <About />
       <Experience />
       <Skills />

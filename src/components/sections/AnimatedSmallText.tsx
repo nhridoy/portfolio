@@ -11,13 +11,13 @@ const AnimatedSmallText = ({ text }: { text: string }) => {
   return (
     <div ref={ref} className="flex items-center overflow-hidden">
       <Div
-        className="h-0.25 bg-foreground shrink-0"
+        className="h-0.25 bg-background shrink-0"
         initial={{ width: 0 }}
         animate={{ width: isInView ? "2rem" : 0 }}
         transition={{ duration: 0.5, ease: "easeInOut" }}
       />
 
-      <span className="ml-2 text-sm font-light uppercase whitespace-nowrap">
+      <span className="ml-2 text-sm font-light uppercase whitespace-nowrap text-background">
         {text}
       </span>
     </div>

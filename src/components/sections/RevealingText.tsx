@@ -9,16 +9,17 @@ import {
 import { div as Div, span as Span } from "framer-motion/m";
 import { Fragment, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { buildTextChars } from "@/lib/utils";
+import { Button } from "../ui/button";
 
 // ---------------------------------------------------------------------------
 // BREATHING & ANIMATION CONFIG (PERCENTAGE-BASED)
 // ---------------------------------------------------------------------------
 // Percentage of scroll distance to pause at the beginning (0.20 = 20%)
-const START_BREATHING_PERCENT = 0.2;
+const START_BREATHING_PERCENT = 0.1;
 
 // Percentage of scroll distance where the reveal completes (0.80 = 80%)
 // Remaining 20% (from 80% to 100%) acts as the ending pause buffer.
-const END_BREATHING_PERCENT = 0.8;
+const END_BREATHING_PERCENT = 0.9;
 
 // Extra scroll track length as a percentage of viewport height (1.0 = 100vh)
 const EXTRA_BREATHING_HEIGHT_PERCENT = 1.0;
@@ -132,6 +133,8 @@ const RevealingText = ({ text }: RevealingTextProps) => {
     mass: 1,
   });
 
+  const progressWidth = useTransform(smoothProgress, (p) => `${p * 100}%`);
+
   // Helper index tracker across nested mapping loops
   let charCounter = 0;
 
@@ -146,9 +149,15 @@ const RevealingText = ({ text }: RevealingTextProps) => {
     >
       <Div
         ref={containerRef}
-        className="sticky top-0 h-dvh theme-container flex items-center justify-center"
+        className="sticky top-0 h-dvh theme-container flex flex-col items-center justify-center"
       >
-        <p className="font-cormorant text-5xl" ref={textRef}>
+        <Span
+          className="h-theme-px bg-foreground/30"
+          style={{
+            width: progressWidth,
+          }}
+        />
+        <p className="font-cormorant text-5xl py-12" ref={textRef}>
           {wordsData.map(({ word, chars }, wordIndex, words) => (
             // biome-ignore lint/suspicious/noArrayIndexKey: <Not a bug>
             <Fragment key={`${word}-${wordIndex}`}>
@@ -170,6 +179,23 @@ const RevealingText = ({ text }: RevealingTextProps) => {
             </Fragment>
           ))}
         </p>
+        <Span
+          className="h-theme-px bg-foreground/30"
+          style={{
+            width: progressWidth,
+          }}
+        />
+        <Button
+          onClick={() =>
+            document
+              .getElementById("contact")
+              ?.scrollIntoView({ behavior: "smooth" })
+          }
+          variant="interactive"
+          className="uppercase font-bold absolute bottom-5 right-0"
+        >
+          Discuss Your Project
+        </Button>
       </Div>
     </section>
   );

@@ -48,7 +48,7 @@ export function Hero() {
                 variant="interactive"
                 className="uppercase font-bold"
               >
-                Discuss Your Project
+                Contact Me
               </Button>
               <Button
                 nativeButton={false}

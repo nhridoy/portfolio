@@ -51,7 +51,22 @@
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
 
-  --text-10xl: calc(170.667 * var(--theme-unit));
+  /* --text-xs: calc(12 / 1440 * 100vw);
+  --text-sm: calc(14 / 1440 * 100vw);
+  --text-base: calc(16 / 1440 * 100vw);
+  --text-lg: calc(18 / 1440 * 100vw);
+  --text-xl: calc(20 / 1440 * 100vw);
+  --text-2xl: calc(24 / 1440 * 100vw);
+  --text-3xl: calc(30 / 1440 * 100vw);
+  --text-4xl: calc(36 / 1440 * 100vw);
+  --text-5xl: calc(48 / 1440 * 100vw); */
+  /* --text-6xl: calc(60 / 1440 * 100vw);
+  --text-7xl: calc(72 / 1440 * 100vw);
+  --text-8xl: calc(96 / 1440 * 100vw);
+  --text-9xl: calc(128 / 1440 * 100vw); */
+  --text-10xl: calc(170.667 / 1440 * 100vw);
+  --text-11xl: calc(227.556 / 1440 * 100vw);
+  --text-12xl: calc(303.407 / 1440 * 100vw);
   --text-10xl--line-height: calc(170.667 * var(--theme-unit));
 }
 
