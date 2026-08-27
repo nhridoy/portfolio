@@ -356,7 +356,7 @@ export default function SelectedWorks() {
     <section
       id="selected-works"
       ref={sectionRef}
-      className="relative h-[600svh] w-full bg-black text-white"
+      className="relative h-[600svh] w-full bg-foreground text-background"
     >
       {/* =====================================================================
           STICKY VIEWPORT
@@ -378,17 +378,17 @@ export default function SelectedWorks() {
           className="absolute inset-0 z-10 h-svh w-full bg-[#d9ff3f]"
         >
           <Div className="flex h-full w-full flex-col items-center justify-center gap-5 px-8 text-center">
-            <Span className="text-xs uppercase tracking-[0.3em] text-black/50">
+            <Span className="text-xs uppercase tracking-[0.3em] text-foreground/50">
               Featured Project
             </Span>
 
-            <h3 className="text-[clamp(2.5rem,7vw,7rem)] font-medium uppercase leading-[0.9] tracking-[-0.05em] text-black">
+            <h3 className="text-[clamp(2.5rem,7vw,7rem)] font-medium uppercase leading-[0.9] tracking-[-0.05em] text-foreground">
               Digital
               <br />
               Experience
             </h3>
 
-            <Span className="max-w-2xl text-xs leading-relaxed tracking-wide text-black/60 sm:text-sm">
+            <Span className="max-w-2xl text-xs leading-relaxed tracking-wide text-foreground/60 sm:text-sm">
               A digital product combining expressive visual design, fluid
               interaction, and robust engineering.
             </Span>
@@ -457,7 +457,7 @@ export default function SelectedWorks() {
                 style={{
                   y: topShutterY,
                 }}
-                className="absolute inset-x-0 top-0 h-1/2 bg-white"
+                className="absolute inset-x-0 top-0 h-1/2 bg-background"
               />
 
               {/* BOTTOM SHUTTER */}
@@ -466,7 +466,7 @@ export default function SelectedWorks() {
                 style={{
                   y: bottomShutterY,
                 }}
-                className="absolute inset-x-0 bottom-0 h-1/2 bg-white"
+                className="absolute inset-x-0 bottom-0 h-1/2 bg-background"
               />
             </Div>
 
@@ -505,7 +505,7 @@ export default function SelectedWorks() {
             </H2>
 
             <Div className="hidden max-w-60 md:block">
-              <Span className="text-xs uppercase tracking-[0.25em] text-white/40">
+              <Span className="text-xs uppercase tracking-[0.25em] text-background/40">
                 A curated collection of products, interfaces, and digital
                 experiences I&apos;ve helped bring to life.
               </Span>
@@ -515,16 +515,16 @@ export default function SelectedWorks() {
           {/* BOTTOM LEFT */}
 
           <Div className="absolute bottom-8 left-0 flex items-center gap-3">
-            <Div className="h-px w-8 bg-white/30" />
+            <Div className="h-px w-8 bg-background/30" />
 
-            <Span className="text-[10px] uppercase tracking-[0.25em] text-white/30">
+            <Span className="text-[10px] uppercase tracking-[0.25em] text-background/30">
               Scroll to explore
             </Span>
           </Div>
 
           {/* BOTTOM RIGHT */}
 
-          <Div className="absolute bottom-8 right-0 font-mono text-[10px] text-white/30">
+          <Div className="absolute bottom-8 right-0 font-mono text-[10px] text-background/30">
             01
           </Div>
         </div>
