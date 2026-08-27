@@ -1,90 +1,82 @@
 "use client";
 
 import { useScroll, useSpring, useTransform } from "framer-motion";
-import { div as Div, span as Span } from "framer-motion/m";
+import { div as Div, h2 as H2, span as Span } from "framer-motion/m";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 
-// ---------------------------------------------------------------------------
-// TIMING
-// ---------------------------------------------------------------------------
-
-const HEADING_START = 0.02;
-const HEADING_END = 0.1;
-
-const OUTLINE_START = 0.1;
-const OUTLINE_END = 0.22;
-const OUTLINE_HOLD_END = 0.36;
-
-const CROSSFADE_START = 0.36;
-const CROSSFADE_END = 0.46;
-
-const DEVICE_HOLD_END = 0.58;
-
-const REVEAL_START = 0.58;
-const REVEAL_END = 0.8;
-
-const FINAL_HOLD_START = 0.8;
-
-// ---------------------------------------------------------------------------
-// DEVICE SOURCE DIMENSIONS
-// ---------------------------------------------------------------------------
+// ============================================================================
+// SOURCE IMAGE
+// ============================================================================
 
 const DEVICE_WIDTH = 800;
 const DEVICE_HEIGHT = 588;
 
 const DEVICE_ASPECT_RATIO = DEVICE_WIDTH / DEVICE_HEIGHT;
 
-// ---------------------------------------------------------------------------
-// DISPLAY AREA
-// ---------------------------------------------------------------------------
+// ============================================================================
+// MACBOOK DISPLAY
+// ============================================================================
 
-/*
- * Approximate display area inside 3d.png.
- */
+const SCREEN_LEFT = 105 / DEVICE_WIDTH;
+const SCREEN_TOP = 23 / DEVICE_HEIGHT;
 
-const SCREEN_LEFT = 0.1325;
-const SCREEN_TOP = 0.034;
-const SCREEN_WIDTH = 0.735;
-const SCREEN_HEIGHT = 0.67;
+const SCREEN_WIDTH = (691 - 105) / DEVICE_WIDTH;
 
-// ---------------------------------------------------------------------------
-// DEVICE TRANSFORM ORIGIN
-// ---------------------------------------------------------------------------
+const SCREEN_HEIGHT = (412 - 23) / DEVICE_HEIGHT;
 
-const DEVICE_ORIGIN_X = 0.5;
-const DEVICE_ORIGIN_Y = 0.363;
+const SCREEN_ASPECT_RATIO = SCREEN_WIDTH / SCREEN_HEIGHT;
 
-// ---------------------------------------------------------------------------
-// DEVICE SIZE CONFIG
-// ---------------------------------------------------------------------------
+// ============================================================================
+// TIMELINE
+// ============================================================================
 
-/*
- * On larger/landscape screens:
- *
- *     70svh
- *
- * determines the laptop's height.
- *
- * On portrait screens:
- *
- *     92vw
- *
- * becomes the limiting factor.
- *
- * This prevents the laptop from ever being wider than the viewport while
- * preserving the height-based sizing on desktop.
- */
+const HEADING_START = 0.02;
+const HEADING_END = 0.1;
 
-const DEVICE_HEIGHT_RATIO = 0.7;
+const OUTLINE_START = 0.1;
+const OUTLINE_END = 0.22;
+
+const OUTLINE_HOLD_END = 0.34;
+
+const CROSSFADE_START = 0.34;
+const CROSSFADE_END = 0.46;
+
+const DEVICE_HOLD_END = 0.56;
+
+const REVEAL_START = 0.56;
+const REVEAL_END = 0.76;
+
+const PROJECT_SCALE_START = 0.56;
+const PROJECT_SCALE_END = 0.82;
+
+// 3D MacBook disappears here.
+// Project DOES NOT disappear here.
+const FRAME_EXIT_START = 0.84;
+const FRAME_EXIT_END = 0.94;
+
+// ============================================================================
+// DEVICE SIZE
+// ============================================================================
+
 const DEVICE_WIDTH_RATIO = 0.92;
+const DEVICE_HEIGHT_RATIO = 0.7;
 
 const DEVICE_MIN_WIDTH = 280;
 const DEVICE_MAX_WIDTH = 1100;
 
-// ---------------------------------------------------------------------------
+const FINAL_OVERSCAN = 1.001;
+
+// ============================================================================
+// MACBOOK ZOOM ORIGIN
+// ============================================================================
+
+const DEVICE_ZOOM_ORIGIN_X = 50;
+const DEVICE_ZOOM_ORIGIN_Y = 34;
+
+// ============================================================================
 // COMPONENT
-// ---------------------------------------------------------------------------
+// ============================================================================
 
 export default function SelectedWorks() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -94,9 +86,9 @@ export default function SelectedWorks() {
     height: 0,
   });
 
-  // -------------------------------------------------------------------------
+  // ==========================================================================
   // VIEWPORT
-  // -------------------------------------------------------------------------
+  // ==========================================================================
 
   useEffect(() => {
     const updateViewport = () => {
@@ -115,9 +107,9 @@ export default function SelectedWorks() {
     };
   }, []);
 
-  // -------------------------------------------------------------------------
-  // SCROLL PROGRESS
-  // -------------------------------------------------------------------------
+  // ==========================================================================
+  // SCROLL
+  // ==========================================================================
 
   const { scrollYProgress: rawProgress } = useScroll({
     target: sectionRef,
@@ -130,13 +122,13 @@ export default function SelectedWorks() {
     mass: 0.8,
   });
 
-  // -------------------------------------------------------------------------
+  // ==========================================================================
   // HEADING
-  // -------------------------------------------------------------------------
+  // ==========================================================================
 
   const headingOpacity = useTransform(
     scrollYProgress,
-    [0, HEADING_START, HEADING_END, FINAL_HOLD_START, 0.9],
+    [0, HEADING_START, HEADING_END, FRAME_EXIT_START, FRAME_EXIT_END],
     [0, 0, 1, 1, 0],
   );
 
@@ -146,19 +138,64 @@ export default function SelectedWorks() {
     [60, 60, 0],
   );
 
-  // -------------------------------------------------------------------------
-  // INTRO TEXT
-  // -------------------------------------------------------------------------
+  // ==========================================================================
+  // DEVICE SIZE
+  // ==========================================================================
 
-  const introTextOpacity = useTransform(
-    scrollYProgress,
-    [0, HEADING_START, HEADING_END, FINAL_HOLD_START, 0.9],
-    [0, 0, 1, 1, 0],
+  const widthBasedDeviceWidth = viewport.width * DEVICE_WIDTH_RATIO;
+
+  const heightBasedDeviceWidth =
+    viewport.height * DEVICE_HEIGHT_RATIO * DEVICE_ASPECT_RATIO;
+
+  const calculatedDeviceWidth =
+    viewport.width > 0 && viewport.height > 0
+      ? Math.min(widthBasedDeviceWidth, heightBasedDeviceWidth)
+      : DEVICE_WIDTH;
+
+  const deviceWidth = Math.min(
+    Math.max(calculatedDeviceWidth, DEVICE_MIN_WIDTH),
+    DEVICE_MAX_WIDTH,
   );
 
-  // -------------------------------------------------------------------------
-  // OUTLINE MACBOOK
-  // -------------------------------------------------------------------------
+  const deviceHeight = deviceWidth / DEVICE_ASPECT_RATIO;
+
+  // ==========================================================================
+  // DEVICE POSITION
+  // ==========================================================================
+
+  const deviceLeft = viewport.width / 2 - deviceWidth / 2;
+
+  const deviceTop = viewport.height / 2 - deviceHeight / 2;
+
+  // ==========================================================================
+  // DISPLAY SIZE
+  // ==========================================================================
+
+  const screenWidth = deviceWidth * SCREEN_WIDTH;
+
+  const screenHeight = deviceHeight * SCREEN_HEIGHT;
+
+  // ==========================================================================
+  // DISPLAY POSITION
+  // ==========================================================================
+
+  const screenLeft = deviceLeft + deviceWidth * SCREEN_LEFT;
+
+  const screenTop = deviceTop + deviceHeight * SCREEN_TOP;
+
+  const screenCenterX = screenLeft + screenWidth / 2;
+
+  const screenCenterY = screenTop + screenHeight / 2;
+
+  // ==========================================================================
+  // OUTLINE
+  // ==========================================================================
+
+  const outlineOpacity = useTransform(
+    scrollYProgress,
+    [0, OUTLINE_START, OUTLINE_END, CROSSFADE_START, CROSSFADE_END],
+    [0, 0, 1, 1, 0],
+  );
 
   const outlineScale = useTransform(
     scrollYProgress,
@@ -172,183 +209,200 @@ export default function SelectedWorks() {
     [35, 0, 0, 0],
   );
 
-  const outlineOpacity = useTransform(
-    scrollYProgress,
-    [0, OUTLINE_START, OUTLINE_END, CROSSFADE_START, CROSSFADE_END],
-    [0, 0, 1, 1, 0],
-  );
-
-  // -------------------------------------------------------------------------
-  // 3D DEVICE OPACITY
-  // -------------------------------------------------------------------------
+  // ==========================================================================
+  // 3D MACBOOK OPACITY
+  // ==========================================================================
 
   const deviceOpacity = useTransform(
     scrollYProgress,
-    [0, CROSSFADE_START, CROSSFADE_END, DEVICE_HOLD_END],
-    [0, 0, 1, 1],
-  );
-
-  // -------------------------------------------------------------------------
-  // RESPONSIVE DEVICE WIDTH
-  // -------------------------------------------------------------------------
-
-  /*
-   * Two independent constraints:
-   *
-   * 1. Width constraint
-   *    --------------------------------
-   *    The laptop cannot exceed 92% of
-   *    the viewport width.
-   *
-   * 2. Height constraint
-   *    --------------------------------
-   *    The laptop's height is capped at
-   *    70% of viewport height.
-   *
-   * Since DEVICE_WIDTH / DEVICE_HEIGHT is
-   * the source image aspect ratio, converting
-   * the height constraint into width gives:
-   *
-   * viewportHeight × 0.70 × aspectRatio
-   *
-   * Then we take the smaller of the two.
-   */
-
-  const widthBasedDeviceWidth = viewport.width * DEVICE_WIDTH_RATIO;
-
-  const heightBasedDeviceWidth =
-    viewport.height * DEVICE_HEIGHT_RATIO * DEVICE_ASPECT_RATIO;
-
-  const calculatedDeviceWidth =
-    viewport.width > 0 && viewport.height > 0
-      ? Math.min(widthBasedDeviceWidth, heightBasedDeviceWidth)
-      : 800;
-
-  const deviceWidth = Math.min(
-    Math.max(calculatedDeviceWidth, DEVICE_MIN_WIDTH),
-    DEVICE_MAX_WIDTH,
-  );
-
-  const deviceHeight = deviceWidth / DEVICE_ASPECT_RATIO;
-
-  // -------------------------------------------------------------------------
-  // DISPLAY SIZE AT SCALE 1
-  // -------------------------------------------------------------------------
-
-  const screenWidthAtScaleOne = deviceWidth * SCREEN_WIDTH;
-
-  const screenHeightAtScaleOne = deviceHeight * SCREEN_HEIGHT;
-
-  // -------------------------------------------------------------------------
-  // TARGET SCALE
-  // -------------------------------------------------------------------------
-
-  /*
-   * We don't calculate the zoom from the MacBook itself.
-   *
-   * We calculate the scale required for the DISPLAY to cover the entire
-   * viewport.
-   *
-   * This means the final zoom works correctly regardless of:
-   *
-   * - mobile
-   * - portrait tablet
-   * - laptop
-   * - desktop
-   * - ultrawide
-   * - 4K
-   */
-
-  const scaleForWidth =
-    viewport.width > 0 ? viewport.width / screenWidthAtScaleOne : 1;
-
-  const scaleForHeight =
-    viewport.height > 0 ? viewport.height / screenHeightAtScaleOne : 1;
-
-  const targetDeviceScale = Math.max(scaleForWidth, scaleForHeight);
-
-  // -------------------------------------------------------------------------
-  // DEVICE SCALE
-  // -------------------------------------------------------------------------
-
-  const deviceScale = useTransform(
-    scrollYProgress,
-    [CROSSFADE_START, DEVICE_HOLD_END, REVEAL_END, FINAL_HOLD_START, 1],
-    [1, 1, targetDeviceScale, targetDeviceScale, targetDeviceScale],
-  );
-
-  // -------------------------------------------------------------------------
-  // PROJECT CONTENT
-  // -------------------------------------------------------------------------
-
-  const projectOpacity = useTransform(
-    scrollYProgress,
-    [CROSSFADE_START, CROSSFADE_END, 1],
-    [0, 1, 1],
-  );
-
-  // -------------------------------------------------------------------------
-  // SCREEN SHUTTERS
-  // -------------------------------------------------------------------------
-
-  /*
-   * No opacity animation.
-   *
-   * The white screen simply splits apart.
-   */
-
-  const topPanelY = useTransform(
-    scrollYProgress,
-    [CROSSFADE_START, DEVICE_HOLD_END, REVEAL_END, FINAL_HOLD_START, 1],
-    ["0%", "0%", "-105%", "-105%", "-105%"],
-  );
-
-  const bottomPanelY = useTransform(
-    scrollYProgress,
-    [CROSSFADE_START, DEVICE_HOLD_END, REVEAL_END, FINAL_HOLD_START, 1],
-    ["0%", "0%", "105%", "105%", "105%"],
-  );
-
-  // -------------------------------------------------------------------------
-  // MACBOOK IMAGE VISIBILITY
-  // -------------------------------------------------------------------------
-
-  /*
-   * Once the screen has taken over the viewport, the MacBook itself
-   * disappears so the project can continue as a full-screen experience.
-   */
-
-  const deviceImageOpacity = useTransform(
-    scrollYProgress,
-    [CROSSFADE_START, CROSSFADE_END, REVEAL_END, FINAL_HOLD_START],
+    [CROSSFADE_START, CROSSFADE_END, FRAME_EXIT_START, FRAME_EXIT_END],
     [0, 1, 1, 0],
   );
 
-  // -------------------------------------------------------------------------
+  // ==========================================================================
+  // PROJECT OPACITY
+  // ==========================================================================
+
+  /*
+   * IMPORTANT:
+   *
+   * Project appears only AFTER the 3D MacBook reaches 100%.
+   *
+   * It remains visible after the MacBook disappears.
+   *
+   * The project is therefore independent from the MacBook's exit animation.
+   *
+   *                3D
+   *                 ↓
+   *          ┌─────────────┐
+   *          │   100%      │
+   *          └─────────────┘
+   *                 ↓
+   *              PROJECT
+   *                 ↓
+   *       ┌──────────────────┐
+   *       │                  │
+   *       │     PROJECT      │
+   *       │                  │
+   *       └──────────────────┘
+   *
+   * The project remains visible for the remainder of this section.
+   */
+
+  const projectOpacity = useTransform(
+    scrollYProgress,
+    [0, CROSSFADE_END, REVEAL_START, 1],
+    [0, 0, 1, 1],
+  );
+
+  // ==========================================================================
+  // MACBOOK ZOOM
+  // ==========================================================================
+
+  const scaleForWidth = viewport.width > 0 ? viewport.width / screenWidth : 1;
+
+  const scaleForHeight =
+    viewport.height > 0 ? viewport.height / screenHeight : 1;
+
+  const finalDeviceScale =
+    Math.max(scaleForWidth, scaleForHeight) * FINAL_OVERSCAN;
+
+  const deviceScale = useTransform(
+    scrollYProgress,
+    [
+      CROSSFADE_START,
+      DEVICE_HOLD_END,
+      PROJECT_SCALE_START,
+      PROJECT_SCALE_END,
+      1,
+    ],
+    [1, 1, 1, finalDeviceScale, finalDeviceScale],
+  );
+
+  // ==========================================================================
+  // DEVICE Y
+  // ==========================================================================
+
+  const DEVICE_ZOOM_Y = -0.035;
+
+  const deviceY = useTransform(
+    scrollYProgress,
+    [PROJECT_SCALE_START, PROJECT_SCALE_END, 1],
+    [0, viewport.height * DEVICE_ZOOM_Y, viewport.height * DEVICE_ZOOM_Y],
+  );
+
+  // ==========================================================================
+  // PROJECT INITIAL SCALE
+  // ==========================================================================
+
+  /*
+   * Project starts as a viewport-sized element.
+   *
+   * It is uniformly scaled down until it covers the MacBook display.
+   */
+
+  const projectInitialScale =
+    viewport.width > 0 && viewport.height > 0
+      ? Math.max(screenWidth / viewport.width, screenHeight / viewport.height)
+      : 1;
+
+  const projectScale = useTransform(
+    scrollYProgress,
+    [PROJECT_SCALE_START, PROJECT_SCALE_END, 1],
+    [projectInitialScale, 1, 1],
+  );
+
+  // ==========================================================================
+  // PROJECT POSITION
+  // ==========================================================================
+
+  const projectInitialX = screenCenterX - viewport.width / 2;
+
+  const projectInitialY = screenCenterY - viewport.height / 2;
+
+  const projectX = useTransform(
+    scrollYProgress,
+    [PROJECT_SCALE_START, PROJECT_SCALE_END, 1],
+    [projectInitialX, 0, 0],
+  );
+
+  const projectY = useTransform(
+    scrollYProgress,
+    [PROJECT_SCALE_START, PROJECT_SCALE_END, 1],
+    [projectInitialY, 0, 0],
+  );
+
+  // ==========================================================================
+  // WHITE SHUTTERS
+  // ==========================================================================
+
+  const topShutterY = useTransform(
+    scrollYProgress,
+    [REVEAL_START, REVEAL_END, 1],
+    ["0%", "-105%", "-105%"],
+  );
+
+  const bottomShutterY = useTransform(
+    scrollYProgress,
+    [REVEAL_START, REVEAL_END, 1],
+    ["0%", "105%", "105%"],
+  );
+
+  // ==========================================================================
   // RENDER
-  // -------------------------------------------------------------------------
+  // ==========================================================================
 
   return (
     <section
       id="selected-works"
       ref={sectionRef}
-      className="relative h-[600svh] w-full bg-foreground text-background"
+      className="relative h-[600svh] w-full bg-black text-white"
     >
       {/* =====================================================================
           STICKY VIEWPORT
           ===================================================================== */}
 
-      <div className="sticky top-0 h-screen w-full overflow-hidden">
+      <div className="sticky top-0 h-svh w-full overflow-hidden">
         {/* ===================================================================
-            FULL VIEWPORT DEVICE STAGE
-
-            NOT inside theme-container.
+            PROJECT LAYER
             =================================================================== */}
 
-        <Div className="absolute inset-0 z-20 flex items-center justify-center">
-          {/* =================================================================
-              OUTLINE MACBOOK
-              ================================================================= */}
+        <Div
+          style={{
+            opacity: projectOpacity,
+            x: projectX,
+            y: projectY,
+            scale: projectScale,
+            transformOrigin: "50% 50%",
+          }}
+          className="absolute inset-0 z-10 h-svh w-full bg-[#d9ff3f]"
+        >
+          <Div className="flex h-full w-full flex-col items-center justify-center gap-5 px-8 text-center">
+            <Span className="text-xs uppercase tracking-[0.3em] text-black/50">
+              Featured Project
+            </Span>
+
+            <h3 className="text-[clamp(2.5rem,7vw,7rem)] font-medium uppercase leading-[0.9] tracking-[-0.05em] text-black">
+              Digital
+              <br />
+              Experience
+            </h3>
+
+            <Span className="max-w-2xl text-xs leading-relaxed tracking-wide text-black/60 sm:text-sm">
+              A digital product combining expressive visual design, fluid
+              interaction, and robust engineering.
+            </Span>
+          </Div>
+        </Div>
+
+        {/* ===================================================================
+            MACBOOK LAYER
+            =================================================================== */}
+
+        <Div className="pointer-events-none absolute inset-0 z-20">
+          {/* ================================================================
+              OUTLINE
+              ================================================================ */}
 
           <Div
             style={{
@@ -370,150 +424,95 @@ export default function SelectedWorks() {
             />
           </Div>
 
-          {/* =================================================================
+          {/* ================================================================
               3D MACBOOK
-              ================================================================= */}
+              ================================================================ */}
 
           <Div
             style={{
               opacity: deviceOpacity,
               scale: deviceScale,
+              y: deviceY,
               width: deviceWidth,
-              transformOrigin: `${DEVICE_ORIGIN_X * 100}% ${
-                DEVICE_ORIGIN_Y * 100
-              }%`,
+              transformOrigin: `${DEVICE_ZOOM_ORIGIN_X}% ${DEVICE_ZOOM_ORIGIN_Y}%`,
             }}
             className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
           >
             {/* ==============================================================
-                PROJECT CONTENT
+                DISPLAY / SHUTTERS
                 ============================================================== */}
 
             <Div
-              style={{
-                opacity: projectOpacity,
-                left: `${SCREEN_LEFT * 100}%`,
-                top: `${SCREEN_TOP * 100}%`,
-                width: `${SCREEN_WIDTH * 100}%`,
-                height: `${SCREEN_HEIGHT * 100}%`,
-              }}
-              className="absolute overflow-hidden bg-[#d9ff3f]"
-            >
-              <Div className="flex h-full w-full flex-col items-center justify-center gap-4 px-8 text-center">
-                <Span className="text-xs uppercase tracking-[0.3em] text-black/50">
-                  Featured Project
-                </Span>
-
-                <Span className="text-[clamp(2rem,5vw,5rem)] font-medium uppercase leading-none tracking-[-0.04em] text-black">
-                  Digital Experience
-                </Span>
-
-                <Span className="max-w-xl text-xs leading-relaxed tracking-wide text-black/60 sm:text-sm">
-                  A thoughtful digital product combining expressive visual
-                  design, fluid interaction, and robust engineering.
-                </Span>
-              </Div>
-            </Div>
-
-            {/* ==============================================================
-                WHITE SCREEN SHUTTERS
-                ============================================================== */}
-
-            <Div
-              style={{
-                left: `${SCREEN_LEFT * 100}%`,
-                top: `${SCREEN_TOP * 100}%`,
-                width: `${SCREEN_WIDTH * 100}%`,
-                height: `${SCREEN_HEIGHT * 100}%`,
-              }}
               className="absolute overflow-hidden"
-            >
-              {/* ============================================================
-                  TOP SHUTTER
-                  ============================================================ */}
-
-              <Div
-                style={{
-                  y: topPanelY,
-                }}
-                className="absolute inset-x-0 top-0 h-1/2 bg-background"
-              />
-
-              {/* ============================================================
-                  BOTTOM SHUTTER
-                  ============================================================ */}
-
-              <Div
-                style={{
-                  y: bottomPanelY,
-                }}
-                className="absolute inset-x-0 bottom-0 h-1/2 bg-background"
-              />
-            </Div>
-
-            {/* ==============================================================
-                3D MACBOOK IMAGE
-                ============================================================== */}
-
-            <Div
               style={{
-                opacity: deviceImageOpacity,
+                left: `${SCREEN_LEFT * 100}%`,
+                top: `${SCREEN_TOP * 100}%`,
+                width: `${SCREEN_WIDTH * 100}%`,
+                height: `${SCREEN_HEIGHT * 100}%`,
               }}
-              className="relative z-10"
             >
-              <Image
-                src="/3d.png"
-                alt=""
-                width={DEVICE_WIDTH}
-                height={DEVICE_HEIGHT}
-                priority
-                draggable={false}
-                className="block h-auto w-full select-none"
+              {/* TOP SHUTTER */}
+
+              <Div
+                style={{
+                  y: topShutterY,
+                }}
+                className="absolute inset-x-0 top-0 h-1/2 bg-white"
+              />
+
+              {/* BOTTOM SHUTTER */}
+
+              <Div
+                style={{
+                  y: bottomShutterY,
+                }}
+                className="absolute inset-x-0 bottom-0 h-1/2 bg-white"
               />
             </Div>
+
+            {/* MACBOOK */}
+
+            <Image
+              src="/3d.png"
+              alt=""
+              width={DEVICE_WIDTH}
+              height={DEVICE_HEIGHT}
+              priority
+              draggable={false}
+              className="relative z-10 block h-auto w-full select-none"
+            />
           </Div>
         </Div>
 
         {/* ===================================================================
             THEME CONTAINER
-
-            BELOW DEVICE LAYER.
-
-            The MacBook/project can therefore cover this content as it zooms.
             =================================================================== */}
 
-        <div className="theme-container pointer-events-none absolute inset-0 z-10 h-screen py-12">
-          {/* =================================================================
-              HEADER
-              ================================================================= */}
+        <div className="theme-container pointer-events-none absolute inset-0 h-svh py-12">
+          {/* HEADER */}
 
           <Div
-            className="flex justify-between"
             style={{
               opacity: headingOpacity,
               y: headingY,
             }}
+            className="flex justify-between"
           >
-            <h2 className="text-4xl font-bold uppercase leading-none tracking-tight sm:text-6xl">
+            <H2 className="text-4xl font-bold uppercase leading-none tracking-tight sm:text-6xl">
               Selected
               <br />
               Works
-            </h2>
+            </H2>
 
-            <Span
-              style={{
-                opacity: introTextOpacity,
-              }}
-              className="max-w-60 text-xs uppercase tracking-[0.25em] text-white/40"
-            >
-              A curated collection of products, interfaces, and digital
-              experiences I&apos;ve helped bring to life.
-            </Span>
+            <Div className="hidden max-w-60 md:block">
+              <Span className="text-xs uppercase tracking-[0.25em] text-white/40">
+                A curated collection of products, interfaces, and digital
+                experiences I&apos;ve helped bring to life.
+              </Span>
+            </Div>
           </Div>
 
-          {/* =================================================================
-              BOTTOM LEFT
-              ================================================================= */}
+          {/* BOTTOM LEFT */}
 
           <Div className="absolute bottom-8 left-0 flex items-center gap-3">
             <Div className="h-px w-8 bg-white/30" />
@@ -523,9 +522,7 @@ export default function SelectedWorks() {
             </Span>
           </Div>
 
-          {/* =================================================================
-              BOTTOM RIGHT
-              ================================================================= */}
+          {/* BOTTOM RIGHT */}
 
           <Div className="absolute bottom-8 right-0 font-mono text-[10px] text-white/30">
             01
