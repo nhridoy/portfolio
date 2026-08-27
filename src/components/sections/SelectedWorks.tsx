@@ -17,6 +17,10 @@ const DEVICE_ASPECT_RATIO = DEVICE_WIDTH / DEVICE_HEIGHT;
 // ============================================================================
 // MACBOOK DISPLAY
 // ============================================================================
+//
+// Coordinates of the actual display area inside 3d.png.
+//
+// ============================================================================
 
 const SCREEN_LEFT = 105 / DEVICE_WIDTH;
 const SCREEN_TOP = 23 / DEVICE_HEIGHT;
@@ -25,7 +29,13 @@ const SCREEN_WIDTH = (691 - 105) / DEVICE_WIDTH;
 
 const SCREEN_HEIGHT = (412 - 23) / DEVICE_HEIGHT;
 
-const SCREEN_ASPECT_RATIO = SCREEN_WIDTH / SCREEN_HEIGHT;
+// Actual MacBook display ratio.
+//
+// This should remain 16:10.
+// The project uses this ratio at its INITIAL state.
+// ============================================================================
+
+const SCREEN_ASPECT_RATIO = 16 / 10;
 
 // ============================================================================
 // TIMELINE
@@ -50,8 +60,6 @@ const REVEAL_END = 0.76;
 const PROJECT_SCALE_START = 0.56;
 const PROJECT_SCALE_END = 0.82;
 
-// 3D MacBook disappears here.
-// Project DOES NOT disappear here.
 const FRAME_EXIT_START = 0.84;
 const FRAME_EXIT_END = 0.94;
 
@@ -168,7 +176,7 @@ export default function SelectedWorks() {
   const deviceTop = viewport.height / 2 - deviceHeight / 2;
 
   // ==========================================================================
-  // DISPLAY SIZE
+  // MACBOOK DISPLAY SIZE
   // ==========================================================================
 
   const screenWidth = deviceWidth * SCREEN_WIDTH;
@@ -224,29 +232,11 @@ export default function SelectedWorks() {
   // ==========================================================================
 
   /*
-   * IMPORTANT:
+   * Project remains invisible while the 3D MacBook is transitioning.
    *
-   * Project appears only AFTER the 3D MacBook reaches 100%.
+   * Once the MacBook reaches full opacity, the project appears.
    *
-   * It remains visible after the MacBook disappears.
-   *
-   * The project is therefore independent from the MacBook's exit animation.
-   *
-   *                3D
-   *                 ↓
-   *          ┌─────────────┐
-   *          │   100%      │
-   *          └─────────────┘
-   *                 ↓
-   *              PROJECT
-   *                 ↓
-   *       ┌──────────────────┐
-   *       │                  │
-   *       │     PROJECT      │
-   *       │                  │
-   *       └──────────────────┘
-   *
-   * The project remains visible for the remainder of this section.
+   * It NEVER disappears with the MacBook.
    */
 
   const projectOpacity = useTransform(
@@ -258,6 +248,11 @@ export default function SelectedWorks() {
   // ==========================================================================
   // MACBOOK ZOOM
   // ==========================================================================
+
+  /*
+   * The MacBook itself zooms until its DISPLAY completely covers the
+   * user's viewport.
+   */
 
   const scaleForWidth = viewport.width > 0 ? viewport.width / screenWidth : 1;
 
@@ -292,29 +287,96 @@ export default function SelectedWorks() {
   );
 
   // ==========================================================================
-  // PROJECT INITIAL SCALE
+  // PROJECT INITIAL DIMENSIONS
   // ==========================================================================
 
   /*
-   * Project starts as a viewport-sized element.
+   * THIS IS THE IMPORTANT PART.
    *
-   * It is uniformly scaled down until it covers the MacBook display.
+   * The project does NOT start as:
+   *
+   *     100vw × 100svh
+   *
+   * because that would inherit the user's viewport aspect ratio.
+   *
+   * Instead, its initial dimensions are explicitly based on the MacBook
+   * display and forced to 16:10.
+   *
+   * Therefore:
+   *
+   * Desktop:
+   *     project might start at 580 × 362.5
+   *
+   * Mobile:
+   *     project might start at 280 × 175
+   *
+   * Ultrawide:
+   *     project might start at 700 × 437.5
+   *
+   * The ratio ALWAYS remains:
+   *
+   *     16 : 10
    */
 
-  const projectInitialScale =
-    viewport.width > 0 && viewport.height > 0
-      ? Math.max(screenWidth / viewport.width, screenHeight / viewport.height)
-      : 1;
+  const initialProjectWidth = screenWidth;
 
-  const projectScale = useTransform(
+  const initialProjectHeight = initialProjectWidth / SCREEN_ASPECT_RATIO;
+
+  // ==========================================================================
+  // PROJECT SCALE
+  // ==========================================================================
+
+  /*
+   * The project starts at its ACTUAL display dimensions.
+   *
+   * It then expands to exactly:
+   *
+   *     100vw × 100svh
+   *
+   * We use separate X/Y scaling because the final viewport aspect ratio can
+   * be different from 16:10.
+   *
+   * This is necessary.
+   *
+   * A uniform scale cannot transform a 16:10 rectangle into, for example,
+   * a 9:19 mobile viewport without changing its aspect ratio.
+   */
+
+  const projectScaleX = useTransform(
     scrollYProgress,
     [PROJECT_SCALE_START, PROJECT_SCALE_END, 1],
-    [projectInitialScale, 1, 1],
+    [
+      viewport.width > 0 ? initialProjectWidth / viewport.width : 1,
+
+      1,
+      1,
+    ],
+  );
+
+  const projectScaleY = useTransform(
+    scrollYProgress,
+    [PROJECT_SCALE_START, PROJECT_SCALE_END, 1],
+    [
+      viewport.height > 0 ? initialProjectHeight / viewport.height : 1,
+
+      1,
+      1,
+    ],
   );
 
   // ==========================================================================
   // PROJECT POSITION
   // ==========================================================================
+
+  /*
+   * Initial project center:
+   *
+   *     MacBook display center
+   *
+   * Final project center:
+   *
+   *     viewport center
+   */
 
   const projectInitialX = screenCenterX - viewport.width / 2;
 
@@ -365,14 +427,32 @@ export default function SelectedWorks() {
       <div className="sticky top-0 h-svh w-full overflow-hidden">
         {/* ===================================================================
             PROJECT LAYER
+            ===================================================================
+
+            Base size:
+                100vw × 100svh
+
+            Initial scale:
+                screenWidth  / viewportWidth
+                screenHeight / viewportHeight
+
+            Therefore its INITIAL visible dimensions are:
+
+                screenWidth × screenHeight
+
+            and screenWidth/screenHeight is explicitly 16:10.
             =================================================================== */}
 
         <Div
           style={{
             opacity: projectOpacity,
+
             x: projectX,
             y: projectY,
-            scale: projectScale,
+
+            scaleX: projectScaleX,
+            scaleY: projectScaleY,
+
             transformOrigin: "50% 50%",
           }}
           className="absolute inset-0 z-10 h-svh w-full bg-[#d9ff3f]"
@@ -439,7 +519,7 @@ export default function SelectedWorks() {
             className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
           >
             {/* ==============================================================
-                DISPLAY / SHUTTERS
+                DISPLAY AREA
                 ============================================================== */}
 
             <Div
@@ -451,7 +531,9 @@ export default function SelectedWorks() {
                 height: `${SCREEN_HEIGHT * 100}%`,
               }}
             >
-              {/* TOP SHUTTER */}
+              {/* ============================================================
+                  TOP SHUTTER
+                  ============================================================ */}
 
               <Div
                 style={{
@@ -460,7 +542,9 @@ export default function SelectedWorks() {
                 className="absolute inset-x-0 top-0 h-1/2 bg-background"
               />
 
-              {/* BOTTOM SHUTTER */}
+              {/* ============================================================
+                  BOTTOM SHUTTER
+                  ============================================================ */}
 
               <Div
                 style={{
@@ -470,7 +554,9 @@ export default function SelectedWorks() {
               />
             </Div>
 
-            {/* MACBOOK */}
+            {/* ==============================================================
+                MACBOOK
+                ============================================================== */}
 
             <Image
               src="/3d.png"
@@ -489,7 +575,9 @@ export default function SelectedWorks() {
             =================================================================== */}
 
         <div className="theme-container pointer-events-none absolute inset-0 h-svh py-12">
-          {/* HEADER */}
+          {/* ================================================================
+              HEADER
+              ================================================================ */}
 
           <Div
             style={{
@@ -512,7 +600,9 @@ export default function SelectedWorks() {
             </Div>
           </Div>
 
-          {/* BOTTOM LEFT */}
+          {/* ================================================================
+              BOTTOM LEFT
+              ================================================================ */}
 
           <Div className="absolute bottom-8 left-0 flex items-center gap-3">
             <Div className="h-px w-8 bg-background/30" />
@@ -522,7 +612,9 @@ export default function SelectedWorks() {
             </Span>
           </Div>
 
-          {/* BOTTOM RIGHT */}
+          {/* ================================================================
+              BOTTOM RIGHT
+              ================================================================ */}
 
           <Div className="absolute bottom-8 right-0 font-mono text-[10px] text-background/30">
             01
