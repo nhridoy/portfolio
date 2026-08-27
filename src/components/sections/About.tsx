@@ -243,12 +243,12 @@ export default function About() {
     <section
       id="about"
       ref={sectionRef}
-      className="bg-[#0A0A0A] relative"
+      className="bg-foreground relative"
       style={{
         height: `${totalHeightVh}vh`,
       }}
     >
-      <div className="sticky top-0 theme-container py-12 px-6 md:px-12 h-screen flex flex-col justify-between overflow-hidden">
+      <div className="sticky top-0 theme-container py-12 h-screen flex flex-col justify-between overflow-hidden">
         {/* Main content layer */}
         <Div
           style={{ opacity: contentOpacity }}

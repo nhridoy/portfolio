@@ -22,6 +22,13 @@ const Experience = dynamic(() => import("@/components/sections/Experience"), {
   ssr: true,
 });
 
+const SelectedWorks = dynamic(
+  () => import("@/components/sections/SelectedWorks"),
+  {
+    ssr: true,
+  },
+);
+
 const Skills = dynamic(() => import("@/components/sections/Skills"), {
   ssr: true,
 });
@@ -80,6 +87,7 @@ export default function Home() {
       <SlidingText text={PERSONAL_INFO.tagline} />
       <About />
       <Experience />
+      <SelectedWorks />
       <Skills />
       <Projects />
       <Contact />
