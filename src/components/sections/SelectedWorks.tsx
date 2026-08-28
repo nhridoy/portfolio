@@ -27,32 +27,34 @@ const SCREEN_HEIGHT = (412 - 23) / DEVICE_HEIGHT;
 const SCREEN_ASPECT_RATIO = 16 / 10;
 
 // ============================================================================
-// TIMELINE (ADJUSTED FOR NON-OVERLAPPING TRANSITION)
+// TIMELINE
 // ============================================================================
 
-const HEADING_START = 0.02;
-const HEADING_END = 0.1;
+const HEADING_START = 0.01;
+const HEADING_END = 0.05;
 
-const OUTLINE_START = 0.1;
-const OUTLINE_END = 0.22;
+const OUTLINE_START = 0.05;
+const OUTLINE_END = 0.12;
 
-const OUTLINE_HOLD_END = 0.34;
+const OUTLINE_HOLD_END = 0.18;
 
-const CROSSFADE_START = 0.34;
-const CROSSFADE_END = 0.46;
+const CROSSFADE_START = 0.18;
+const CROSSFADE_END = 0.25;
 
-const DEVICE_HOLD_END = 0.52;
+const DEVICE_HOLD_END = 0.28;
 
-const REVEAL_START = 0.52;
-const REVEAL_END = 0.68;
+const REVEAL_START = 0.28;
+const REVEAL_END = 0.38;
 
-const PROJECT_SCALE_START = 0.52;
-const PROJECT_SCALE_END = 0.76;
+const PROJECT_SCALE_START = 0.28;
+const PROJECT_SCALE_END = 0.4;
 
-const FRAME_EXIT_START = 0.7;
-const FRAME_EXIT_END = 0.76;
+const FRAME_EXIT_START = 0.36;
+const FRAME_EXIT_END = 0.4;
 
-const PROJECT_SLIDES_START = 0.78;
+// Slides start at 0.40 and finish at 0.92 for a punchier scroll pace
+const PROJECT_SLIDES_START = 0.4;
+const PROJECT_SLIDES_END = 0.92;
 
 // ============================================================================
 // DEVICE SIZE
@@ -156,9 +158,9 @@ export default function SelectedWorks() {
   });
 
   const scrollYProgress = useSpring(rawProgress, {
-    stiffness: 250,
-    damping: 35,
-    mass: 0.8,
+    stiffness: 140,
+    damping: 26,
+    mass: 0.5,
   });
 
   // ==========================================================================
@@ -344,12 +346,15 @@ export default function SelectedWorks() {
       ? projectTrackWidth
       : viewport.width * PROJECTS.length;
 
-  const PROJECT_SCROLL_MULTIPLIER = 1.25;
+  // Reduced multiplier to speed up horizontal traversal per pixel scrolled
+  const PROJECT_SCROLL_MULTIPLIER = 1.35;
+
+  const BREATHING_SPACE = viewport.height * 0.2;
 
   const dynamicSectionHeight =
     viewport.width > 0 && viewport.height > 0 && projectTravelDistance > 0
-      ? `calc(100vh + ${projectTravelDistance * PROJECT_SCROLL_MULTIPLIER}px)`
-      : "600vh";
+      ? `calc(100vh + ${projectTravelDistance * PROJECT_SCROLL_MULTIPLIER + BREATHING_SPACE}px)`
+      : "500vh";
 
   const projectTrackStartX = viewport.width;
 
@@ -360,13 +365,13 @@ export default function SelectedWorks() {
 
   const projectTrackX = useTransform(
     scrollYProgress,
-    [PROJECT_SLIDES_START, 1],
-    [projectTrackStartX, projectTrackEndX],
+    [PROJECT_SLIDES_START, PROJECT_SLIDES_END, 1],
+    [projectTrackStartX, projectTrackEndX, projectTrackEndX],
   );
 
   const projectSliderOpacity = useTransform(
     scrollYProgress,
-    [PROJECT_SCALE_END, PROJECT_SLIDES_START, PROJECT_SLIDES_START + 0.02],
+    [PROJECT_SCALE_END, PROJECT_SLIDES_START, PROJECT_SLIDES_START + 0.01],
     [0, 0, 1],
   );
 
