@@ -20,9 +20,9 @@ const RESIZE_END = 0.38;
 const TIMELINE_START = 0.38;
 const TIMELINE_END = 0.75;
 
-// Phase 6: Expand line to full-screen curtain (0.75 -> 0.88)
+// Phase 6: Expand line to full-screen curtain (0.75 -> 0.95)
 const EXIT_EXPAND_START = 0.75;
-const EXIT_EXPAND_END = 0.88;
+const EXIT_EXPAND_END = 0.95;
 
 // Phase 7: Breathing / Hold Space (0.88 -> 1.00)
 // Curtain remains fully expanded on screen, giving the user room to scroll

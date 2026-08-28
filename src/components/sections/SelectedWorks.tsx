@@ -17,10 +17,8 @@ const DEVICE_ASPECT_RATIO = DEVICE_WIDTH / DEVICE_HEIGHT;
 // ============================================================================
 // MACBOOK DISPLAY
 // ============================================================================
-//
+
 // Coordinates of the actual display area inside 3d.png.
-//
-// ============================================================================
 
 const SCREEN_LEFT = 105 / DEVICE_WIDTH;
 const SCREEN_TOP = 23 / DEVICE_HEIGHT;
@@ -64,6 +62,18 @@ const FRAME_EXIT_START = 0.84;
 const FRAME_EXIT_END = 0.94;
 
 // ============================================================================
+// PROJECT SHOWCASE
+// ============================================================================
+//
+// The introductory project text remains visible until the project reaches
+// full-screen.
+//
+// After that, the actual project images start sliding.
+//
+
+const PROJECT_SLIDES_START = 0.84;
+
+// ============================================================================
 // DEVICE SIZE
 // ============================================================================
 
@@ -83,35 +93,76 @@ const DEVICE_ZOOM_ORIGIN_X = 50;
 const DEVICE_ZOOM_ORIGIN_Y = 34;
 
 // ============================================================================
+// PROJECTS
+// ============================================================================
+
+const PROJECTS = [
+  {
+    number: "01",
+    category: "Digital Product",
+    title: "Learning Platform",
+    description:
+      "A scalable learning experience combining thoughtful visual design, fluid interaction, and robust engineering.",
+    image:
+      "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=2400&q=90",
+  },
+  {
+    number: "02",
+    category: "Web Experience",
+    title: "Digital Commerce",
+    description:
+      "A refined commerce experience designed around clear navigation, expressive visuals, and effortless interaction.",
+    image:
+      "https://images.unsplash.com/photo-1559028012-481c04fa702d?auto=format&fit=crop&w=2400&q=90",
+  },
+  {
+    number: "03",
+    category: "Product Interface",
+    title: "Connected Experience",
+    description:
+      "A modern product interface built around clarity, purposeful motion, and a seamless relationship between content and interaction.",
+    image:
+      "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=2400&q=90",
+  },
+];
+
+// ============================================================================
 // COMPONENT
 // ============================================================================
 
 export default function SelectedWorks() {
   const sectionRef = useRef<HTMLElement>(null);
+  const projectTrackRef = useRef<HTMLDivElement>(null);
 
   const [viewport, setViewport] = useState({
     width: 0,
     height: 0,
   });
 
+  const [projectTrackWidth, setProjectTrackWidth] = useState(0);
+
   // ==========================================================================
-  // VIEWPORT
+  // VIEWPORT + PROJECT CONTENT MEASUREMENT
   // ==========================================================================
 
   useEffect(() => {
-    const updateViewport = () => {
+    const updateDimensions = () => {
       setViewport({
         width: window.innerWidth,
         height: window.innerHeight,
       });
+
+      if (projectTrackRef.current) {
+        setProjectTrackWidth(projectTrackRef.current.scrollWidth);
+      }
     };
 
-    updateViewport();
+    updateDimensions();
 
-    window.addEventListener("resize", updateViewport);
+    window.addEventListener("resize", updateDimensions);
 
     return () => {
-      window.removeEventListener("resize", updateViewport);
+      window.removeEventListener("resize", updateDimensions);
     };
   }, []);
 
@@ -232,17 +283,40 @@ export default function SelectedWorks() {
   // ==========================================================================
 
   /*
-   * Project remains invisible while the 3D MacBook is transitioning.
+   * The project layer begins exactly as before.
    *
-   * Once the MacBook reaches full opacity, the project appears.
-   *
-   * It NEVER disappears with the MacBook.
+   * It starts at the MacBook display dimensions and expands to the
+   * full viewport.
    */
 
   const projectOpacity = useTransform(
     scrollYProgress,
     [0, CROSSFADE_END, REVEAL_START, 1],
     [0, 0, 1, 1],
+  );
+
+  // ==========================================================================
+  // EXISTING PROJECT INTRO TEXT
+  // ==========================================================================
+
+  /*
+   * THIS IS THE ORIGINAL PROJECT INTRO.
+   *
+   * It remains visible while the project expands to full-screen.
+   *
+   * Once the project has reached full-screen, it fades out so the actual
+   * project images can take over.
+   */
+
+  const projectIntroOpacity = useTransform(
+    scrollYProgress,
+    [
+      PROJECT_SCALE_START,
+      PROJECT_SCALE_END,
+      PROJECT_SLIDES_START,
+      PROJECT_SLIDES_START + 0.015,
+    ],
+    [1, 1, 1, 0],
   );
 
   // ==========================================================================
@@ -291,31 +365,9 @@ export default function SelectedWorks() {
   // ==========================================================================
 
   /*
-   * THIS IS THE IMPORTANT PART.
+   * Initial project dimensions are based on the actual MacBook display.
    *
-   * The project does NOT start as:
-   *
-   *   100vw × 100svh
-   *
-   * because that would inherit the user's viewport aspect ratio.
-   *
-   * Instead, its initial dimensions are explicitly based on the MacBook
-   * display and forced to 16:10.
-   *
-   * Therefore:
-   *
-   * Desktop:
-   *   project might start at 580 × 362.5
-   *
-   * Mobile:
-   *   project might start at 280 × 175
-   *
-   * Ultrawide:
-   *   project might start at 700 × 437.5
-   *
-   * The ratio ALWAYS remains:
-   *
-   *   16 : 10
+   * The ratio ALWAYS remains 16:10.
    */
 
   const initialProjectWidth = screenWidth;
@@ -326,42 +378,16 @@ export default function SelectedWorks() {
   // PROJECT SCALE
   // ==========================================================================
 
-  /*
-   * The project starts at its ACTUAL display dimensions.
-   *
-   * It then expands to exactly:
-   *
-   *   100vw × 100svh
-   *
-   * We use separate X/Y scaling because the final viewport aspect ratio can
-   * be different from 16:10.
-   *
-   * This is necessary.
-   *
-   * A uniform scale cannot transform a 16:10 rectangle into, for example,
-   * a 9:19 mobile viewport without changing its aspect ratio.
-   */
-
   const projectScaleX = useTransform(
     scrollYProgress,
     [PROJECT_SCALE_START, PROJECT_SCALE_END, 1],
-    [
-      viewport.width > 0 ? initialProjectWidth / viewport.width : 1,
-
-      1,
-      1,
-    ],
+    [viewport.width > 0 ? initialProjectWidth / viewport.width : 1, 1, 1],
   );
 
   const projectScaleY = useTransform(
     scrollYProgress,
     [PROJECT_SCALE_START, PROJECT_SCALE_END, 1],
-    [
-      viewport.height > 0 ? initialProjectHeight / viewport.height : 1,
-
-      1,
-      1,
-    ],
+    [viewport.height > 0 ? initialProjectHeight / viewport.height : 1, 1, 1],
   );
 
   // ==========================================================================
@@ -411,6 +437,114 @@ export default function SelectedWorks() {
   );
 
   // ==========================================================================
+  // DYNAMIC PROJECT SCROLL DISTANCE
+  // ==========================================================================
+
+  /*
+   * The track contains all project screens.
+   *
+   * We start the track one viewport to the RIGHT of the screen:
+   *
+   *     + viewport width
+   *
+   * and finish with the last project occupying the viewport:
+   *
+   *     -(track width - viewport width)
+   *
+   * Therefore the total horizontal travel distance is:
+   *
+   *     track width
+   *
+   * This automatically adapts to:
+   *
+   *   - number of projects
+   *   - viewport width
+   *   - project width
+   */
+
+  const projectTravelDistance =
+    projectTrackWidth > 0 && viewport.width > 0
+      ? projectTrackWidth
+      : viewport.width * PROJECTS.length;
+
+  // ==========================================================================
+  // DYNAMIC SECTION HEIGHT
+  // ==========================================================================
+
+  /*
+   * The project slider occupies the final portion of the normalized timeline.
+   *
+   * Instead of:
+   *
+   *     h-[600svh]
+   *
+   * the section height is derived from the actual horizontal content.
+   *
+   * PROJECT_SLIDES_START = 0.84
+   *
+   * Therefore the final 16% of the scroll progress is used for the
+   * horizontal project movement.
+   *
+   * We give the project movement approximately 1.25 viewport-heights of
+   * vertical scroll for every viewport-width of horizontal movement.
+   *
+   * This makes the projects significantly slower and more cinematic,
+   * while still being completely dynamic.
+   */
+
+  const PROJECT_SCROLL_MULTIPLIER = 1.25;
+
+  const dynamicSectionHeight =
+    viewport.width > 0 && viewport.height > 0 && projectTravelDistance > 0
+      ? `calc(100vh + ${projectTravelDistance * PROJECT_SCROLL_MULTIPLIER}px)`
+      : "600vh";
+
+  // ==========================================================================
+  // PROJECT SLIDER
+  // ==========================================================================
+
+  /*
+   * The project images begin AFTER the existing project intro has reached
+   * full-screen.
+   *
+   * Initial position:
+   *
+   *     +100vw
+   *
+   * This means the first image is completely outside the viewport on the
+   * RIGHT side.
+   *
+   * Final position:
+   *
+   *     -(trackWidth - viewportWidth)
+   *
+   * This means the final project ends perfectly centered in the viewport.
+   */
+
+  const projectTrackStartX = viewport.width;
+
+  const projectTrackEndX =
+    projectTrackWidth > 0 && viewport.width > 0
+      ? -(projectTrackWidth - viewport.width)
+      : -(viewport.width * (PROJECTS.length - 1));
+
+  const projectTrackX = useTransform(
+    scrollYProgress,
+    [PROJECT_SLIDES_START, 1],
+    [projectTrackStartX, projectTrackEndX],
+  );
+
+  // ==========================================================================
+  // PROJECT SLIDER OPACITY
+  // ==========================================================================
+
+  const projectSliderOpacity = useTransform(
+    scrollYProgress,
+    [PROJECT_SCALE_END, PROJECT_SLIDES_START, PROJECT_SLIDES_START + 0.015],
+    [0, 0, 1],
+  );
+
+  // ==========================================================================
   // RENDER
   // ==========================================================================
 
@@ -418,31 +552,18 @@ export default function SelectedWorks() {
     <section
       id="selected-works"
       ref={sectionRef}
-      className="relative h-[600svh] w-full bg-foreground text-background"
+      style={{ height: dynamicSectionHeight }}
+      className="relative w-full bg-foreground text-background"
     >
       {/* =====================================================================
-     STICKY VIEWPORT
-     ===================================================================== */}
+      STICKY VIEWPORT
+      ===================================================================== */}
 
       <div className="sticky top-0 h-svh w-full overflow-hidden">
         {/* ===================================================================
-      PROJECT LAYER
-      ===================================================================
+        PROJECT LAYER
+        =================================================================== */}
 
-      Base size:
-        100vw × 100svh
-
-      Initial scale:
-        screenWidth / viewportWidth
-        screenHeight / viewportHeight
-
-      Therefore its INITIAL visible dimensions are:
-
-        screenWidth × screenHeight
-
-      and screenWidth/screenHeight is explicitly 16:10.
-      =================================================================== */}
-        {/* Projects Section Starts */}
         <Div
           style={{
             opacity: projectOpacity,
@@ -455,9 +576,18 @@ export default function SelectedWorks() {
 
             transformOrigin: "50% 50%",
           }}
-          className="absolute inset-0 z-10 h-svh w-full bg-foreground"
+          className="absolute inset-0 z-10 h-svh w-full overflow-hidden bg-foreground"
         >
-          <Div className="flex h-full w-full flex-col items-center justify-center gap-5 px-8 text-center">
+          {/* ================================================================
+          EXISTING PROJECT INTRO TEXT
+          ================================================================ */}
+
+          <Div
+            style={{
+              opacity: projectIntroOpacity,
+            }}
+            className="absolute inset-0 z-20 flex h-full w-full flex-col items-center justify-center gap-5 px-8 text-center"
+          >
             <Span className="text-xs uppercase tracking-[0.3em] text-background/50">
               Featured Project
             </Span>
@@ -471,16 +601,95 @@ export default function SelectedWorks() {
               interaction, and robust engineering.
             </Span>
           </Div>
+
+          {/* ================================================================
+          PROJECT IMAGE SLIDER
+          ================================================================ */}
+
+          <Div
+            ref={projectTrackRef}
+            style={{
+              opacity: projectSliderOpacity,
+              x: projectTrackX,
+            }}
+            className="absolute inset-0 z-10 flex h-full w-max"
+          >
+            {PROJECTS.map((project) => (
+              <Div
+                key={project.number}
+                className="relative h-full w-screen shrink-0 overflow-hidden bg-foreground"
+              >
+                {/* ==========================================================
+                PROJECT IMAGE
+                ========================================================== */}
+
+                <Image
+                  src={project.image}
+                  alt={project.title}
+                  fill
+                  sizes="100vw"
+                  priority
+                  className="object-cover"
+                />
+
+                {/* ==========================================================
+                IMAGE OVERLAY
+                ========================================================== */}
+
+                <div className="absolute inset-0 bg-foreground/65" />
+
+                {/* ==========================================================
+                PROJECT INFORMATION
+                ========================================================== */}
+
+                <div className="theme-container relative z-10 flex h-full flex-col justify-between py-12">
+                  {/* ========================================================
+                  TOP
+                  ======================================================== */}
+
+                  <div className="flex items-start justify-between">
+                    <Span className="text-xs uppercase tracking-[0.3em] text-background/80">
+                      {project.category}
+                    </Span>
+
+                    <Span className="font-mono text-xs text-background/80">
+                      {project.number}
+                    </Span>
+                  </div>
+
+                  {/* ========================================================
+                  BOTTOM
+                  ======================================================== */}
+
+                  <div className="flex flex-col gap-8 pb-4">
+                    <h3 className="max-w-6xl text-6xl font-medium uppercase leading-[0.82] tracking-none text-background">
+                      {project.title}
+                    </h3>
+
+                    <div className="flex max-w-4xl items-end justify-between gap-8">
+                      <Span className="max-w-xl text-xs leading-relaxed tracking-wide text-background/80 sm:text-sm">
+                        {project.description}
+                      </Span>
+
+                      <Span className="hidden shrink-0 text-[10px] uppercase tracking-[0.25em] text-background/70 sm:block">
+                        Selected Work
+                      </Span>
+                    </div>
+                  </div>
+                </div>
+              </Div>
+            ))}
+          </Div>
         </Div>
-        {/* Projects Section Ends */}
+
         {/* ===================================================================
-      MACBOOK LAYER
-      =================================================================== */}
+        MACBOOK LAYER
+        =================================================================== */}
 
         <Div className="pointer-events-none absolute inset-0 z-20">
           {/* ================================================================
-       OUTLINE
-       ================================================================ */}
+          OUTLINE
+          ================================================================ */}
 
           <Div
             style={{
@@ -503,8 +712,8 @@ export default function SelectedWorks() {
           </Div>
 
           {/* ================================================================
-       3D MACBOOK
-       ================================================================ */}
+          3D MACBOOK
+          ================================================================ */}
 
           <Div
             style={{
@@ -517,8 +726,8 @@ export default function SelectedWorks() {
             className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
           >
             {/* ==============================================================
-        DISPLAY AREA
-        ============================================================== */}
+            DISPLAY AREA
+            ============================================================== */}
 
             <Div
               className="absolute overflow-hidden"
@@ -530,8 +739,8 @@ export default function SelectedWorks() {
               }}
             >
               {/* ============================================================
-         TOP SHUTTER
-         ============================================================ */}
+              TOP SHUTTER
+              ============================================================ */}
 
               <Div
                 style={{
@@ -541,8 +750,8 @@ export default function SelectedWorks() {
               />
 
               {/* ============================================================
-         BOTTOM SHUTTER
-         ============================================================ */}
+              BOTTOM SHUTTER
+              ============================================================ */}
 
               <Div
                 style={{
@@ -553,8 +762,8 @@ export default function SelectedWorks() {
             </Div>
 
             {/* ==============================================================
-        MACBOOK
-        ============================================================== */}
+            MACBOOK
+            ============================================================== */}
 
             <Image
               src="/3d.png"
@@ -569,13 +778,13 @@ export default function SelectedWorks() {
         </Div>
 
         {/* ===================================================================
-      THEME CONTAINER
-      =================================================================== */}
+        THEME CONTAINER
+        =================================================================== */}
 
         <div className="theme-container pointer-events-none absolute inset-0 h-svh py-12">
           {/* ================================================================
-       HEADER
-       ================================================================ */}
+          HEADER
+          ================================================================ */}
 
           <Div
             style={{
@@ -597,19 +806,20 @@ export default function SelectedWorks() {
           </Div>
 
           {/* ================================================================
-       BOTTOM LEFT
-       ================================================================ */}
+          BOTTOM LEFT
+          ================================================================ */}
 
           <Div className="absolute bottom-8 left-0 flex items-center gap-3">
             <Div className="h-px w-8 bg-background/30" />
+
             <Span className="text-[10px] uppercase tracking-[0.25em] text-background/30">
               Scroll to explore
             </Span>
           </Div>
 
           {/* ================================================================
-       BOTTOM RIGHT
-       ================================================================ */}
+          BOTTOM RIGHT
+          ================================================================ */}
 
           <Div className="absolute bottom-8 right-0 font-mono text-[10px] text-background/30">
             01
