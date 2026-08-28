@@ -295,7 +295,7 @@ export default function SelectedWorks() {
    *
    * The project does NOT start as:
    *
-   *     100vw × 100svh
+   *   100vw × 100svh
    *
    * because that would inherit the user's viewport aspect ratio.
    *
@@ -305,17 +305,17 @@ export default function SelectedWorks() {
    * Therefore:
    *
    * Desktop:
-   *     project might start at 580 × 362.5
+   *   project might start at 580 × 362.5
    *
    * Mobile:
-   *     project might start at 280 × 175
+   *   project might start at 280 × 175
    *
    * Ultrawide:
-   *     project might start at 700 × 437.5
+   *   project might start at 700 × 437.5
    *
    * The ratio ALWAYS remains:
    *
-   *     16 : 10
+   *   16 : 10
    */
 
   const initialProjectWidth = screenWidth;
@@ -331,7 +331,7 @@ export default function SelectedWorks() {
    *
    * It then expands to exactly:
    *
-   *     100vw × 100svh
+   *   100vw × 100svh
    *
    * We use separate X/Y scaling because the final viewport aspect ratio can
    * be different from 16:10.
@@ -371,11 +371,11 @@ export default function SelectedWorks() {
   /*
    * Initial project center:
    *
-   *     MacBook display center
+   *   MacBook display center
    *
    * Final project center:
    *
-   *     viewport center
+   *   viewport center
    */
 
   const projectInitialX = screenCenterX - viewport.width / 2;
@@ -421,28 +421,28 @@ export default function SelectedWorks() {
       className="relative h-[600svh] w-full bg-foreground text-background"
     >
       {/* =====================================================================
-          STICKY VIEWPORT
-          ===================================================================== */}
+     STICKY VIEWPORT
+     ===================================================================== */}
 
       <div className="sticky top-0 h-svh w-full overflow-hidden">
         {/* ===================================================================
-            PROJECT LAYER
-            ===================================================================
+      PROJECT LAYER
+      ===================================================================
 
-            Base size:
-                100vw × 100svh
+      Base size:
+        100vw × 100svh
 
-            Initial scale:
-                screenWidth  / viewportWidth
-                screenHeight / viewportHeight
+      Initial scale:
+        screenWidth / viewportWidth
+        screenHeight / viewportHeight
 
-            Therefore its INITIAL visible dimensions are:
+      Therefore its INITIAL visible dimensions are:
 
-                screenWidth × screenHeight
+        screenWidth × screenHeight
 
-            and screenWidth/screenHeight is explicitly 16:10.
-            =================================================================== */}
-
+      and screenWidth/screenHeight is explicitly 16:10.
+      =================================================================== */}
+        {/* Projects Section Starts */}
         <Div
           style={{
             opacity: projectOpacity,
@@ -455,34 +455,32 @@ export default function SelectedWorks() {
 
             transformOrigin: "50% 50%",
           }}
-          className="absolute inset-0 z-10 h-svh w-full bg-[#d9ff3f]"
+          className="absolute inset-0 z-10 h-svh w-full bg-foreground"
         >
           <Div className="flex h-full w-full flex-col items-center justify-center gap-5 px-8 text-center">
-            <Span className="text-xs uppercase tracking-[0.3em] text-foreground/50">
+            <Span className="text-xs uppercase tracking-[0.3em] text-background/50">
               Featured Project
             </Span>
 
-            <h3 className="text-[clamp(2.5rem,7vw,7rem)] font-medium uppercase leading-[0.9] tracking-[-0.05em] text-foreground">
-              Digital
-              <br />
-              Experience
+            <h3 className="text-[clamp(2.5rem,7vw,7rem)] font-medium uppercase leading-[0.9] tracking-[-0.05em] text-background">
+              Digital <br /> Experience
             </h3>
 
-            <Span className="max-w-2xl text-xs leading-relaxed tracking-wide text-foreground/60 sm:text-sm">
+            <Span className="max-w-2xl text-xs leading-relaxed tracking-wide text-background/60 sm:text-sm">
               A digital product combining expressive visual design, fluid
               interaction, and robust engineering.
             </Span>
           </Div>
         </Div>
-
+        {/* Projects Section Ends */}
         {/* ===================================================================
-            MACBOOK LAYER
-            =================================================================== */}
+      MACBOOK LAYER
+      =================================================================== */}
 
         <Div className="pointer-events-none absolute inset-0 z-20">
           {/* ================================================================
-              OUTLINE
-              ================================================================ */}
+       OUTLINE
+       ================================================================ */}
 
           <Div
             style={{
@@ -505,8 +503,8 @@ export default function SelectedWorks() {
           </Div>
 
           {/* ================================================================
-              3D MACBOOK
-              ================================================================ */}
+       3D MACBOOK
+       ================================================================ */}
 
           <Div
             style={{
@@ -519,8 +517,8 @@ export default function SelectedWorks() {
             className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
           >
             {/* ==============================================================
-                DISPLAY AREA
-                ============================================================== */}
+        DISPLAY AREA
+        ============================================================== */}
 
             <Div
               className="absolute overflow-hidden"
@@ -532,8 +530,8 @@ export default function SelectedWorks() {
               }}
             >
               {/* ============================================================
-                  TOP SHUTTER
-                  ============================================================ */}
+         TOP SHUTTER
+         ============================================================ */}
 
               <Div
                 style={{
@@ -543,8 +541,8 @@ export default function SelectedWorks() {
               />
 
               {/* ============================================================
-                  BOTTOM SHUTTER
-                  ============================================================ */}
+         BOTTOM SHUTTER
+         ============================================================ */}
 
               <Div
                 style={{
@@ -555,8 +553,8 @@ export default function SelectedWorks() {
             </Div>
 
             {/* ==============================================================
-                MACBOOK
-                ============================================================== */}
+        MACBOOK
+        ============================================================== */}
 
             <Image
               src="/3d.png"
@@ -571,13 +569,13 @@ export default function SelectedWorks() {
         </Div>
 
         {/* ===================================================================
-            THEME CONTAINER
-            =================================================================== */}
+      THEME CONTAINER
+      =================================================================== */}
 
         <div className="theme-container pointer-events-none absolute inset-0 h-svh py-12">
           {/* ================================================================
-              HEADER
-              ================================================================ */}
+       HEADER
+       ================================================================ */}
 
           <Div
             style={{
@@ -587,9 +585,7 @@ export default function SelectedWorks() {
             className="flex justify-between"
           >
             <H2 className="text-4xl font-bold uppercase leading-none tracking-tight sm:text-6xl">
-              Selected
-              <br />
-              Works
+              Selected <br /> Works
             </H2>
 
             <Div className="hidden max-w-60 md:block">
@@ -601,20 +597,19 @@ export default function SelectedWorks() {
           </Div>
 
           {/* ================================================================
-              BOTTOM LEFT
-              ================================================================ */}
+       BOTTOM LEFT
+       ================================================================ */}
 
           <Div className="absolute bottom-8 left-0 flex items-center gap-3">
             <Div className="h-px w-8 bg-background/30" />
-
             <Span className="text-[10px] uppercase tracking-[0.25em] text-background/30">
               Scroll to explore
             </Span>
           </Div>
 
           {/* ================================================================
-              BOTTOM RIGHT
-              ================================================================ */}
+       BOTTOM RIGHT
+       ================================================================ */}
 
           <Div className="absolute bottom-8 right-0 font-mono text-[10px] text-background/30">
             01
