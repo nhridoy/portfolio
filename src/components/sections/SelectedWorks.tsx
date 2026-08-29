@@ -4,6 +4,7 @@ import { useScroll, useSpring, useTransform } from "framer-motion";
 import { div as Div, h2 as H2, span as Span } from "framer-motion/m";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
+import { PROJECTS } from "@/lib/constants";
 
 // ============================================================================
 // SOURCE IMAGE
@@ -74,48 +75,6 @@ const FINAL_OVERSCAN = 1.001;
 
 const DEVICE_ZOOM_ORIGIN_X = 50;
 const DEVICE_ZOOM_ORIGIN_Y = 34;
-
-// ============================================================================
-// PROJECTS
-// ============================================================================
-
-interface Project {
-  number: string;
-  category: string;
-  title: string;
-  description: string;
-  image: string;
-}
-
-const PROJECTS: Project[] = [
-  {
-    number: "01",
-    category: "Digital Product",
-    title: "Learning Platform",
-    description:
-      "A scalable learning experience combining thoughtful visual design, fluid interaction, and robust engineering.",
-    image:
-      "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=2400&q=90",
-  },
-  {
-    number: "02",
-    category: "Web Experience",
-    title: "Digital Commerce",
-    description:
-      "A refined commerce experience designed around clear navigation, expressive visuals, and effortless interaction.",
-    image:
-      "https://images.unsplash.com/photo-1559028012-481c04fa702d?auto=format&fit=crop&w=2400&q=90",
-  },
-  {
-    number: "03",
-    category: "Product Interface",
-    title: "Connected Experience",
-    description:
-      "A modern product interface built around clarity, purposeful motion, and a seamless relationship between content and interaction.",
-    image:
-      "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=2400&q=90",
-  },
-];
 
 // ============================================================================
 // COMPONENT
@@ -384,8 +343,9 @@ export default function SelectedWorks() {
     >
       <Div className="sticky top-0 h-svh w-full overflow-hidden">
         {/* ===================================================================
-        PROJECT LAYER
-        =================================================================== */}
+    PROJECT LAYER
+    =================================================================== */}
+
         <Div
           style={{
             opacity: projectOpacity,
@@ -417,7 +377,6 @@ export default function SelectedWorks() {
               interaction, and robust engineering.
             </Span>
           </Div>
-
           {/* PROJECT TRACK SLIDER */}
           <Div
             ref={projectTrackRef}
@@ -429,7 +388,7 @@ export default function SelectedWorks() {
           >
             {PROJECTS.map((project) => (
               <Div
-                key={project.number}
+                key={project.id}
                 className="relative h-full w-screen shrink-0 overflow-hidden bg-foreground"
               >
                 <Image
@@ -450,7 +409,7 @@ export default function SelectedWorks() {
                     </Span>
 
                     <Span className="font-mono text-xs text-background/80">
-                      {project.number}
+                      {project.id}
                     </Span>
                   </Div>
 
@@ -476,8 +435,9 @@ export default function SelectedWorks() {
         </Div>
 
         {/* ===================================================================
-        MACBOOK LAYER
-        =================================================================== */}
+    MACBOOK LAYER
+    =================================================================== */}
+
         <Div className="pointer-events-none absolute inset-0 z-20">
           {/* OUTLINE */}
           <Div
@@ -499,7 +459,6 @@ export default function SelectedWorks() {
               className="block h-auto w-full select-none"
             />
           </Div>
-
           {/* 3D MACBOOK FRAME */}
           <Div
             style={{
@@ -548,8 +507,9 @@ export default function SelectedWorks() {
         </Div>
 
         {/* ===================================================================
-        THEME CONTAINER / OVERLAY HEADINGS
-        =================================================================== */}
+    THEME CONTAINER / OVERLAY HEADINGS
+    =================================================================== */}
+
         <Div className="theme-container pointer-events-none absolute inset-0 h-svh py-12">
           <Div
             style={{
@@ -572,7 +532,6 @@ export default function SelectedWorks() {
 
           <Div className="absolute bottom-8 left-0 flex items-center gap-3">
             <Div className="h-px w-8 bg-background/30" />
-
             <Span className="text-[10px] uppercase tracking-[0.25em] text-background/30">
               Scroll to explore
             </Span>
