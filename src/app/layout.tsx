@@ -153,7 +153,7 @@ export default function RootLayout({
           {/* <Header /> */}
           {/* <div className="bg-grain" /> */}
           <ReadingProgress />
-          <Intro />
+          {/* <Intro /> */}
           {children}
           <Footer />
         </Providers>
