@@ -28,14 +28,6 @@ const SelectedWorks = dynamic(
   },
 );
 
-const Skills = dynamic(() => import("@/components/sections/Skills"), {
-  ssr: true,
-});
-
-const Projects = dynamic(() => import("@/components/sections/Projects"), {
-  ssr: true,
-});
-
 const Contact = dynamic(() => import("@/components/sections/Contact"), {
   ssr: true,
 });

@@ -86,11 +86,6 @@ export default function Contact() {
     }, 1500);
   };
 
-  const socialLinks = [
-    { name: "GitHub", url: "https://github.com/nhridoy" },
-    { name: "LinkedIn", url: "https://linkedin.com/in/nahidujjaman-hridoy" },
-  ];
-
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -176,8 +171,12 @@ export default function Contact() {
           {/* Editorial Form with Elevated Budget Options */}
           <form onSubmit={handleSubmit} className="space-y-10">
             <div className="text-2xl md:text-4xl lg:text-5xl font-light leading-relaxed md:leading-snug">
-              Hello! My name is{" "}
+              Hello!{" "}
+              <label className="[font-size:inherit]" htmlFor="name">
+                My name is{" "}
+              </label>
               <input
+                id="name"
                 type="text"
                 required
                 placeholder="your name *"
@@ -187,8 +186,12 @@ export default function Contact() {
                 }
                 className="bg-transparent border-b-2 border-background/30 text-background placeholder-neutral-600 focus:outline-none focus:border-background transition-colors px-2 py-0.5 font-normal w-52 md:w-72"
               />{" "}
-              and I’m looking for help with a project. You can reach me at
+              and I’m looking for help with a project.{" "}
+              <label className="[font-size:inherit]" htmlFor="email">
+                You can reach me at
+              </label>
               <input
+                id="email"
                 type="email"
                 required
                 placeholder="your email *"
@@ -197,9 +200,13 @@ export default function Contact() {
                   setFormData({ ...formData, email: e.target.value })
                 }
                 className="bg-transparent border-b-2 border-background/30 text-background placeholder-neutral-600 focus:outline-none focus:border-background transition-colors px-2 py-0.5 font-normal w-64 md:w-80"
-              />{" "}
-              . Our estimated budget is around{" "}
+              />
+              .{" "}
+              <label className="[font-size:inherit]" htmlFor="budget">
+                Our estimated budget is around
+              </label>
               <select
+                id="budget"
                 value={formData.budget}
                 onChange={(e) =>
                   setFormData({ ...formData, budget: e.target.value })
@@ -234,8 +241,12 @@ export default function Contact() {
                   $50k+
                 </option>
               </select>
-              . Here are a few details:
+              .{" "}
+              <label className="[font-size:inherit]" htmlFor="message">
+                Here are a few details:
+              </label>
               <textarea
+                id="message"
                 placeholder="tell me about your goals..."
                 value={formData.message}
                 onChange={(e) =>

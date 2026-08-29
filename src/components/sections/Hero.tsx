@@ -78,6 +78,7 @@ export function Hero() {
         <Image
           src={Watermark}
           loading="eager"
+          fetchPriority="high"
           alt="Background Hero Watermark"
           className="absolute bottom-0 left-0 w-full md:w-md"
         />
