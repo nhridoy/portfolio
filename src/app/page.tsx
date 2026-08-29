@@ -1,6 +1,5 @@
 import dynamic from "next/dynamic";
 import { Hero } from "@/components/sections/Hero";
-import { SectionDots } from "@/components/ui/section-dots";
 import { PERSONAL_INFO } from "@/lib/constants";
 
 const About = dynamic(() => import("@/components/sections/About"), {
@@ -81,7 +80,7 @@ export default function Home() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <SectionDots />
+      {/* <SectionDots /> */}
       <Hero />
       <RevealingText text={PERSONAL_INFO.shortInfo} />
       <SlidingText text={PERSONAL_INFO.tagline} />
