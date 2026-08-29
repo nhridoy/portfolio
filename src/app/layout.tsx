@@ -3,10 +3,7 @@ import dynamic from "next/dynamic";
 import { Cormorant, Inter, Outfit, Playfair_Display } from "next/font/google";
 import "./globals.css";
 
-import { Analytics } from "@vercel/analytics/next";
-import { SpeedInsights } from "@vercel/speed-insights/next";
-import { Providers } from "@/components/providers/providers";
-import { SmoothScroll } from "@/components/providers/smooth-scroll";
+import { DeferredProviders } from "@/components/providers/deferred-providers";
 import { cn } from "@/lib/utils";
 
 const Footer = dynamic(() => import("@/components/ui/footer"));
@@ -137,16 +134,12 @@ export default function RootLayout({
       suppressHydrationWarning={process.env.NODE_ENV === "production"}
     >
       <body className="min-h-screen">
-        <SmoothScroll>
-          <Analytics />
-          <SpeedInsights />
-          <Providers>
-            <ReadingProgress />
-            <Intro />
-            {children}
-            <Footer />
-          </Providers>
-        </SmoothScroll>
+        <DeferredProviders>
+          <ReadingProgress />
+          <Intro />
+          {children}
+          <Footer />
+        </DeferredProviders>
       </body>
     </html>
   );
