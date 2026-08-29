@@ -28,34 +28,34 @@ const SCREEN_HEIGHT = (412 - 23) / DEVICE_HEIGHT;
 const SCREEN_ASPECT_RATIO = 16 / 10;
 
 // ============================================================================
-// TIMELINE
+// TIMELINE (COMPRESSED FOR FAST RESPONSE)
 // ============================================================================
 
 const HEADING_START = 0.01;
 const HEADING_END = 0.05;
 
 const OUTLINE_START = 0.05;
-const OUTLINE_END = 0.12;
+const OUTLINE_END = 0.1;
 
-const OUTLINE_HOLD_END = 0.18;
+const OUTLINE_HOLD_END = 0.14;
 
-const CROSSFADE_START = 0.18;
-const CROSSFADE_END = 0.25;
+const CROSSFADE_START = 0.14;
+const CROSSFADE_END = 0.2;
 
-const DEVICE_HOLD_END = 0.28;
+const DEVICE_HOLD_END = 0.22;
 
-const REVEAL_START = 0.28;
-const REVEAL_END = 0.38;
+const REVEAL_START = 0.22;
+const REVEAL_END = 0.3;
 
-const PROJECT_SCALE_START = 0.28;
-const PROJECT_SCALE_END = 0.4;
+const PROJECT_SCALE_START = 0.22;
+const PROJECT_SCALE_END = 0.32;
 
-const FRAME_EXIT_START = 0.36;
-const FRAME_EXIT_END = 0.4;
+const FRAME_EXIT_START = 0.28;
+const FRAME_EXIT_END = 0.32;
 
-// Slides start at 0.40 and finish at 0.92 for a punchier scroll pace
-const PROJECT_SLIDES_START = 0.4;
-const PROJECT_SLIDES_END = 0.92;
+// Slides start right at 0.32 and finish at 0.95
+const PROJECT_SLIDES_START = 0.32;
+const PROJECT_SLIDES_END = 0.95;
 
 // ============================================================================
 // DEVICE SIZE
@@ -116,10 +116,11 @@ export default function SelectedWorks() {
     offset: ["start start", "end end"],
   });
 
+  // Fast, instant spring response without floaty lag
   const scrollYProgress = useSpring(rawProgress, {
-    stiffness: 140,
-    damping: 26,
-    mass: 0.5,
+    stiffness: 300,
+    damping: 30,
+    mass: 0.1,
   });
 
   // ==========================================================================
@@ -135,7 +136,7 @@ export default function SelectedWorks() {
   const headingY = useTransform(
     scrollYProgress,
     [0, HEADING_START, HEADING_END],
-    [60, 60, 0],
+    [40, 40, 0],
   );
 
   // ==========================================================================
@@ -183,13 +184,13 @@ export default function SelectedWorks() {
   const outlineScale = useTransform(
     scrollYProgress,
     [OUTLINE_START, OUTLINE_END, OUTLINE_HOLD_END, CROSSFADE_END],
-    [0.88, 1, 1, 1],
+    [0.92, 1, 1, 1],
   );
 
   const outlineY = useTransform(
     scrollYProgress,
     [OUTLINE_START, OUTLINE_END, OUTLINE_HOLD_END, CROSSFADE_END],
-    [35, 0, 0, 0],
+    [20, 0, 0, 0],
   );
 
   // ==========================================================================
@@ -239,16 +240,14 @@ export default function SelectedWorks() {
     [0, 0, 1, 1],
   );
 
+  // Instant dissolve of intro text on zoom finish
   const projectIntroOpacity = useTransform(
     scrollYProgress,
-    [
-      PROJECT_SCALE_START,
-      PROJECT_SCALE_END,
-      PROJECT_SLIDES_START - 0.02,
-      PROJECT_SLIDES_START,
-    ],
-    [1, 1, 1, 0],
+    [REVEAL_START, REVEAL_END, 0.3, 0.33],
+    [0, 1, 1, 0],
   );
+
+  const projectIntroY = useTransform(scrollYProgress, [0.3, 0.33], [0, -20]);
 
   const initialProjectWidth = screenWidth;
   const initialProjectHeight = initialProjectWidth / SCREEN_ASPECT_RATIO;
@@ -305,15 +304,14 @@ export default function SelectedWorks() {
       ? projectTrackWidth
       : viewport.width * PROJECTS.length;
 
-  // Reduced multiplier to speed up horizontal traversal per pixel scrolled
-  const PROJECT_SCROLL_MULTIPLIER = 1.35;
-
-  const BREATHING_SPACE = viewport.height * 0.2;
+  // Reduced multiplier significantly (0.45) for fast horizontal progression
+  const PROJECT_SCROLL_MULTIPLIER = 0.45;
+  const BREATHING_SPACE = viewport.height * 0.1;
 
   const dynamicSectionHeight =
     viewport.width > 0 && viewport.height > 0 && projectTravelDistance > 0
       ? `calc(100vh + ${projectTravelDistance * PROJECT_SCROLL_MULTIPLIER + BREATHING_SPACE}px)`
-      : "500vh";
+      : "250vh";
 
   const projectTrackStartX = viewport.width;
 
@@ -330,8 +328,8 @@ export default function SelectedWorks() {
 
   const projectSliderOpacity = useTransform(
     scrollYProgress,
-    [PROJECT_SCALE_END, PROJECT_SLIDES_START, PROJECT_SLIDES_START + 0.01],
-    [0, 0, 1],
+    [0.3, 0.33],
+    [0, 1],
   );
 
   return (
@@ -343,8 +341,8 @@ export default function SelectedWorks() {
     >
       <Div className="sticky top-0 h-svh w-full overflow-hidden">
         {/* ===================================================================
-    PROJECT LAYER
-    =================================================================== */}
+        PROJECT LAYER
+        =================================================================== */}
 
         <Div
           style={{
@@ -361,8 +359,9 @@ export default function SelectedWorks() {
           <Div
             style={{
               opacity: projectIntroOpacity,
+              y: projectIntroY,
             }}
-            className="absolute inset-0 z-20 flex h-full w-full flex-col items-center justify-center gap-5 px-8 text-center"
+            className="pointer-events-none absolute inset-0 z-20 flex h-full w-full flex-col items-center justify-center gap-5 px-8 text-center"
           >
             <Span className="text-xs uppercase tracking-[0.3em] text-background/50">
               Featured Project
@@ -377,6 +376,7 @@ export default function SelectedWorks() {
               interaction, and robust engineering.
             </Span>
           </Div>
+
           {/* PROJECT TRACK SLIDER */}
           <Div
             ref={projectTrackRef}
@@ -435,8 +435,8 @@ export default function SelectedWorks() {
         </Div>
 
         {/* ===================================================================
-    MACBOOK LAYER
-    =================================================================== */}
+        MACBOOK LAYER
+        =================================================================== */}
 
         <Div className="pointer-events-none absolute inset-0 z-20">
           {/* OUTLINE */}
@@ -459,6 +459,7 @@ export default function SelectedWorks() {
               className="block h-auto w-full select-none"
             />
           </Div>
+
           {/* 3D MACBOOK FRAME */}
           <Div
             style={{
@@ -507,8 +508,8 @@ export default function SelectedWorks() {
         </Div>
 
         {/* ===================================================================
-    THEME CONTAINER / OVERLAY HEADINGS
-    =================================================================== */}
+        THEME CONTAINER / OVERLAY HEADINGS
+        =================================================================== */}
 
         <Div className="theme-container pointer-events-none absolute inset-0 h-svh py-12">
           <Div

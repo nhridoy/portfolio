@@ -88,8 +88,6 @@ export default function Home() {
       <About />
       <Experience />
       <SelectedWorks />
-      <Skills />
-      <Projects />
       <Contact />
     </main>
   );
