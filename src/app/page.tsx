@@ -5,35 +5,21 @@ const Hero = dynamic(() => import("@/components/sections/Hero"), {
   ssr: true,
 });
 
-const About = dynamic(() => import("@/components/sections/About"), {
-  ssr: true,
-});
+const About = dynamic(() => import("@/components/sections/About"));
 
-const SlidingText = dynamic(() => import("@/components/sections/SlidingText"), {
-  ssr: true,
-});
+const SlidingText = dynamic(() => import("@/components/sections/SlidingText"));
 
 const RevealingText = dynamic(
   () => import("@/components/sections/RevealingText"),
-  {
-    ssr: true,
-  },
 );
 
-const Experience = dynamic(() => import("@/components/sections/Experience"), {
-  ssr: true,
-});
+const Experience = dynamic(() => import("@/components/sections/Experience"));
 
 const SelectedWorks = dynamic(
   () => import("@/components/sections/SelectedWorks"),
-  {
-    ssr: true,
-  },
 );
 
-const Contact = dynamic(() => import("@/components/sections/Contact"), {
-  ssr: true,
-});
+const Contact = dynamic(() => import("@/components/sections/Contact"));
 
 export default function Home() {
   const jsonLd = {

@@ -5,23 +5,16 @@ import "./globals.css";
 
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import ReactLenis from "lenis/react";
 import { Providers } from "@/components/providers/providers";
+import { SmoothScroll } from "@/components/providers/smooth-scroll";
 import { cn } from "@/lib/utils";
 
-const Footer = dynamic(() => import("@/components/ui/footer"), {
-  ssr: true,
-});
+const Footer = dynamic(() => import("@/components/ui/footer"));
 
-const Intro = dynamic(() => import("@/components/sections/Intro"), {
-  ssr: true,
-});
+const Intro = dynamic(() => import("@/components/sections/Intro"));
 
 const ReadingProgress = dynamic(
   () => import("@/components/ui/reading-progress"),
-  {
-    ssr: true,
-  },
 );
 
 const inter = Inter({
@@ -145,18 +138,19 @@ export default function RootLayout({
       )}
       suppressHydrationWarning={process.env.NODE_ENV === "production"}
     >
-      <ReactLenis root />
       <body className="min-h-screen">
-        <Analytics />
-        <SpeedInsights />
-        <Providers>
-          {/* <Header /> */}
-          {/* <div className="bg-grain" /> */}
-          <ReadingProgress />
-          <Intro />
-          {children}
-          <Footer />
-        </Providers>
+        <SmoothScroll>
+          <Analytics />
+          <SpeedInsights />
+          <Providers>
+            {/* <Header /> */}
+            {/* <div className="bg-grain" /> */}
+            <ReadingProgress />
+            <Intro />
+            {children}
+            <Footer />
+          </Providers>
+        </SmoothScroll>
       </body>
     </html>
   );

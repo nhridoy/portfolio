@@ -104,7 +104,7 @@
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
 
-/*
+  /*
 |--------------------------------------------------------------------------
 | Theme scale
 |--------------------------------------------------------------------------
@@ -123,7 +123,7 @@
 
   --theme-design-width: 1440;
   --theme-unit: calc(100vw / var(--theme-design-width));
-   --motion-shift: 1.25rem;
+  --motion-shift: 1.25rem;
 }
 
 .dark {
@@ -291,7 +291,6 @@
   line-height: calc(303.407 * var(--theme-unit));
 } */
 
-
 /*
 |--------------------------------------------------------------------------
 | Space Between
@@ -328,7 +327,6 @@
   }
 } */
 
-
 /*
 |--------------------------------------------------------------------------
 | Padding
@@ -362,7 +360,6 @@
 @utility pl-theme-* {
   padding-left: calc(--value(number) * 4 * var(--theme-unit));
 } */
-
 
 /*
 |--------------------------------------------------------------------------
@@ -398,7 +395,6 @@
   margin-left: calc(--value(number) * 4 * var(--theme-unit));
 } */
 
-
 /*
 |--------------------------------------------------------------------------
 | Negative Margin
@@ -433,7 +429,6 @@
   margin-left: calc(--value(number) * -4 * var(--theme-unit));
 } */
 
-
 /*
 |--------------------------------------------------------------------------
 | Gap
@@ -451,7 +446,6 @@
 @utility gap-y-theme-* {
   row-gap: calc(--value(number) * 4 * var(--theme-unit));
 } */
-
 
 /*
 |--------------------------------------------------------------------------
@@ -501,7 +495,6 @@
   height: calc(2 * var(--theme-unit));
 }
 
-
 /*
 |--------------------------------------------------------------------------
 | Border Radius
@@ -536,7 +529,6 @@
   @apply rounded-full;
 } */
 
-
 /*
 |--------------------------------------------------------------------------
 | Positioning
@@ -562,7 +554,6 @@
 @utility left-theme-* {
   left: calc(--value(number) * 4 * var(--theme-unit));
 } */
-
 
 /*
 |--------------------------------------------------------------------------
@@ -590,7 +581,6 @@
   left: calc(--value(number) * -4 * var(--theme-unit));
 } */
 
-
 /*
 |--------------------------------------------------------------------------
 | Border Width
@@ -603,7 +593,6 @@
 /* @utility border-theme-* {
   border-width: calc(--value(number) * var(--theme-unit));
 } */
-
 
 /*
 |--------------------------------------------------------------------------
@@ -622,7 +611,7 @@
 
 @utility no-scrollbar {
   scrollbar-width: none; /* Targets modern Firefox and Chrome */
-  
+
   &::-webkit-scrollbar {
     display: none; /* Targets Safari and older WebKit browsers */
   }

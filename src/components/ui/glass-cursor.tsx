@@ -1,11 +1,11 @@
-'use client'
+"use client";
 
-import { useCursorify } from '@cursorify/react'
-import GlassSurface from '../GlassSurface'
+import { useCursorify } from "@cursorify/react";
+import GlassSurface from "../GlassSurface";
 
 export function GlassCursor() {
-  const { style } = useCursorify()
-  const isHovering = style === 'pointer' || style === 'text'
+  const { style } = useCursorify();
+  const isHovering = style === "pointer" || style === "text";
 
   return (
     <GlassSurface
@@ -21,7 +21,10 @@ export function GlassCursor() {
       height={isHovering ? 60 : 32}
       borderRadius={50}
       className="my-custom-class"
-      style={{ transition: 'width 0.15s, height 0.15s, background-color 0.15s, border 0.15s' }}
+      style={{
+        transition:
+          "width 0.15s, height 0.15s, background-color 0.15s, border 0.15s",
+      }}
     />
-  )
+  );
 }

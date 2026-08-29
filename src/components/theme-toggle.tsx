@@ -1,26 +1,26 @@
-'use client'
+"use client";
 
-import { Monitor, Moon, Sun } from 'lucide-react'
-import { useTheme } from 'next-themes'
-import * as React from 'react'
-import { Button } from '@/components/ui/button'
+import { Monitor, Moon, Sun } from "lucide-react";
+import { useTheme } from "next-themes";
+import * as React from "react";
+import { Button } from "@/components/ui/button";
 
-type Theme = 'light' | 'dark' | 'system'
+type Theme = "light" | "dark" | "system";
 
 export function ThemeToggle() {
-  const { theme, setTheme } = useTheme()
-  const [mounted, setMounted] = React.useState(false)
+  const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = React.useState(false);
 
   React.useEffect(() => {
-    setMounted(true)
-  }, [])
+    setMounted(true);
+  }, []);
 
   const cycleTheme = () => {
-    const themes: Theme[] = ['light', 'dark', 'system']
-    const currentIndex = themes.indexOf(theme as Theme)
-    const nextTheme = themes[(currentIndex + 1) % themes.length]
-    setTheme(nextTheme)
-  }
+    const themes: Theme[] = ["light", "dark", "system"];
+    const currentIndex = themes.indexOf(theme as Theme);
+    const nextTheme = themes[(currentIndex + 1) % themes.length];
+    setTheme(nextTheme);
+  };
 
   if (!mounted) {
     return (
@@ -28,15 +28,15 @@ export function ThemeToggle() {
         <Sun className="h-[1.2rem] w-[1.2rem]" />
         <span className="sr-only">Toggle theme</span>
       </Button>
-    )
+    );
   }
 
   const getIcon = () => {
-    if (theme === 'system') return Monitor
-    return theme === 'dark' ? Moon : Sun
-  }
+    if (theme === "system") return Monitor;
+    return theme === "dark" ? Moon : Sun;
+  };
 
-  const Icon = getIcon()
+  const Icon = getIcon();
 
   return (
     <Button
@@ -49,5 +49,5 @@ export function ThemeToggle() {
       <Icon className="h-[1.2rem] w-[1.2rem]" />
       <span className="sr-only">Theme: {theme}</span>
     </Button>
-  )
+  );
 }
