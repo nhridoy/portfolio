@@ -643,11 +643,11 @@
   mix-blend-mode: overlay;
 }
 
-::selection {
+/* ::selection {
   background-color: color-mix(
     in oklch,
     var(--color-foreground),
     transparent 85%
   );
   color: var(--color-foreground);
-}
+} */
