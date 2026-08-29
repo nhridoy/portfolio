@@ -235,14 +235,13 @@ export default function Contact() {
                 </option>
               </select>
               . Here are a few details:
-              <input
-                type="text"
+              <textarea
                 placeholder="tell me about your goals..."
                 value={formData.message}
                 onChange={(e) =>
                   setFormData({ ...formData, message: e.target.value })
                 }
-                className="bg-transparent border-b-2 border-background/30 text-background placeholder-neutral-600 focus:outline-none focus:border-background transition-colors px-2 py-0.5 font-normal w-full max-w-lg inline-block mt-2 md:mt-0"
+                className="bg-transparent border-b-2 border-background/30 text-background placeholder-neutral-600 focus:outline-none focus:border-background transition-colors px-2 py-0.5 font-normal w-full inline-block mt-2 md:mt-0"
               />
             </div>
 
@@ -305,28 +304,6 @@ export default function Contact() {
             </div>
           </form>
         </Div>
-
-        {/* Footer Social Grid */}
-        <div className="pt-12 border-t border-background/10 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-          <span className="text-xs font-mono text-neutral-500 uppercase tracking-wider">
-            Connect
-          </span>
-          <ul className="flex flex-wrap gap-8">
-            {socialLinks.map((social) => (
-              <li key={social.name}>
-                <a
-                  href={social.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group inline-flex items-center gap-1 text-base font-medium hover:text-neutral-400 transition-colors"
-                >
-                  <span>{social.name}</span>
-                  <ArrowUpRight className="size-4 opacity-0 -translate-x-2 translate-y-2 group-hover:opacity-100 group-hover:translate-x-0 group-hover:translate-y-0 transition-all duration-300" />
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
       </div>
     </section>
   );

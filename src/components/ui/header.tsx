@@ -17,8 +17,8 @@ const Header = ({
   return (
     <header className={cn("py-6 mb-14", className)}>
       <nav className="flex justify-between items-start">
-        <AnimatedLink href="/" className="hover:no-underline">
-          <Caption>Portfolio</Caption>
+        <AnimatedLink href="/" className="hover:no-underline text-foreground">
+          <Caption>NAHID</Caption>
         </AnimatedLink>
 
         <div className="flex items-center gap-4">
