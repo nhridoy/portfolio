@@ -13,9 +13,9 @@ const Footer = dynamic(() => import("@/components/ui/footer"), {
   ssr: true,
 });
 
-const Intro = dynamic(() => import("@/components/sections/Intro"), {
-  ssr: true,
-});
+// const Intro = dynamic(() => import("@/components/sections/Intro"), {
+//   ssr: true,
+// });
 
 const ReadingProgress = dynamic(
   () => import("@/components/ui/reading-progress"),
