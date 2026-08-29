@@ -136,7 +136,7 @@ export default function RootLayout({
       <body className="min-h-screen">
         <DeferredProviders>
           <ReadingProgress />
-          <Intro />
+          {/* <Intro /> */}
           {children}
           <Footer />
         </DeferredProviders>
