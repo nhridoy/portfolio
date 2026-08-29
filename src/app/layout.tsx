@@ -10,9 +10,7 @@ import { SmoothScroll } from "@/components/providers/smooth-scroll";
 import { cn } from "@/lib/utils";
 
 const Footer = dynamic(() => import("@/components/ui/footer"));
-
 const Intro = dynamic(() => import("@/components/sections/Intro"));
-
 const ReadingProgress = dynamic(
   () => import("@/components/ui/reading-progress"),
 );
@@ -143,8 +141,6 @@ export default function RootLayout({
           <Analytics />
           <SpeedInsights />
           <Providers>
-            {/* <Header /> */}
-            {/* <div className="bg-grain" /> */}
             <ReadingProgress />
             <Intro />
             {children}

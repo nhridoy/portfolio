@@ -1,25 +1,14 @@
-import dynamic from "next/dynamic";
+"use client";
+
 import { PERSONAL_INFO } from "@/lib/constants";
+import dynamic from "next/dynamic";
 
-const Hero = dynamic(() => import("@/components/sections/Hero"), {
-  ssr: true,
-});
+const Hero = dynamic(() => import("@/components/sections/Hero"));
 
-const About = dynamic(() => import("@/components/sections/About"));
-
-const SlidingText = dynamic(() => import("@/components/sections/SlidingText"));
-
-const RevealingText = dynamic(
-  () => import("@/components/sections/RevealingText"),
+const HomeSections = dynamic(
+  () => import("@/components/sections/home-sections"),
+  { ssr: false },
 );
-
-const Experience = dynamic(() => import("@/components/sections/Experience"));
-
-const SelectedWorks = dynamic(
-  () => import("@/components/sections/SelectedWorks"),
-);
-
-const Contact = dynamic(() => import("@/components/sections/Contact"));
 
 export default function Home() {
   const jsonLd = {
@@ -61,14 +50,8 @@ export default function Home() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      {/* <SectionDots /> */}
       <Hero />
-      <RevealingText text={PERSONAL_INFO.shortInfo} />
-      <SlidingText text={PERSONAL_INFO.tagline} />
-      <About />
-      <Experience />
-      <SelectedWorks />
-      <Contact />
+      <HomeSections shortInfo={PERSONAL_INFO.shortInfo} tagline={PERSONAL_INFO.tagline} />
     </main>
   );
 }
