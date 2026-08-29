@@ -9,7 +9,7 @@ import { Button } from "../ui/button";
 import Header from "../ui/header";
 import { TypingText } from "../ui/typing-text";
 
-export function Hero() {
+export default function Hero() {
   return (
     <section id="hero" className="relative bg-background">
       <div className="theme-container z-10 relative min-h-dvh flex flex-col justify-center">

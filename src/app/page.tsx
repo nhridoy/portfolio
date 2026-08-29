@@ -1,6 +1,9 @@
 import dynamic from "next/dynamic";
-import { Hero } from "@/components/sections/Hero";
 import { PERSONAL_INFO } from "@/lib/constants";
+
+const Hero = dynamic(() => import("@/components/sections/Hero"), {
+  ssr: true,
+});
 
 const About = dynamic(() => import("@/components/sections/About"), {
   ssr: true,

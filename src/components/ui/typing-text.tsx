@@ -32,16 +32,33 @@ export function TypingText({
     if (!started) return;
 
     let index = 0;
-    const interval = setInterval(() => {
-      if (index <= text.length) {
-        setDisplayedText(text.slice(0, index));
-        index++;
-      } else {
-        clearInterval(interval);
-      }
-    }, speed);
+    let lastTime = 0;
+    let animationFrameId: number;
 
-    return () => clearInterval(interval);
+    const animate = (currentTime: number) => {
+      if (lastTime === 0) lastTime = currentTime;
+      const elapsed = currentTime - lastTime;
+
+      if (elapsed >= speed) {
+        if (index <= text.length) {
+          setDisplayedText(text.slice(0, index));
+          index++;
+          lastTime = currentTime;
+        }
+      }
+
+      if (index <= text.length) {
+        animationFrameId = requestAnimationFrame(animate);
+      }
+    };
+
+    animationFrameId = requestAnimationFrame(animate);
+
+    return () => {
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+      }
+    };
   }, [text, speed, started]);
 
   return (
