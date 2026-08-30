@@ -62,7 +62,6 @@ const nextConfig = {
               "base-uri 'self'",
               "form-action 'self'",
               "frame-ancestors 'self'",
-              "require-trusted-types-for 'script'",
             ].join("; "),
           },
         ],
