@@ -50,8 +50,20 @@ const nextConfig = {
             value: "camera=(), microphone=(), geolocation=(), usb=()",
           },
           {
+            key: "Cross-Origin-Opener-Policy",
+            value: "same-origin",
+          },
+          {
             key: "Content-Security-Policy",
-            value: "upgrade-insecure-requests",
+            value: [
+              "upgrade-insecure-requests",
+              "script-src 'self' 'unsafe-inline' https://va.vercel-scripts.com https://vitals.vercel-insights.com",
+              "object-src 'none'",
+              "base-uri 'self'",
+              "form-action 'self'",
+              "frame-ancestors 'self'",
+              "require-trusted-types-for 'script'",
+            ].join("; "),
           },
         ],
       },
