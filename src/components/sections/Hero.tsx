@@ -7,7 +7,6 @@ import Watermark from "../../assets/watermark.webp";
 import { AnimatedLink } from "../ui/animated-link";
 import { Button } from "../ui/button";
 import Header from "../ui/header";
-import { TypingText } from "../ui/typing-text";
 
 export default function Hero() {
   return (
@@ -65,11 +64,9 @@ export default function Hero() {
                 Download CV
               </Button>
             </div>
-            <TypingText
-              className="text-2xl font-cormorant font-bold"
-              text={PERSONAL_INFO.tagline}
-              delay={0.5}
-            />
+            <span className="text-2xl font-cormorant font-bold">
+              {PERSONAL_INFO.tagline}
+            </span>
           </div>
         </div>
       </div>
