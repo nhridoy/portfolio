@@ -1,9 +1,8 @@
-import type { MetadataRoute } from "next";
 import fs from "node:fs";
 import path from "node:path";
+import type { MetadataRoute } from "next";
 
-const BASE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL || "https://iamnahid.com";
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://iamnahid.com";
 
 const FRONTMATTER_RE = /^---\r?\n([\s\S]*?)\r?\n---/;
 const DATE_RE = /^date:\s*['"]?([^'"\r\n]+)['"]?/m;
