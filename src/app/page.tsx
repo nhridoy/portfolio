@@ -1,9 +1,10 @@
 "use client";
 
-import { PERSONAL_INFO } from "@/lib/constants";
 import dynamic from "next/dynamic";
+import { PERSONAL_INFO } from "@/lib/constants";
 
 const Hero = dynamic(() => import("@/components/sections/Hero"));
+const Intro = dynamic(() => import("@/components/sections/Intro"));
 
 const HomeSections = dynamic(
   () => import("@/components/sections/home-sections"),
@@ -50,8 +51,12 @@ export default function Home() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
+      <Intro />
       <Hero />
-      <HomeSections shortInfo={PERSONAL_INFO.shortInfo} tagline={PERSONAL_INFO.tagline} />
+      <HomeSections
+        shortInfo={PERSONAL_INFO.shortInfo}
+        tagline={PERSONAL_INFO.tagline}
+      />
     </main>
   );
 }
