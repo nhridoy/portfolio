@@ -40,7 +40,11 @@ const cormorant = Cormorant({
   weight: ["400"],
 });
 
+const BASE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL || "https://iamnahid.com";
+
 export const metadata: Metadata = {
+  metadataBase: new URL(BASE_URL),
   title: "Nahidujjaman Hridoy | Software Engineer | Full-Stack & DevOps Expert",
   description:
     "Nahidujjaman Hridoy is a skilled Software Engineer specializing in React, Next.js, TypeScript, Django, and AWS. Builds high-performance web apps, e-commerce platforms, streaming services, ERP systems, and mobile applications for global clients. creativity is my source code.",
@@ -74,7 +78,7 @@ export const metadata: Metadata = {
     title: "Nahidujjaman Hridoy | Software Engineer Portfolio",
     description:
       "Explore 15+ projects including e-commerce platforms, streaming services, ERP systems, and mobile apps. Specializing in React, Next.js, Django, and AWS for global clients.",
-    url: "https://nhridoy.github.io",
+    url: "/",
     siteName: "Nahidujjaman Hridoy - Software Engineer",
     images: [
       {
@@ -136,7 +140,7 @@ export default function RootLayout({
       <body className="min-h-screen">
         <DeferredProviders>
           <ReadingProgress />
-          {/* <Intro /> */}
+          <Intro />
           {children}
           <Footer />
         </DeferredProviders>
