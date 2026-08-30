@@ -71,7 +71,7 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* <div className="theme-container relative">
+      <div className="theme-container relative">
         <Image
           src={Watermark}
           loading="eager"
@@ -79,7 +79,7 @@ export default function Hero() {
           alt="Background Hero Watermark"
           className="absolute bottom-0 left-0 w-full md:w-md"
         />
-      </div> */}
+      </div>
 
       <div className="absolute inset-0 hidden md:block">
         <span className="absolute z-10 uppercase left-5 bottom-0 origin-top-left -rotate-90">
