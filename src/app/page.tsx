@@ -51,7 +51,7 @@ export default function Home() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <Intro />
+      {/* <Intro /> */}
       <Hero />
       <HomeSections
         shortInfo={PERSONAL_INFO.shortInfo}
