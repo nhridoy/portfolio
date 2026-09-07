@@ -47,10 +47,10 @@ export default function Hero() {
       {/* Text */}
       <div className="theme-container pointer-events-none relative z-20 flex h-full items-end pb-24 pt-24 md:items-center md:py-0">
         <div className="pointer-events-auto w-full md:w-[52%] flex flex-col gap-4">
-          <p className="text-base font-medium">
+          <p className="text-xs font-medium">
             NAHIDUJJAMAN HRIDOY / SOFTWARE ENGINEER
           </p>
-          <h1 className="text-6xl font-medium leading-none">
+          <h1 className="text-[2.75rem] sm:text-5xl md:text-6xl font-medium leading-none">
             Thoughtfully
             <br />
             designed.
@@ -59,7 +59,7 @@ export default function Hero() {
               Precisely built.
             </span>
           </h1>
-          <p className="max-w-84 leading-relaxed text-current/65 text-base">
+          <p className="max-w-84 text-sm leading-relaxed text-current/65 lg:text-base">
             Expressive interfaces. Dependable systems.
             <br />I build the connection between them.
           </p>
