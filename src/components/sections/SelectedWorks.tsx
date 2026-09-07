@@ -450,7 +450,7 @@ export default function SelectedWorks() {
             className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
           >
             <Image
-              src="/outline_thick.png"
+              src="/macbook-pro-outline.svg"
               alt=""
               width={DEVICE_WIDTH}
               height={DEVICE_HEIGHT}
@@ -496,7 +496,7 @@ export default function SelectedWorks() {
             </Div>
 
             <Image
-              src="/3d.png"
+              src="/macbook-pro.svg"
               alt=""
               width={DEVICE_WIDTH}
               height={DEVICE_HEIGHT}

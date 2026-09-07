@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="588" viewBox="0 0 800 588" fill="none">
+<title>MacBook Pro outline</title>
+<!-- Shared 800 × 588 geometry; the display is transparent for the project reveal. -->
+
+<g stroke="#f5f5f4" stroke-width="1.5" stroke-linejoin="round">
+<path d="M116 2H681Q704 2 704 26L701 421Q701 434 691 437H107Q96 437 96 422L93 26Q93 2 116 2Z M115 12H362Q365 12 365 15V19Q365 23 369 23H429Q433 23 433 19V15Q433 12 436 12H681Q693 12 693 24L691 413H106L104 24Q104 12 115 12Z" fill="none" fill-rule="evenodd"/>
+<path d="M115 6H682Q699 6 699 25L697 421H100L98 25Q98 6 115 6Z"/>
+<path d="M115 12H362Q365 12 365 15V19Q365 23 369 23H429Q433 23 433 19V15Q433 12 436 12H681Q693 12 693 24L691 413H106L104 24Q104 12 115 12Z"/>
+<circle cx="399" cy="14" r="2.4" fill="none"/>
+<path d="M2 560Q5 565 17 565H783Q795 565 798 560L796 576Q793 586 777 587H23Q7 586 3 577Z" fill="none"/>
+<path d="M107 434H691Q703 434 711 445L797 555Q801 563 789 565H12Q0 564 3 556L88 446Q96 434 107 434Z" fill="none"/>
+<path d="M168 433H631" stroke="#f5f5f4" stroke-width="3"/>
+<path d="M127 441H671Q678 441 681 446L718 502Q720 506 713 506H85Q78 506 81 501L117 447Q121 441 127 441Z" fill="none"/>
+<g fill="none" stroke="#f5f5f4" stroke-width=".6">
+<path d="M123.00 444h36.50l3 6h-42.50Z"/><text x="141.25" y="448.20">esc</text>
+<path d="M162.50 444h36.50l3 6h-42.50Z"/><text x="180.75" y="448.20">F1</text>
+<path d="M202.00 444h36.50l3 6h-42.50Z"/><text x="220.25" y="448.20">F2</text>
+<path d="M241.50 444h36.50l3 6h-42.50Z"/><text x="259.75" y="448.20">F3</text>
+<path d="M281.00 444h36.50l3 6h-42.50Z"/><text x="299.25" y="448.20">F4</text>
+<path d="M320.50 444h36.50l3 6h-42.50Z"/><text x="338.75" y="448.20">F5</text>
+<path d="M360.00 444h36.50l3 6h-42.50Z"/><text x="378.25" y="448.20">F6</text>
+<path d="M399.50 444h36.50l3 6h-42.50Z"/><text x="417.75" y="448.20">F7</text>
+<path d="M439.00 444h36.50l3 6h-42.50Z"/><text x="457.25" y="448.20">F8</text>
+<path d="M478.50 444h36.50l3 6h-42.50Z"/><text x="496.75" y="448.20">F9</text>
+<path d="M518.00 444h36.50l3 6h-42.50Z"/><text x="536.25" y="448.20">F10</text>
+<path d="M557.50 444h36.50l3 6h-42.50Z"/><text x="575.75" y="448.20">F11</text>
+<path d="M597.00 444h36.50l3 6h-42.50Z"/><text x="615.25" y="448.20">F12</text>
+<path d="M636.50 444h36.50l3 6h-42.50Z"/><text x="654.75" y="448.20">◉</text>
+<path d="M116.40 453.7h37.44l3 8h-43.44Z"/><text x="135.12" y="459.30">~</text>
+<path d="M156.84 453.7h37.44l3 8h-43.44Z"/><text x="175.56" y="459.30">1</text>
+<path d="M197.29 453.7h37.44l3 8h-43.44Z"/><text x="216.01" y="459.30">2</text>
+<path d="M237.73 453.7h37.44l3 8h-43.44Z"/><text x="256.45" y="459.30">3</text>
+<path d="M278.17 453.7h37.44l3 8h-43.44Z"/><text x="296.89" y="459.30">4</text>
+<path d="M318.61 453.7h37.44l3 8h-43.44Z"/><text x="337.34" y="459.30">5</text>
+<path d="M359.06 453.7h37.44l3 8h-43.44Z"/><text x="377.78" y="459.30">6</text>
+<path d="M399.50 453.7h37.44l3 8h-43.44Z"/><text x="418.22" y="459.30">7</text>
+<path d="M439.94 453.7h37.44l3 8h-43.44Z"/><text x="458.66" y="459.30">8</text>
+<path d="M480.39 453.7h37.44l3 8h-43.44Z"/><text x="499.11" y="459.30">9</text>
+<path d="M520.83 453.7h37.44l3 8h-43.44Z"/><text x="539.55" y="459.30">0</text>
+<path d="M561.27 453.7h37.44l3 8h-43.44Z"/><text x="579.99" y="459.30">−</text>
+<path d="M601.71 453.7h37.44l3 8h-43.44Z"/><text x="620.44" y="459.30">=</text>
+<path d="M642.16 453.7h37.44l3 8h-43.44Z"/><text x="660.88" y="459.30">delete</text>
+<path d="M109.80 463.4h54.94l3 8h-60.94Z"/><text x="137.27" y="469.00">tab</text>
+<path d="M167.74 463.4h35.63l3 8h-41.63Z"/><text x="185.55" y="469.00">Q</text>
+<path d="M206.37 463.4h35.63l3 8h-41.63Z"/><text x="224.18" y="469.00">W</text>
+<path d="M244.99 463.4h35.63l3 8h-41.63Z"/><text x="262.81" y="469.00">E</text>
+<path d="M283.62 463.4h35.63l3 8h-41.63Z"/><text x="301.43" y="469.00">R</text>
+<path d="M322.25 463.4h35.63l3 8h-41.63Z"/><text x="340.06" y="469.00">T</text>
+<path d="M360.87 463.4h35.63l3 8h-41.63Z"/><text x="378.69" y="469.00">Y</text>
+<path d="M399.50 463.4h35.63l3 8h-41.63Z"/><text x="417.31" y="469.00">U</text>
+<path d="M438.13 463.4h35.63l3 8h-41.63Z"/><text x="455.94" y="469.00">I</text>
+<path d="M476.75 463.4h35.63l3 8h-41.63Z"/><text x="494.57" y="469.00">O</text>
+<path d="M515.38 463.4h35.63l3 8h-41.63Z"/><text x="533.19" y="469.00">P</text>
+<path d="M554.01 463.4h35.63l3 8h-41.63Z"/><text x="571.82" y="469.00">[</text>
+<path d="M592.63 463.4h35.63l3 8h-41.63Z"/><text x="610.45" y="469.00">]</text>
+<path d="M631.26 463.4h54.94l3 8h-60.94Z"/><text x="658.73" y="469.00">\</text>
+<path d="M103.20 473.1h60.49l3 8h-66.49Z"/><text x="133.45" y="478.70">caps</text>
+<path d="M166.69 473.1h39.33l3 8h-45.33Z"/><text x="186.36" y="478.70">A</text>
+<path d="M209.02 473.1h39.33l3 8h-45.33Z"/><text x="228.69" y="478.70">S</text>
+<path d="M251.35 473.1h39.33l3 8h-45.33Z"/><text x="271.01" y="478.70">D</text>
+<path d="M293.68 473.1h39.33l3 8h-45.33Z"/><text x="313.34" y="478.70">F</text>
+<path d="M336.01 473.1h39.33l3 8h-45.33Z"/><text x="355.67" y="478.70">G</text>
+<path d="M378.34 473.1h39.33l3 8h-45.33Z"/><text x="398.00" y="478.70">H</text>
+<path d="M420.66 473.1h39.33l3 8h-45.33Z"/><text x="440.33" y="478.70">J</text>
+<path d="M462.99 473.1h39.33l3 8h-45.33Z"/><text x="482.66" y="478.70">K</text>
+<path d="M505.32 473.1h39.33l3 8h-45.33Z"/><text x="524.99" y="478.70">L</text>
+<path d="M547.65 473.1h39.33l3 8h-45.33Z"/><text x="567.31" y="478.70">;</text>
+<path d="M589.98 473.1h39.33l3 8h-45.33Z"/><text x="609.64" y="478.70">'</text>
+<path d="M632.31 473.1h60.49l3 8h-66.49Z"/><text x="662.55" y="478.70">return</text>
+<path d="M96.60 482.8h66.90l3 8h-72.90Z"/><text x="130.05" y="488.40">shift</text>
+<path d="M166.50 482.8h43.60l3 8h-49.60Z"/><text x="188.30" y="488.40">Z</text>
+<path d="M213.10 482.8h43.60l3 8h-49.60Z"/><text x="234.90" y="488.40">X</text>
+<path d="M259.70 482.8h43.60l3 8h-49.60Z"/><text x="281.50" y="488.40">C</text>
+<path d="M306.30 482.8h43.60l3 8h-49.60Z"/><text x="328.10" y="488.40">V</text>
+<path d="M352.90 482.8h43.60l3 8h-49.60Z"/><text x="374.70" y="488.40">B</text>
+<path d="M399.50 482.8h43.60l3 8h-49.60Z"/><text x="421.30" y="488.40">N</text>
+<path d="M446.10 482.8h43.60l3 8h-49.60Z"/><text x="467.90" y="488.40">M</text>
+<path d="M492.70 482.8h43.60l3 8h-49.60Z"/><text x="514.50" y="488.40">,</text>
+<path d="M539.30 482.8h43.60l3 8h-49.60Z"/><text x="561.10" y="488.40">.</text>
+<path d="M585.90 482.8h43.60l3 8h-49.60Z"/><text x="607.70" y="488.40">/</text>
+<path d="M632.50 482.8h66.90l3 8h-72.90Z"/><text x="665.95" y="488.40">shift</text>
+<path d="M90.00 492.5h41.21l3 8h-47.21Z"/><text x="110.61" y="498.10">fn</text>
+<path d="M134.21 492.5h41.21l3 8h-47.21Z"/><text x="154.82" y="498.10">control</text>
+<path d="M178.43 492.5h41.21l3 8h-47.21Z"/><text x="199.04" y="498.10">option</text>
+<path d="M222.64 492.5h41.21l3 8h-47.21Z"/><text x="243.25" y="498.10">command</text>
+<path d="M266.86 492.5h218.07l3 8h-224.07Z"/>
+<path d="M487.93 492.5h41.21l3 8h-47.21Z"/><text x="508.54" y="498.10">command</text>
+<path d="M532.14 492.5h41.21l3 8h-47.21Z"/><text x="552.75" y="498.10">option</text>
+<path d="M576.36 492.5h41.21l3 8h-47.21Z"/><text x="596.96" y="498.10">←</text>
+<path d="M620.57 492.5h41.21l3 8h-47.21Z"/><text x="641.18" y="498.10">↑</text>
+<path d="M664.79 492.5h41.21l3 8h-47.21Z"/><text x="685.39" y="498.10">→</text>
+</g>
+<g fill="none" stroke-width=".6"><path d="M98 444H115L77 503H49Z"/><path d="M684 444H701L750 503H724Z"/></g>
+<path d="M249 510H550L565 556Q566 559 561 559H238Q232 559 234 555Z" stroke="#f5f5f4"/>
+<path d="M332 564H468L466 569Q465 573 459 573H341Q334 573 332 567Z" fill="none"/>
+</g>
+<style>text{font-family:Arial,sans-serif;font-size:4px;text-anchor:middle;fill:#f5f5f4;stroke:none}</style>
+</svg>
