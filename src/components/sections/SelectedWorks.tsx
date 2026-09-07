@@ -187,14 +187,16 @@ export default function SelectedWorks() {
     screenBounds,
     (bounds) => (bounds.top + bounds.bottom - viewport.height) / 2,
   );
+  // Prepare the content only once the device and closed shutters are opaque.
+  // Otherwise the title shows through while the whole device is crossfading.
   const projectOpacity = useTransform(
     scrollYProgress,
-    [CROSSFADE_START, CROSSFADE_END],
+    [CROSSFADE_END, SHUTTER_START],
     [0, 1],
   );
   const projectIntroOpacity = useTransform(
     scrollYProgress,
-    [CROSSFADE_START, CROSSFADE_END, TITLE_HOLD_END, TITLE_EXIT_END],
+    [CROSSFADE_END, SHUTTER_START, TITLE_HOLD_END, TITLE_EXIT_END],
     [0, 1, 1, 0],
   );
   const projectIntroY = useTransform(
