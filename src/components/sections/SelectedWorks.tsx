@@ -1,334 +1,255 @@
 "use client";
 
-import { useScroll, useSpring, useTransform } from "framer-motion";
-import { div as Div, h2 as H2, span as Span } from "framer-motion/m";
+import {
+  useMotionValueEvent,
+  useScroll,
+  useSpring,
+  useTransform,
+} from "framer-motion";
+import { div as Div, h2 as H2 } from "framer-motion/m";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { PROJECTS } from "@/lib/constants";
-
-// ============================================================================
-// SOURCE IMAGE
-// ============================================================================
+import { SelectedWorkPanel } from "./selected-work-panel";
 
 const DEVICE_WIDTH = 800;
 const DEVICE_HEIGHT = 588;
+// Bounds of the transparent display in macbook-pro.svg, including the area
+// above the notch. The SVG itself masks the notch and rounded corners.
+const SCREEN_LEFT = 104 / DEVICE_WIDTH;
+const SCREEN_TOP = 12 / DEVICE_HEIGHT;
+const SCREEN_WIDTH = (693 - 104) / DEVICE_WIDTH;
+const SCREEN_HEIGHT = (413 - 12) / DEVICE_HEIGHT;
 
-const DEVICE_ASPECT_RATIO = DEVICE_WIDTH / DEVICE_HEIGHT;
-
-// ============================================================================
-// MACBOOK DISPLAY
-// ============================================================================
-
-const SCREEN_LEFT = 105 / DEVICE_WIDTH;
-const SCREEN_TOP = 23 / DEVICE_HEIGHT;
-
-const SCREEN_WIDTH = (691 - 105) / DEVICE_WIDTH;
-const SCREEN_HEIGHT = (412 - 23) / DEVICE_HEIGHT;
-
-const SCREEN_ASPECT_RATIO = 16 / 10;
-
-// ============================================================================
-// TIMELINE (COMPRESSED FOR FAST RESPONSE)
-// ============================================================================
-
+// Separate scroll beats: outline → solid device → shutters → zoom → title hold.
 const HEADING_START = 0.01;
-const HEADING_END = 0.05;
-
+const HEADING_END = 0.04;
 const OUTLINE_START = 0.05;
-const OUTLINE_END = 0.1;
+const OUTLINE_END = 0.09;
+const CROSSFADE_START = 0.12;
+const CROSSFADE_END = 0.17;
+const SHUTTER_START = 0.19;
+const SHUTTER_END = 0.24;
+const ZOOM_START = 0.26;
+const ZOOM_END = 0.36;
+const FRAME_EXIT_END = 0.37;
+const TITLE_HOLD_END = 0.4;
+const TITLE_EXIT_END = 0.425;
+const PROJECT_SLIDES_START = 0.44;
+const PROJECT_SLIDES_END = 0.98;
+const SLIDE_TRAVEL_FRACTION = 0.82;
 
-const OUTLINE_HOLD_END = 0.14;
-
-const CROSSFADE_START = 0.14;
-const CROSSFADE_END = 0.2;
-
-const DEVICE_HOLD_END = 0.22;
-
-const REVEAL_START = 0.22;
-const REVEAL_END = 0.3;
-
-const PROJECT_SCALE_START = 0.22;
-const PROJECT_SCALE_END = 0.32;
-
-const FRAME_EXIT_START = 0.28;
-const FRAME_EXIT_END = 0.32;
-
-// Slides start right at 0.32 and finish at 0.95
-const PROJECT_SLIDES_START = 0.32;
-const PROJECT_SLIDES_END = 0.95;
-
-// ============================================================================
-// DEVICE SIZE
-// ============================================================================
-
-const DEVICE_WIDTH_RATIO = 0.92;
-const DEVICE_HEIGHT_RATIO = 0.7;
-
-const DEVICE_MIN_WIDTH = 280;
-const DEVICE_MAX_WIDTH = 1100;
-
-const FINAL_OVERSCAN = 1.001;
-
-// ============================================================================
-// MACBOOK ZOOM ORIGIN
-// ============================================================================
-
-const DEVICE_ZOOM_ORIGIN_X = 50;
-const DEVICE_ZOOM_ORIGIN_Y = 34;
-
-// ============================================================================
-// COMPONENT
-// ============================================================================
+// Continuous velocity and acceleration at both ends of every movement.
+function smootherstep(value: number) {
+  return value * value * value * (value * (value * 6 - 15) + 10);
+}
 
 export default function SelectedWorks() {
   const sectionRef = useRef<HTMLElement>(null);
-  const projectTrackRef = useRef<HTMLDivElement>(null);
-
-  const [viewport, setViewport] = useState({
-    width: 0,
-    height: 0,
-  });
-
-  const [projectTrackWidth, setProjectTrackWidth] = useState(0);
+  const viewportRef = useRef<HTMLDivElement>(null);
+  const [viewport, setViewport] = useState({ width: 0, height: 0 });
+  const [activeProject, setActiveProject] = useState(-1);
 
   useEffect(() => {
-    const updateDimensions = () => {
-      setViewport({
-        width: window.innerWidth,
-        height: window.innerHeight,
-      });
-
-      if (projectTrackRef.current) {
-        setProjectTrackWidth(projectTrackRef.current.scrollWidth);
-      }
+    const element = viewportRef.current;
+    if (!element) return;
+    const measure = () => {
+      // Use the actual sticky surface, not innerHeight (which differs from svh
+      // on mobile browsers with an expanding/collapsing address bar).
+      setViewport({ width: element.clientWidth, height: element.clientHeight });
     };
-
-    updateDimensions();
-    window.addEventListener("resize", updateDimensions);
-
-    return () => {
-      window.removeEventListener("resize", updateDimensions);
-    };
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(element);
+    return () => observer.disconnect();
   }, []);
 
   const { scrollYProgress: rawProgress } = useScroll({
     target: sectionRef,
     offset: ["start start", "end end"],
   });
-
-  // Fast, instant spring response without floaty lag
   const scrollYProgress = useSpring(rawProgress, {
-    stiffness: 300,
+    stiffness: 180,
     damping: 30,
-    mass: 0.1,
+    mass: 0.5,
   });
-
-  // ==========================================================================
-  // HEADING TRANSFORMS
-  // ==========================================================================
 
   const headingOpacity = useTransform(
     scrollYProgress,
-    [0, HEADING_START, HEADING_END, FRAME_EXIT_START, FRAME_EXIT_END],
+    [0, HEADING_START, HEADING_END, ZOOM_START, ZOOM_END],
     [0, 0, 1, 1, 0],
   );
-
   const headingY = useTransform(
     scrollYProgress,
-    [0, HEADING_START, HEADING_END],
-    [40, 40, 0],
+    [HEADING_START, HEADING_END],
+    [40, 0],
   );
-
-  // ==========================================================================
-  // DEVICE DIMENSIONS
-  // ==========================================================================
-
-  const widthBasedDeviceWidth = viewport.width * DEVICE_WIDTH_RATIO;
-  const heightBasedDeviceWidth =
-    viewport.height * DEVICE_HEIGHT_RATIO * DEVICE_ASPECT_RATIO;
-
-  const calculatedDeviceWidth =
-    viewport.width > 0 && viewport.height > 0
-      ? Math.min(widthBasedDeviceWidth, heightBasedDeviceWidth)
-      : DEVICE_WIDTH;
-
-  const deviceWidth = Math.min(
-    Math.max(calculatedDeviceWidth, DEVICE_MIN_WIDTH),
-    DEVICE_MAX_WIDTH,
-  );
-
-  const deviceHeight = deviceWidth / DEVICE_ASPECT_RATIO;
-
-  const deviceLeft = viewport.width / 2 - deviceWidth / 2;
-  const deviceTop = viewport.height / 2 - deviceHeight / 2;
-
-  const screenWidth = deviceWidth * SCREEN_WIDTH;
-  const screenHeight = deviceHeight * SCREEN_HEIGHT;
-
-  const screenLeft = deviceLeft + deviceWidth * SCREEN_LEFT;
-  const screenTop = deviceTop + deviceHeight * SCREEN_TOP;
-
-  const screenCenterX = screenLeft + screenWidth / 2;
-  const screenCenterY = screenTop + screenHeight / 2;
-
-  // ==========================================================================
-  // OUTLINE TRANSFORMS
-  // ==========================================================================
-
   const outlineOpacity = useTransform(
     scrollYProgress,
-    [0, OUTLINE_START, OUTLINE_END, CROSSFADE_START, CROSSFADE_END],
-    [0, 0, 1, 1, 0],
+    [OUTLINE_START, OUTLINE_END, CROSSFADE_START, CROSSFADE_END],
+    [0, 1, 1, 0],
   );
-
   const outlineScale = useTransform(
     scrollYProgress,
-    [OUTLINE_START, OUTLINE_END, OUTLINE_HOLD_END, CROSSFADE_END],
-    [0.92, 1, 1, 1],
+    [OUTLINE_START, OUTLINE_END],
+    [0.92, 1],
   );
-
   const outlineY = useTransform(
     scrollYProgress,
-    [OUTLINE_START, OUTLINE_END, OUTLINE_HOLD_END, CROSSFADE_END],
-    [20, 0, 0, 0],
+    [OUTLINE_START, OUTLINE_END],
+    [20, 0],
   );
-
-  // ==========================================================================
-  // 3D MACBOOK OPACITY & ZOOM
-  // ==========================================================================
-
   const deviceOpacity = useTransform(
     scrollYProgress,
-    [CROSSFADE_START, CROSSFADE_END, FRAME_EXIT_START, FRAME_EXIT_END],
+    [CROSSFADE_START, CROSSFADE_END, ZOOM_END, FRAME_EXIT_END],
     [0, 1, 1, 0],
   );
 
-  const scaleForWidth = viewport.width > 0 ? viewport.width / screenWidth : 1;
-  const scaleForHeight =
-    viewport.height > 0 ? viewport.height / screenHeight : 1;
+  const deviceWidth =
+    viewport.width && viewport.height
+      ? Math.min(
+          viewport.width * 0.92,
+          (viewport.height * 0.7 * DEVICE_WIDTH) / DEVICE_HEIGHT,
+          1100,
+        )
+      : DEVICE_WIDTH;
+  const deviceHeight = (deviceWidth * DEVICE_HEIGHT) / DEVICE_WIDTH;
+  const screenWidth = deviceWidth * SCREEN_WIDTH;
+  const screenHeight = deviceHeight * SCREEN_HEIGHT;
+  const screenCenterX =
+    (viewport.width - deviceWidth) / 2 +
+    deviceWidth * (SCREEN_LEFT + SCREEN_WIDTH / 2);
+  const screenCenterY =
+    (viewport.height - deviceHeight) / 2 +
+    deviceHeight * (SCREEN_TOP + SCREEN_HEIGHT / 2);
+  const finalScale =
+    viewport.width && viewport.height
+      ? Math.max(viewport.width / screenWidth, viewport.height / screenHeight) *
+        1.015
+      : 1;
 
-  const finalDeviceScale =
-    Math.max(scaleForWidth, scaleForHeight) * FINAL_OVERSCAN;
-
+  const zoomLinear = useTransform(
+    scrollYProgress,
+    [ZOOM_START, ZOOM_END],
+    [0, 1],
+  );
+  const zoom = useTransform(zoomLinear, smootherstep);
   const deviceScale = useTransform(
-    scrollYProgress,
-    [
-      CROSSFADE_START,
-      DEVICE_HOLD_END,
-      PROJECT_SCALE_START,
-      PROJECT_SCALE_END,
-      1,
-    ],
-    [1, 1, 1, finalDeviceScale, finalDeviceScale],
+    zoom,
+    (value) => 1 + (finalScale - 1) * value,
   );
-
-  const DEVICE_ZOOM_Y = -0.035;
-
+  const deviceX = useTransform(
+    zoom,
+    (value) => (viewport.width / 2 - screenCenterX) * value,
+  );
   const deviceY = useTransform(
-    scrollYProgress,
-    [PROJECT_SCALE_START, PROJECT_SCALE_END, 1],
-    [0, viewport.height * DEVICE_ZOOM_Y, viewport.height * DEVICE_ZOOM_Y],
+    zoom,
+    (value) => (viewport.height / 2 - screenCenterY) * value,
   );
 
-  // ==========================================================================
-  // PROJECT LAYER TRANSFORMS
-  // ==========================================================================
-
+  // The content follows the very same zoomed screen rectangle as the frame.
+  // Clamp only at the viewport edges, so it fills the aperture throughout and
+  // settles at exactly the user's display size without an independent zoom.
+  const screenBounds = useTransform(zoom, (value) => {
+    const scale = 1 + (finalScale - 1) * value;
+    const centerX =
+      screenCenterX + (viewport.width / 2 - screenCenterX) * value;
+    const centerY =
+      screenCenterY + (viewport.height / 2 - screenCenterY) * value;
+    return {
+      left: Math.max(0, centerX - (screenWidth * scale) / 2),
+      right: Math.min(viewport.width, centerX + (screenWidth * scale) / 2),
+      top: Math.max(0, centerY - (screenHeight * scale) / 2),
+      bottom: Math.min(viewport.height, centerY + (screenHeight * scale) / 2),
+    };
+  });
+  const introLeft = useTransform(screenBounds, (bounds) => bounds.left);
+  const introTop = useTransform(screenBounds, (bounds) => bounds.top);
+  const introWidth = useTransform(
+    screenBounds,
+    (bounds) => bounds.right - bounds.left,
+  );
+  const introHeight = useTransform(
+    screenBounds,
+    (bounds) => bounds.bottom - bounds.top,
+  );
+  const projectScaleX = useTransform(screenBounds, (bounds) =>
+    viewport.width ? (bounds.right - bounds.left) / viewport.width : 1,
+  );
+  const projectScaleY = useTransform(screenBounds, (bounds) =>
+    viewport.height ? (bounds.bottom - bounds.top) / viewport.height : 1,
+  );
+  const projectX = useTransform(
+    screenBounds,
+    (bounds) => (bounds.left + bounds.right - viewport.width) / 2,
+  );
+  const projectY = useTransform(
+    screenBounds,
+    (bounds) => (bounds.top + bounds.bottom - viewport.height) / 2,
+  );
   const projectOpacity = useTransform(
     scrollYProgress,
-    [0, CROSSFADE_END, REVEAL_START, 1],
-    [0, 0, 1, 1],
+    [CROSSFADE_START, CROSSFADE_END],
+    [0, 1],
   );
-
-  // Instant dissolve of intro text on zoom finish
   const projectIntroOpacity = useTransform(
     scrollYProgress,
-    [REVEAL_START, REVEAL_END, 0.3, 0.33],
+    [CROSSFADE_START, CROSSFADE_END, TITLE_HOLD_END, TITLE_EXIT_END],
     [0, 1, 1, 0],
   );
-
-  const projectIntroY = useTransform(scrollYProgress, [0.3, 0.33], [0, -20]);
-
-  const initialProjectWidth = screenWidth;
-  const initialProjectHeight = initialProjectWidth / SCREEN_ASPECT_RATIO;
-
-  const projectScaleX = useTransform(
+  const projectIntroY = useTransform(
     scrollYProgress,
-    [PROJECT_SCALE_START, PROJECT_SCALE_END, 1],
-    [viewport.width > 0 ? initialProjectWidth / viewport.width : 1, 1, 1],
+    [TITLE_HOLD_END, TITLE_EXIT_END],
+    [0, -20],
   );
-
-  const projectScaleY = useTransform(
-    scrollYProgress,
-    [PROJECT_SCALE_START, PROJECT_SCALE_END, 1],
-    [viewport.height > 0 ? initialProjectHeight / viewport.height : 1, 1, 1],
-  );
-
-  const projectInitialX = screenCenterX - viewport.width / 2;
-  const projectInitialY = screenCenterY - viewport.height / 2;
-
-  const projectX = useTransform(
-    scrollYProgress,
-    [PROJECT_SCALE_START, PROJECT_SCALE_END, 1],
-    [projectInitialX, 0, 0],
-  );
-
-  const projectY = useTransform(
-    scrollYProgress,
-    [PROJECT_SCALE_START, PROJECT_SCALE_END, 1],
-    [projectInitialY, 0, 0],
-  );
-
-  // ==========================================================================
-  // SHUTTERS TRANSFORMS
-  // ==========================================================================
-
   const topShutterY = useTransform(
     scrollYProgress,
-    [REVEAL_START, REVEAL_END, 1],
-    ["0%", "-105%", "-105%"],
+    [SHUTTER_START, SHUTTER_END],
+    ["0%", "-101%"],
   );
-
   const bottomShutterY = useTransform(
     scrollYProgress,
-    [REVEAL_START, REVEAL_END, 1],
-    ["0%", "105%", "105%"],
+    [SHUTTER_START, SHUTTER_END],
+    ["0%", "101%"],
   );
 
-  // ==========================================================================
-  // DYNAMIC SECTION HEIGHT & HORIZONTAL SLIDER
-  // ==========================================================================
-
-  const projectTravelDistance =
-    projectTrackWidth > 0 && viewport.width > 0
-      ? projectTrackWidth
-      : viewport.width * PROJECTS.length;
-
-  // Reduced multiplier significantly (0.45) for fast horizontal progression
-  const PROJECT_SCROLL_MULTIPLIER = 0.45;
-  const BREATHING_SPACE = viewport.height * 0.1;
-
-  const dynamicSectionHeight =
-    viewport.width > 0 && viewport.height > 0 && projectTravelDistance > 0
-      ? `calc(100vh + ${projectTravelDistance * PROJECT_SCROLL_MULTIPLIER + BREATHING_SPACE}px)`
-      : "250vh";
-
-  const projectTrackStartX = viewport.width;
-
-  const projectTrackEndX =
-    projectTrackWidth > 0 && viewport.width > 0
-      ? -(projectTrackWidth - viewport.width)
-      : -(viewport.width * (PROJECTS.length - 1));
-
-  const projectTrackX = useTransform(
+  // Preserve readable gallery pacing despite reserving more time for the intro.
+  const galleryDistance =
+    Math.max(viewport.width * 0.52, viewport.height * 0.65) * PROJECTS.length;
+  const dynamicSectionHeight = viewport.height
+    ? viewport.height +
+      galleryDistance / (PROJECT_SLIDES_END - PROJECT_SLIDES_START)
+    : "1600svh";
+  const slideProgress = useTransform(
     scrollYProgress,
-    [PROJECT_SLIDES_START, PROJECT_SLIDES_END, 1],
-    [projectTrackStartX, projectTrackEndX, projectTrackEndX],
+    [PROJECT_SLIDES_START, PROJECT_SLIDES_END],
+    [0, PROJECTS.length],
   );
-
+  const targetTrackX = useTransform(slideProgress, (value) => {
+    const step = Math.min(Math.floor(value), PROJECTS.length - 1);
+    const fraction = Math.min((value - step) / SLIDE_TRAVEL_FRACTION, 1);
+    return viewport.width * (1 - step - smootherstep(fraction));
+  });
+  // Smooth the resulting pixel position as well as scroll input. This avoids
+  // sudden starts/stops when wheel events skip over a reading hold.
+  const projectTrackX = useSpring(targetTrackX, {
+    stiffness: 170,
+    damping: 30,
+    mass: 0.5,
+  });
+  useMotionValueEvent(projectTrackX, "change", (value) => {
+    if (!viewport.width) return;
+    const index = Math.round(-value / viewport.width);
+    setActiveProject(Math.max(-1, Math.min(index, PROJECTS.length - 1)));
+  });
+  const galleryProgress = useTransform(projectTrackX, (value) =>
+    viewport.width
+      ? Math.max(0, Math.min(1, (1 - value / viewport.width) / PROJECTS.length))
+      : 0,
+  );
   const projectSliderOpacity = useTransform(
     scrollYProgress,
-    [0.3, 0.33],
+    [TITLE_EXIT_END, PROJECT_SLIDES_START],
     [0, 1],
   );
 
@@ -339,11 +260,11 @@ export default function SelectedWorks() {
       style={{ height: dynamicSectionHeight }}
       className="relative w-full bg-foreground text-background"
     >
-      <Div className="sticky top-0 h-svh w-full overflow-hidden">
-        {/* ===================================================================
-        PROJECT LAYER
-        =================================================================== */}
-
+      <Div
+        ref={viewportRef}
+        className="sticky top-0 h-svh w-full overflow-hidden"
+      >
+        {/* CONTENT: fitted to the MacBook aperture, then the full viewport. */}
         <Div
           style={{
             opacity: projectOpacity,
@@ -353,93 +274,76 @@ export default function SelectedWorks() {
             scaleY: projectScaleY,
             transformOrigin: "50% 50%",
           }}
-          className="absolute inset-0 z-10 h-svh w-full overflow-hidden bg-foreground"
+          className="absolute inset-0 z-10 overflow-hidden bg-foreground will-change-transform"
         >
-          {/* INTRO TEXT */}
           <Div
-            style={{
-              opacity: projectIntroOpacity,
-              y: projectIntroY,
-            }}
-            className="pointer-events-none absolute inset-0 z-20 flex h-full w-full flex-col items-center justify-center gap-5 px-8 text-center"
+            style={{ opacity: projectSliderOpacity, x: projectTrackX }}
+            className="absolute inset-0 z-10 flex h-full w-max will-change-transform"
           >
-            <Span className="text-xs uppercase tracking-[0.3em] text-background/50">
-              Featured Project
-            </Span>
-
-            <h3 className="text-[clamp(2.5rem,7vw,7rem)] font-medium uppercase leading-[0.9] tracking-[-0.05em] text-background">
-              Digital <br /> Experience
-            </h3>
-
-            <Span className="max-w-2xl text-xs leading-relaxed tracking-wide text-background/60 sm:text-sm">
-              A digital product combining expressive visual design, fluid
-              interaction, and robust engineering.
-            </Span>
-          </Div>
-
-          {/* PROJECT TRACK SLIDER */}
-          <Div
-            ref={projectTrackRef}
-            style={{
-              opacity: projectSliderOpacity,
-              x: projectTrackX,
-            }}
-            className="absolute inset-0 z-10 flex h-full w-max"
-          >
-            {PROJECTS.map((project) => (
-              <Div
+            {PROJECTS.map((project, index) => (
+              <SelectedWorkPanel
                 key={project.id}
-                className="relative h-full w-screen shrink-0 overflow-hidden bg-foreground"
-              >
-                <Image
-                  src={project.image}
-                  alt={project.title}
-                  fill
-                  sizes="100vw"
-                  priority
-                  className="object-cover"
-                />
-
-                <Div className="absolute inset-0 bg-foreground/65" />
-
-                <Div className="theme-container relative z-10 flex h-full flex-col justify-between py-12">
-                  <Div className="flex items-start justify-between">
-                    <Span className="text-xs uppercase tracking-[0.3em] text-background/80">
-                      {project.category}
-                    </Span>
-
-                    <Span className="font-mono text-xs text-background/80">
-                      {project.id}
-                    </Span>
-                  </Div>
-
-                  <Div className="flex flex-col gap-8 pb-4">
-                    <h3 className="max-w-6xl text-6xl font-medium uppercase leading-[0.82] tracking-none text-background">
-                      {project.title}
-                    </h3>
-
-                    <Div className="flex max-w-4xl items-end justify-between gap-8">
-                      <Span className="max-w-xl text-xs leading-relaxed tracking-wide text-background/80 sm:text-sm">
-                        {project.description}
-                      </Span>
-
-                      <Span className="hidden shrink-0 text-[10px] uppercase tracking-[0.25em] text-background/70 sm:block">
-                        Selected Work
-                      </Span>
-                    </Div>
-                  </Div>
-                </Div>
-              </Div>
+                project={project}
+                index={index}
+                active={activeProject === index}
+                preload={Math.abs(index - Math.max(0, activeProject)) <= 2}
+              />
             ))}
+          </Div>
+          <Div
+            style={{ opacity: projectSliderOpacity }}
+            className="pointer-events-none absolute inset-0 z-[15] px-[4vw] font-mono text-[10px] tracking-[0.12em] uppercase max-[760px]:text-[8px]"
+          >
+            <div className="absolute inset-x-[4vw] top-7 flex justify-between border-b border-background/20 pb-4 max-[760px]:top-[23px]">
+              <span>Selected Works</span>
+              <span>Design & engineering</span>
+            </div>
+            <div className="absolute inset-x-[4vw] bottom-[26px] flex items-center gap-6 max-[760px]:bottom-6 max-[760px]:gap-3">
+              <span>
+                {String(Math.max(0, activeProject) + 1).padStart(2, "0")} /{" "}
+                {String(PROJECTS.length).padStart(2, "0")}
+              </span>
+              <div className="h-px flex-1 overflow-hidden bg-background/20">
+                <Div
+                  className="h-full origin-left bg-background"
+                  style={{ scaleX: galleryProgress }}
+                />
+              </div>
+              <span>Scroll to explore →</span>
+            </div>
           </Div>
         </Div>
 
-        {/* ===================================================================
-        MACBOOK LAYER
-        =================================================================== */}
+        {/* Size the title to the visible aperture so its typography never stretches. */}
+        <Div
+          style={{
+            opacity: projectIntroOpacity,
+            x: introLeft,
+            y: introTop,
+            width: introWidth,
+            height: introHeight,
+          }}
+          className="pointer-events-none absolute top-0 left-0 z-[15] overflow-hidden [container-type:size]"
+        >
+          <Div
+            style={{ y: projectIntroY }}
+            className="flex h-full w-full flex-col items-center justify-center gap-[clamp(6px,2cqh,20px)] px-[6%] text-center"
+          >
+            <span className="text-[clamp(7px,1.1cqw,12px)] tracking-[0.3em] text-background/50 uppercase">
+              A curated collection
+            </span>
+            <h3 className="text-[min(12cqw,20cqh,7rem)] leading-[0.9] font-medium tracking-[-0.05em] text-background uppercase">
+              Selected <br /> Works
+            </h3>
+            <span className="max-w-2xl text-[clamp(8px,1.1cqw,14px)] leading-relaxed tracking-wide text-background/60">
+              A selection of websites, platforms, and applications. Thoughtfully
+              crafted, from interface to infrastructure.
+            </span>
+          </Div>
+        </Div>
 
+        {/* DEVICE: solid before the shutters open; zooms about its screen center. */}
         <Div className="pointer-events-none absolute inset-0 z-20">
-          {/* OUTLINE */}
           <Div
             style={{
               opacity: outlineOpacity,
@@ -447,7 +351,7 @@ export default function SelectedWorks() {
               y: outlineY,
               width: deviceWidth,
             }}
-            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
           >
             <Image
               src="/macbook-pro-outline.svg"
@@ -459,19 +363,18 @@ export default function SelectedWorks() {
               className="block h-auto w-full select-none"
             />
           </Div>
-
-          {/* 3D MACBOOK FRAME */}
           <Div
             style={{
               opacity: deviceOpacity,
               scale: deviceScale,
+              x: deviceX,
               y: deviceY,
               width: deviceWidth,
-              transformOrigin: `${DEVICE_ZOOM_ORIGIN_X}% ${DEVICE_ZOOM_ORIGIN_Y}%`,
+              transformOrigin: `${(SCREEN_LEFT + SCREEN_WIDTH / 2) * 100}% ${(SCREEN_TOP + SCREEN_HEIGHT / 2) * 100}%`,
             }}
-            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 will-change-transform"
           >
-            <Div
+            <div
               className="absolute overflow-hidden"
               style={{
                 left: `${SCREEN_LEFT * 100}%`,
@@ -481,20 +384,14 @@ export default function SelectedWorks() {
               }}
             >
               <Div
-                style={{
-                  y: topShutterY,
-                }}
-                className="absolute inset-x-0 top-0 h-1/2 bg-background"
+                style={{ y: topShutterY }}
+                className="absolute inset-x-0 top-0 h-[50.2%] bg-white"
               />
-
               <Div
-                style={{
-                  y: bottomShutterY,
-                }}
-                className="absolute inset-x-0 bottom-0 h-1/2 bg-background"
+                style={{ y: bottomShutterY }}
+                className="absolute inset-x-0 bottom-0 h-[50.2%] bg-white"
               />
-            </Div>
-
+            </div>
             <Image
               src="/macbook-pro.svg"
               alt=""
@@ -507,40 +404,31 @@ export default function SelectedWorks() {
           </Div>
         </Div>
 
-        {/* ===================================================================
-        THEME CONTAINER / OVERLAY HEADINGS
-        =================================================================== */}
-
-        <Div className="theme-container pointer-events-none absolute inset-0 h-svh py-12">
-          <Div
-            style={{
-              opacity: headingOpacity,
-              y: headingY,
-            }}
-            className="flex justify-between"
-          >
-            <H2 className="text-4xl font-bold uppercase leading-none tracking-tight sm:text-6xl">
+        {/* INTRO TEXT */}
+        <Div
+          style={{ opacity: headingOpacity }}
+          className="theme-container pointer-events-none absolute inset-0 py-12"
+        >
+          <Div style={{ y: headingY }} className="flex justify-between">
+            <H2 className="text-4xl leading-none font-bold tracking-tight uppercase sm:text-6xl">
               Selected <br /> Works
             </H2>
-
-            <Div className="hidden max-w-60 md:block">
-              <Span className="text-xs uppercase tracking-[0.25em] text-background/40">
+            <div className="hidden max-w-60 md:block">
+              <span className="text-xs tracking-[0.25em] text-background/40 uppercase">
                 A curated collection of products, interfaces, and digital
                 experiences I&apos;ve helped bring to life.
-              </Span>
-            </Div>
+              </span>
+            </div>
           </Div>
-
-          <Div className="absolute bottom-8 left-0 flex items-center gap-3">
-            <Div className="h-px w-8 bg-background/30" />
-            <Span className="text-[10px] uppercase tracking-[0.25em] text-background/30">
+          <div className="absolute bottom-8 left-0 flex items-center gap-3">
+            <div className="h-px w-8 bg-background/30" />
+            <span className="text-[10px] tracking-[0.25em] text-background/30 uppercase">
               Scroll to explore
-            </Span>
-          </Div>
-
-          <Div className="absolute bottom-8 right-0 font-mono text-[10px] text-background/30">
+            </span>
+          </div>
+          <div className="absolute right-0 bottom-8 font-mono text-[10px] text-background/30">
             01
-          </Div>
+          </div>
         </Div>
       </Div>
     </section>
