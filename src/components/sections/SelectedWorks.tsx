@@ -10,6 +10,7 @@ import { div as Div, h2 as H2 } from "framer-motion/m";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { PROJECTS } from "@/lib/constants";
+import { ProjectMosaic } from "./project-mosaic";
 import { SelectedWorkPanel } from "./selected-work-panel";
 
 const DEVICE_WIDTH = 800;
@@ -21,7 +22,7 @@ const SCREEN_TOP = 12 / DEVICE_HEIGHT;
 const SCREEN_WIDTH = (693 - 104) / DEVICE_WIDTH;
 const SCREEN_HEIGHT = (413 - 12) / DEVICE_HEIGHT;
 
-// Separate scroll beats: outline → solid device → shutters → zoom → title hold.
+// Separate scroll beats: outline → solid device → shutters → zoom → mosaic hold.
 const HEADING_START = 0.01;
 const HEADING_END = 0.04;
 const OUTLINE_START = 0.05;
@@ -33,9 +34,8 @@ const SHUTTER_END = 0.24;
 const ZOOM_START = 0.26;
 const ZOOM_END = 0.36;
 const FRAME_EXIT_END = 0.37;
-const TITLE_HOLD_END = 0.4;
-const TITLE_EXIT_END = 0.425;
-const PROJECT_SLIDES_START = 0.44;
+const GALLERY_REVEAL_START = 0.368;
+const PROJECT_SLIDES_START = 0.372;
 const PROJECT_SLIDES_END = 0.98;
 const SLIDE_TRAVEL_FRACTION = 0.82;
 
@@ -49,6 +49,7 @@ export default function SelectedWorks() {
   const viewportRef = useRef<HTMLDivElement>(null);
   const [viewport, setViewport] = useState({ width: 0, height: 0 });
   const [activeProject, setActiveProject] = useState(-1);
+  const [mosaicActive, setMosaicActive] = useState(false);
 
   useEffect(() => {
     const element = viewportRef.current;
@@ -188,22 +189,17 @@ export default function SelectedWorks() {
     (bounds) => (bounds.top + bounds.bottom - viewport.height) / 2,
   );
   // Prepare the content only once the device and closed shutters are opaque.
-  // Otherwise the title shows through while the whole device is crossfading.
+  // Otherwise the mosaic shows through while the whole device is crossfading.
   const projectOpacity = useTransform(
     scrollYProgress,
     [CROSSFADE_END, SHUTTER_START],
     [0, 1],
   );
-  const projectIntroOpacity = useTransform(
-    scrollYProgress,
-    [CROSSFADE_END, SHUTTER_START, TITLE_HOLD_END, TITLE_EXIT_END],
-    [0, 1, 1, 0],
-  );
-  const projectIntroY = useTransform(
-    scrollYProgress,
-    [TITLE_HOLD_END, TITLE_EXIT_END],
-    [0, -20],
-  );
+  useMotionValueEvent(scrollYProgress, "change", (value) => {
+    setMosaicActive(
+      value >= CROSSFADE_END && value < PROJECT_SLIDES_START + 0.05,
+    );
+  });
   const topShutterY = useTransform(
     scrollYProgress,
     [SHUTTER_START, SHUTTER_END],
@@ -251,8 +247,14 @@ export default function SelectedWorks() {
   );
   const projectSliderOpacity = useTransform(
     scrollYProgress,
-    [TITLE_EXIT_END, PROJECT_SLIDES_START],
+    [GALLERY_REVEAL_START, PROJECT_SLIDES_START],
     [0, 1],
+  );
+  // Introduce gallery labels only when the first panel has covered the mosaic.
+  const galleryChromeOpacity = useTransform(projectTrackX, (value) =>
+    viewport.width
+      ? Math.max(0, Math.min(1, 1 - value / (viewport.width * 0.08)))
+      : 0,
   );
 
   return (
@@ -276,7 +278,7 @@ export default function SelectedWorks() {
             scaleY: projectScaleY,
             transformOrigin: "50% 50%",
           }}
-          className="absolute inset-0 z-10 overflow-hidden bg-foreground will-change-transform"
+          className="absolute inset-0 z-10 overflow-hidden will-change-transform"
         >
           <Div
             style={{ opacity: projectSliderOpacity, x: projectTrackX }}
@@ -293,7 +295,7 @@ export default function SelectedWorks() {
             ))}
           </Div>
           <Div
-            style={{ opacity: projectSliderOpacity }}
+            style={{ opacity: galleryChromeOpacity }}
             className="pointer-events-none absolute inset-0 z-[15] px-[4vw] font-mono text-[10px] tracking-[0.12em] uppercase max-[760px]:text-[8px]"
           >
             <div className="absolute inset-x-[4vw] top-7 flex justify-between border-b border-background/20 pb-4 max-[760px]:top-[23px]">
@@ -316,32 +318,19 @@ export default function SelectedWorks() {
           </Div>
         </Div>
 
-        {/* Size the title to the visible aperture so its typography never stretches. */}
+        {/* The gallery covers the mosaic without a scroll-driven exit animation. */}
         <Div
           style={{
-            opacity: projectIntroOpacity,
+            opacity: projectOpacity,
             x: introLeft,
             y: introTop,
             width: introWidth,
             height: introHeight,
           }}
-          className="pointer-events-none absolute top-0 left-0 z-[15] overflow-hidden [container-type:size]"
+          inert={!mosaicActive}
+          className="pointer-events-none absolute top-0 left-0 z-[9] overflow-hidden [container-type:size]"
         >
-          <Div
-            style={{ y: projectIntroY }}
-            className="flex h-full w-full flex-col items-center justify-center gap-[clamp(6px,2cqh,20px)] px-[6%] text-center"
-          >
-            <span className="text-[clamp(7px,1.1cqw,12px)] tracking-[0.3em] text-background/50 uppercase">
-              A curated collection
-            </span>
-            <h3 className="text-[min(12cqw,20cqh,7rem)] leading-[0.9] font-medium tracking-[-0.05em] text-background uppercase">
-              Selected <br /> Works
-            </h3>
-            <span className="max-w-2xl text-[clamp(8px,1.1cqw,14px)] leading-relaxed tracking-wide text-background/60">
-              A selection of websites, platforms, and applications. Thoughtfully
-              crafted, from interface to infrastructure.
-            </span>
-          </Div>
+          <ProjectMosaic active={mosaicActive} />
         </Div>
 
         {/* DEVICE: solid before the shutters open; zooms about its screen center. */}
