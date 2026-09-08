@@ -1,320 +1,228 @@
 "use client";
 
-import { useMotionValue, useSpring } from "framer-motion";
-import { button as Button, div as Div } from "framer-motion/m";
-import {
-  ArrowUpRight,
-  Check,
-  Clock,
-  Copy,
-  Globe,
-  Loader2,
-  Sparkles,
-} from "lucide-react";
-import { useRef, useState } from "react";
+import { ArrowUpRight, Check, Copy } from "lucide-react";
+import { type FormEvent, useState } from "react";
+
+const services = [
+  "Full-stack development",
+  "Frontend",
+  "Backend & APIs",
+  "Something else",
+];
+const inputClass =
+  "w-full rounded-none border-0 border-b border-background/25 bg-transparent px-0 py-1.5 text-base text-background placeholder:text-background/30 focus:border-background focus:outline-none focus:ring-0 transition-colors";
 
 export default function Contact() {
-  const [copied, setCopied] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
-  const [selectedServices, setSelectedServices] = useState<string[]>([
-    "Web Development",
-  ]);
-
-  // Interactive Form State
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    budget: "$15k - $30k",
-    message: "",
-  });
-
+  const [selectedServices, setSelectedServices] = useState<string[]>([]);
+  const [copyStatus, setCopyStatus] = useState("");
+  const [draftOpened, setDraftOpened] = useState(false);
   const email = "hi@iamnahid.com";
 
-  const services = [
-    "Web Development",
-    "Frontend Development",
-    "Backend Development",
-    "Full-Stack Apps",
-    "API & Architecture",
-  ];
+  async function copyEmail() {
+    try {
+      await navigator.clipboard.writeText(email);
+      setCopyStatus("Email copied");
+    } catch {
+      setCopyStatus("Please select and copy the email address.");
+    }
+  }
 
-  const toggleService = (service: string) => {
-    setSelectedServices((prev) =>
-      prev.includes(service)
-        ? prev.filter((s) => s !== service)
-        : [...prev, service],
-    );
-  };
-
-  // Magnetic Button Setup
-  const buttonRef = useRef<HTMLButtonElement>(null);
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-
-  const mouseXSpring = useSpring(x, { stiffness: 150, damping: 15 });
-  const mouseYSpring = useSpring(y, { stiffness: 150, damping: 15 });
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (!buttonRef.current) return;
-    const rect = buttonRef.current.getBoundingClientRect();
-    const centerX = rect.left + rect.width / 2;
-    const centerY = rect.top + rect.height / 2;
-    x.set((e.clientX - centerX) * 0.35);
-    y.set((e.clientY - centerY) * 0.35);
-  };
-
-  const handleMouseLeave = () => {
-    x.set(0);
-    y.set(0);
-  };
-
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText(email);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setSubmitted(true);
-      setTimeout(() => setSubmitted(false), 4000);
-    }, 1500);
-  };
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.12,
-        delayChildren: 0.1,
-      },
-    },
-  };
+  function openDraft(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    const body = `Hi Nahid,\n\nI'm ${data.get("name")}.\nEmail: ${data.get("email")}\nInterested in: ${selectedServices.join(", ") || "Let's discuss"}\nBudget: ${data.get("budget") || "Let's discuss"}\n\n${data.get("message")}\n`;
+    window.location.href = `mailto:${email}?subject=${encodeURIComponent(`Project enquiry from ${data.get("name")}`)}&body=${encodeURIComponent(body)}`;
+    setDraftOpened(true);
+  }
 
   return (
     <section
       id="contact"
-      className="py-24 md:py-32 bg-foreground text-background"
+      aria-labelledby="contact-heading"
+      className="relative flex h-screen items-center overflow-hidden bg-foreground py-4 text-background md:py-6"
     >
-      <div className="theme-container flex flex-col gap-12 md:gap-20">
-        {/* Top Status & Indicator Bar */}
-        <div className="flex flex-wrap items-center justify-between gap-6 border-b border-background/10 pb-8 text-sm text-neutral-400 font-mono uppercase tracking-wider">
-          <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
-            <span>Available for New Projects</span>
-          </div>
-          <div className="flex items-center gap-6">
-            <span className="flex items-center gap-1.5">
-              <Globe className="size-4" /> UTC+6 (Bangladesh)
-            </span>
-            <span className="flex items-center gap-1.5">
-              <Clock className="size-4" /> GMT+6
-            </span>
-          </div>
+      <div className="theme-container max-h-full">
+        <div className="mb-4 flex items-center justify-between gap-2 border-b border-background/15 pb-3">
+          <span className="text-xs text-background/50">
+            HAVE A PROJECT IN MIND?
+          </span>
+          <span className="flex items-center gap-2 text-xs text-background/65">
+            <span className="size-1.5 rounded-full bg-background" />
+            Available for hire
+          </span>
         </div>
 
-        {/* Main Animated Form Container */}
-        <Div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-50px" }}
-          className="space-y-10"
-        >
-          {/* Section Header */}
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <div className="flex items-center gap-3">
-              <span className="p-2 rounded-full bg-background/10 text-background">
-                <Sparkles className="size-4" />
-              </span>
-              <span className="text-xs font-mono uppercase tracking-widest text-neutral-400">
-                [ Interactive Contact Form ]
-              </span>
-            </div>
-            <p className="text-xs font-mono text-neutral-500 uppercase tracking-wider">
-              Fill in the blanks below to drop me a message
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-[0.85fr_1.15fr] md:gap-8 xl:gap-16 [@media(max-height:500px)_and_(min-width:600px)]:grid-cols-[0.85fr_1.15fr]">
+          <div className="flex flex-col items-start">
+            <h2
+              id="contact-heading"
+              className="m-0! mb-2! text-2xl font-medium leading-[1.1] md:text-3xl lg:text-4xl"
+            >
+              Good things start
+              <br />
+              with a conversation.
+            </h2>
+            <p className="m-0! max-w-80 text-xs leading-snug text-background/55">
+              Have something in mind? Tell me what you're building, where you're
+              stuck, or what could be better.
             </p>
-          </div>
-
-          {/* Service Selection Tags */}
-          <div className="space-y-3">
-            <span className="text-xs font-mono uppercase tracking-wider text-neutral-500 block">
-              I need help with:
-            </span>
-            <div className="flex flex-wrap gap-2.5">
-              {services.map((service) => {
-                const isSelected = selectedServices.includes(service);
-                return (
-                  <button
-                    key={service}
-                    type="button"
-                    onClick={() => toggleService(service)}
-                    className={`px-4 py-2 rounded-full text-xs font-mono uppercase tracking-wider border transition-all duration-300 ${
-                      isSelected
-                        ? "bg-background text-foreground border-background shadow-lg shadow-background/10 scale-105"
-                        : "bg-transparent text-neutral-400 border-background/20 hover:border-background/50 hover:text-background"
-                    }`}
-                  >
-                    {isSelected ? `✓ ${service}` : `+ ${service}`}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* Editorial Form with Elevated Budget Options */}
-          <form onSubmit={handleSubmit} className="space-y-10">
-            <div className="text-2xl md:text-4xl lg:text-5xl font-light leading-relaxed md:leading-snug">
-              Hello!{" "}
-              <label className="[font-size:inherit]" htmlFor="name">
-                My name is{" "}
-              </label>
-              <input
-                id="name"
-                type="text"
-                required
-                placeholder="your name *"
-                value={formData.name}
-                onChange={(e) =>
-                  setFormData({ ...formData, name: e.target.value })
-                }
-                className="bg-transparent border-b-2 border-background/30 text-background placeholder-neutral-600 focus:outline-none focus:border-background transition-colors px-2 py-0.5 font-normal w-52 md:w-72"
-              />{" "}
-              and I’m looking for help with a project.{" "}
-              <label className="[font-size:inherit]" htmlFor="email">
-                You can reach me at
-              </label>
-              <input
-                id="email"
-                type="email"
-                required
-                placeholder="your email *"
-                value={formData.email}
-                onChange={(e) =>
-                  setFormData({ ...formData, email: e.target.value })
-                }
-                className="bg-transparent border-b-2 border-background/30 text-background placeholder-neutral-600 focus:outline-none focus:border-background transition-colors px-2 py-0.5 font-normal w-64 md:w-80"
-              />
-              .{" "}
-              <label className="[font-size:inherit]" htmlFor="budget">
-                Our estimated budget is around
-              </label>
-              <select
-                id="budget"
-                value={formData.budget}
-                onChange={(e) =>
-                  setFormData({ ...formData, budget: e.target.value })
-                }
-                className="bg-transparent border-b-2 border-background/30 text-background focus:outline-none focus:border-background transition-colors px-2 py-0.5 font-normal cursor-pointer"
+            <div className="mt-2 flex items-center gap-3 md:mt-5">
+              <a
+                href={`mailto:${email}`}
+                className="border-b border-background/30 pb-1 text-base transition-colors hover:border-background hover:text-background md:text-xl"
               >
-                <option value="<$5k" className="bg-neutral-900 text-background">
-                  &lt; $5k
-                </option>
-                <option
-                  value="$5k - $15k"
-                  className="bg-neutral-900 text-background"
-                >
-                  $5k - $15k
-                </option>
-                <option
-                  value="$15k - $30k"
-                  className="bg-neutral-900 text-background"
-                >
-                  $15k - $30k
-                </option>
-                <option
-                  value="$30k - $50k"
-                  className="bg-neutral-900 text-background"
-                >
-                  $30k - $50k
-                </option>
-                <option
-                  value="$50k+"
-                  className="bg-neutral-900 text-background"
-                >
-                  $50k+
-                </option>
-              </select>
-              .{" "}
-              <label className="[font-size:inherit]" htmlFor="message">
-                Here are a few details:
-              </label>
-              <textarea
-                id="message"
-                placeholder="tell me about your goals..."
-                value={formData.message}
-                onChange={(e) =>
-                  setFormData({ ...formData, message: e.target.value })
-                }
-                className="bg-transparent border-b-2 border-background/30 text-background placeholder-neutral-600 focus:outline-none focus:border-background transition-colors px-2 py-0.5 font-normal w-full inline-block mt-2 md:mt-0"
-              />
-            </div>
-
-            {/* Action Area */}
-            <div className="pt-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
-              {/* Direct Email */}
-              <div className="space-y-1">
-                <span className="text-xs font-mono text-neutral-500 uppercase tracking-wider block">
-                  Prefer direct email?
-                </span>
-                <div className="flex items-center gap-3">
-                  <a
-                    href={`mailto:${email}`}
-                    className="text-lg md:text-xl font-medium hover:text-neutral-400 transition-colors"
-                  >
-                    {email}
-                  </a>
-                  <button
-                    type="button"
-                    onClick={copyToClipboard}
-                    className="p-2 rounded-full border border-background/10 hover:border-background/40 transition-colors"
-                    aria-label="Copy Email"
-                  >
-                    {copied ? (
-                      <Check className="w-3.5 h-3.5 text-emerald-400" />
-                    ) : (
-                      <Copy className="w-3.5 h-3.5" />
-                    )}
-                  </button>
-                </div>
-              </div>
-
-              {/* Magnetic Submit Button */}
-              <Button
-                ref={buttonRef}
-                type="submit"
-                disabled={isSubmitting || submitted}
-                onMouseMove={handleMouseMove}
-                onMouseLeave={handleMouseLeave}
-                style={{ x: mouseXSpring, y: mouseYSpring }}
-                className="w-36 h-36 md:w-48 md:h-48 rounded-full bg-background text-foreground font-semibold uppercase tracking-wider text-xs md:text-sm flex flex-col items-center justify-center gap-2 hover:scale-105 transition-transform duration-300 disabled:opacity-50 shrink-0 self-end md:self-auto shadow-xl"
+                {email}
+              </a>
+              <button
+                type="button"
+                onClick={copyEmail}
+                aria-label="Copy email address"
+                className="flex size-8 items-center justify-center rounded-full border border-background/20 transition-colors hover:border-background focus-visible:outline-2 focus-visible:outline-offset-4"
               >
-                {isSubmitting ? (
-                  <>
-                    <span>Sending...</span>
-                    <Loader2 className="w-5 h-5 animate-spin" />
-                  </>
-                ) : submitted ? (
-                  <>
-                    <span>Message Sent!</span>
-                    <Check className="w-5 h-5 text-emerald-600" />
-                  </>
+                {copyStatus === "Email copied" ? (
+                  <Check className="size-4" />
                 ) : (
-                  <div className="flex items-center gap-1">
-                    <span>Send Message</span>
-                    <ArrowUpRight className="size-4" />
-                  </div>
+                  <Copy className="size-4" />
                 )}
-              </Button>
+              </button>
             </div>
+            <p role="status" className="m-0! text-xs text-background">
+              {copyStatus}
+            </p>
+            <div className="mt-2 flex gap-5 md:mt-5">
+              <a
+                href="https://github.com/nhridoy"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-sm text-background/60 hover:text-background"
+              >
+                GitHub <ArrowUpRight className="size-3.5" />
+              </a>
+              <a
+                href="https://linkedin.com/in/nahidujjaman-hridoy"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-sm text-background/60 hover:text-background"
+              >
+                LinkedIn <ArrowUpRight className="size-3.5" />
+              </a>
+            </div>
+          </div>
+
+          <form
+            onSubmit={openDraft}
+            className="min-w-0 border-t border-background/15 pt-3 md:border-t-0 md:border-l md:pl-8 md:pt-0"
+          >
+            <fieldset className="m-0 min-w-0 border-0 p-0">
+              <legend className="mb-2 text-xs text-background/50">
+                WHAT CAN I HELP WITH?
+              </legend>
+              <div className="flex flex-wrap gap-1.5">
+                {services.map((service) => {
+                  const selected = selectedServices.includes(service);
+                  return (
+                    <button
+                      key={service}
+                      type="button"
+                      aria-pressed={selected}
+                      onClick={() =>
+                        setSelectedServices((previous) =>
+                          selected
+                            ? previous.filter((item) => item !== service)
+                            : [...previous, service],
+                        )
+                      }
+                      className={`rounded-md border px-2.5 py-1.5 text-xs transition-colors focus-visible:outline-2 focus-visible:outline-offset-4 ${selected ? "border-background bg-background text-foreground" : "border-background/25 text-background/65 hover:border-background/60 hover:text-background"}`}
+                    >
+                      {service}
+                    </button>
+                  );
+                })}
+              </div>
+            </fieldset>
+            <div className="mt-3 grid grid-cols-2 gap-3">
+              <label
+                className="text-xs text-background/55"
+                htmlFor="contact-name"
+              >
+                Your name
+                <input
+                  id="contact-name"
+                  name="name"
+                  autoComplete="name"
+                  required
+                  maxLength={100}
+                  placeholder="Alex Morgan"
+                  className={inputClass}
+                />
+              </label>
+              <label
+                className="text-xs text-background/55"
+                htmlFor="contact-email"
+              >
+                Your email
+                <input
+                  id="contact-email"
+                  name="email"
+                  type="email"
+                  autoComplete="email"
+                  required
+                  placeholder="alex@company.com"
+                  className={inputClass}
+                />
+              </label>
+            </div>
+            <label
+              className="mt-3 block text-xs text-background/55"
+              htmlFor="contact-message"
+            >
+              A little about your project
+              <textarea
+                id="contact-message"
+                name="message"
+                required
+                rows={2}
+                maxLength={3000}
+                placeholder="The idea, the challenge, the possibilities..."
+                className={`${inputClass} resize-none`}
+              />
+            </label>
+            <label
+              className="mt-3 block text-xs text-background/55"
+              htmlFor="contact-budget"
+            >
+              Budget, if you have one{" "}
+              <span className="text-xs text-background/30">(optional)</span>
+              <input
+                id="contact-budget"
+                name="budget"
+                maxLength={100}
+                placeholder="A range or let's discuss"
+                className={inputClass}
+              />
+            </label>
+            <div className="mt-3 flex items-center justify-between gap-3">
+              <p className="m-0! max-w-40 text-xs leading-relaxed text-background/40">
+                Opens a draft in your email app.
+              </p>
+              <button
+                type="submit"
+                className="group inline-flex min-h-10 items-center justify-between gap-4 rounded-md bg-background px-4 text-sm font-medium text-foreground transition-colors hover:bg-background/85 focus-visible:outline-2 focus-visible:outline-offset-4"
+              >
+                Let's talk{" "}
+                <ArrowUpRight
+                  aria-hidden="true"
+                  className="size-5 transition-transform group-hover:-translate-y-1 group-hover:translate-x-1"
+                />
+              </button>
+            </div>
+            <p role="status" className="m-0! mt-1! text-xs text-background/55">
+              {draftOpened
+                ? "Continue in your email app to send. If it didn't open, email me directly using the link."
+                : ""}
+            </p>
           </form>
-        </Div>
+        </div>
       </div>
     </section>
   );
