@@ -262,7 +262,7 @@ export default function SelectedWorks() {
       id="selected-works"
       ref={sectionRef}
       style={{ height: dynamicSectionHeight }}
-      className="relative w-full bg-foreground text-background"
+      className="relative -mt-px w-full bg-foreground text-background"
     >
       <Div
         ref={viewportRef}

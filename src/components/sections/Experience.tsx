@@ -134,7 +134,7 @@ export default function Experience() {
       id="experience"
       ref={sectionRef}
       style={{ height: dynamicSectionHeight }}
-      className="relative bg-background text-foreground w-full"
+      className="relative -mt-px bg-background text-foreground w-full"
     >
       <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center justify-center">
         {/* Full-Screen Curtain Bar */}
