@@ -3,11 +3,11 @@
 import { useMotionValue, useReducedMotion, useSpring } from "framer-motion";
 import { div as Div } from "framer-motion/m";
 import { Plus } from "lucide-react";
-import Image from "next/image";
 import { type PointerEvent, useState } from "react";
 import { AnimatedLink } from "../ui/animated-link";
 import { Button } from "../ui/button";
 import Header from "../ui/header";
+import { PortraitTreatment } from "./portrait-treatment";
 
 export default function Hero() {
   const reducedMotion = useReducedMotion();
@@ -131,6 +131,7 @@ export default function Hero() {
 
       {/* Image */}
       <div
+        style={{ cursor: hovered ? "none" : "auto" }}
         onPointerMove={movePortrait}
         onPointerLeave={() => {
           setHovered(false);
@@ -138,18 +139,12 @@ export default function Hero() {
           pointerY.set(0);
         }}
         className="absolute inset-0 h-full overflow-hidden md:inset-x-auto md:inset-y-0 md:right-0 md:h-full md:w-[46%]"
-        style={{ cursor: hovered ? "none" : "auto" }}
       >
-        <Div style={{ x, y }} className="absolute -inset-5">
-          <Image
-            src="/images/hero-portrait.png"
-            alt="Close-up black-and-white portrait of Nahidujjaman Hridoy"
-            fill
-            priority
-            sizes="(min-width: 768px) 50vw, 100vw"
-            className="origin-[50%_35%] scale-100 object-cover object-[50%_25%] md:object-[50%_35%] grayscale contrast-[1.08] md:scale-[1.4]"
-          />
-        </Div>
+        <PortraitTreatment
+          x={x}
+          y={y}
+          reducedMotion={reducedMotion !== false}
+        />
         <Div
           aria-hidden="true"
           style={{ x: cursorX, y: cursorY }}
