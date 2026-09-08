@@ -1,8 +1,8 @@
 import fs from "node:fs";
 import path from "node:path";
 import type { MetadataRoute } from "next";
-
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://iamnahid.com";
+import { getTags } from "@/lib/get-tags";
+import { SITE_URL as BASE_URL } from "@/lib/seo";
 
 const FRONTMATTER_RE = /^---\r?\n([\s\S]*?)\r?\n---/;
 const DATE_RE = /^date:\s*['"]?([^'"\r\n]+)['"]?/m;
@@ -24,7 +24,11 @@ function getBlogPosts() {
         const match = FRONTMATTER_RE.exec(content);
         if (match) {
           const dateMatch = DATE_RE.exec(match[1]);
-          const date = dateMatch ? new Date(dateMatch[1]) : new Date();
+          const parsedDate = dateMatch ? new Date(dateMatch[1]) : undefined;
+          const date =
+            parsedDate && !Number.isNaN(parsedDate.getTime())
+              ? parsedDate
+              : undefined;
           const normalizedPath = fullPath.replaceAll("\\", "/");
           const normalizedBlogDir = blogDir.replaceAll("\\", "/");
           const slug = normalizedPath
@@ -47,22 +51,25 @@ function getBlogPosts() {
   return entries;
 }
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const posts = getBlogPosts();
 
   return [
     {
       url: BASE_URL,
-      lastModified: new Date(),
+
       changeFrequency: "weekly",
       priority: 1,
     },
     {
       url: `${BASE_URL}/blog`,
-      lastModified: new Date(),
+
       changeFrequency: "weekly",
       priority: 0.8,
     },
     ...posts,
+    ...(await getTags()).map((tag) => ({
+      url: `${BASE_URL}/tags/${encodeURIComponent(tag.name)}`,
+    })),
   ];
 }

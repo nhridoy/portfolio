@@ -3,6 +3,7 @@ import Posts from "@/components/blog/posts";
 import Tags from "@/components/blog/tags";
 import { H2 } from "@/components/ui/typography";
 import { getTags } from "@/lib/get-tags";
+import { pageMetadata } from "@/lib/seo";
 
 type TagPageParams = {
   tag: string;
@@ -14,9 +15,12 @@ type TagPageProps = {
 
 export async function generateMetadata(props: TagPageProps): Promise<Metadata> {
   const params = await props.params;
-  return {
-    title: `Posts Tagged with "${decodeURIComponent(params.tag)}"`,
-  };
+  const tag = decodeURIComponent(params.tag);
+  return pageMetadata(
+    `${tag} articles`,
+    `Read articles about ${tag} by Nahidujjaman Hridoy.`,
+    `/tags/${encodeURIComponent(tag)}`,
+  );
 }
 
 export async function generateStaticParams(): Promise<TagPageParams[]> {
@@ -30,7 +34,9 @@ export default async function TagPage(props: Readonly<TagPageProps>) {
 
   return (
     <>
-      <H2>Posts Tagged with &quot;{decodedTag}&quot;</H2>
+      <h1 className="text-3xl font-medium">
+        Posts Tagged with &quot;{decodedTag}&quot;
+      </h1>
 
       <div className="mt-6">
         <Posts tags={[decodedTag]} isRelated />

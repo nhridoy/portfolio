@@ -15,7 +15,6 @@ const inputClass =
   "w-full rounded-none border-0 border-b border-background/25 bg-transparent px-0 py-1.5 [@media(min-width:768px)_and_(min-height:800px)]:py-3 text-base text-background placeholder:text-background/30 focus:border-background focus:outline-none focus:ring-0 transition-colors";
 
 export default function Contact() {
-  const [selectedServices, setSelectedServices] = useState<string[]>([]);
   const [copyStatus, setCopyStatus] = useState("");
   const [draftOpened, setDraftOpened] = useState(false);
   const email = "hi@iamnahid.com";
@@ -43,9 +42,22 @@ export default function Contact() {
   function openDraft(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    const body = `Hi Nahid,\n\nI'm ${data.get("name")}.\nEmail: ${data.get("email")}\nInterested in: ${selectedServices.join(", ") || "Let's discuss"}\nBudget: ${data.get("budget") || "Let's discuss"}\n\n${data.get("message")}\n`;
+    const body = `Hi Nahid,\n\nI'm ${data.get("name")}.\nEmail: ${data.get("email")}\nInterested in: ${data.getAll("services").join(", ") || "Let's discuss"}\nBudget: ${data.get("budget") || "Let's discuss"}\n\n${data.get("message")}\n`;
     window.location.href = `mailto:${email}?subject=${encodeURIComponent(`Project enquiry from ${data.get("name")}`)}&body=${encodeURIComponent(body)}`;
     setDraftOpened(true);
+    const nativeEvent = event.nativeEvent as SubmitEvent & {
+      agentInvoked?: boolean;
+      respondWith?: (result: Promise<unknown>) => void;
+    };
+    if (nativeEvent.agentInvoked && nativeEvent.respondWith) {
+      nativeEvent.respondWith(
+        Promise.resolve({
+          status: "draft_requested",
+          message:
+            "An email draft was requested. The user must review and send it in their email application. No message has been sent by this website.",
+        }),
+      );
+    }
   }
 
   return (
@@ -131,6 +143,11 @@ export default function Contact() {
           </div>
 
           <form
+            {...{
+              toolname: "prepare_project_enquiry",
+              tooldescription:
+                "Prepare an email draft to Nahidujjaman Hridoy about a software project. Fill the contact form for user review. Submitting opens the email app; it does not send the email.",
+            }}
             onSubmit={openDraft}
             ref={formRef}
             className="relative min-w-0 rounded-3xl border border-background/20 bg-background/[0.045] p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.16),inset_0_-1px_0_rgba(255,255,255,0.03),0_24px_64px_rgba(0,0,0,0.18)] backdrop-blur-md backdrop-saturate-125 [background-image:radial-gradient(350px_circle_at_15%_0%,rgba(255,255,255,0.09),transparent_75%)] md:rounded-[2rem] md:p-6 [@media(min-width:768px)_and_(min-height:800px)]:p-8 [@media(min-height:950px)]:p-10"
@@ -153,26 +170,23 @@ export default function Contact() {
                 WHAT CAN I HELP WITH?
               </legend>
               <div className="flex flex-wrap gap-1.5">
-                {services.map((service) => {
-                  const selected = selectedServices.includes(service);
-                  return (
-                    <button
-                      key={service}
-                      type="button"
-                      aria-pressed={selected}
-                      onClick={() =>
-                        setSelectedServices((previous) =>
-                          selected
-                            ? previous.filter((item) => item !== service)
-                            : [...previous, service],
-                        )
-                      }
-                      className={`rounded-md border px-2.5 py-1.5 text-xs transition-colors focus-visible:outline-2 focus-visible:outline-offset-4 ${selected ? "border-background bg-background text-foreground" : "border-background/25 text-background/65 hover:border-background/60 hover:text-background"}`}
-                    >
+                {services.map((service) => (
+                  <label key={service} className="relative cursor-pointer">
+                    <input
+                      type="checkbox"
+                      name="services"
+                      value={service}
+                      className="peer sr-only"
+                      {...{
+                        toolparamdescription:
+                          "Software services requested for the project. Select any that apply.",
+                      }}
+                    />
+                    <span className="block rounded-md border border-background/25 px-2.5 py-1.5 text-xs text-background/65 transition-colors hover:border-background/60 peer-checked:border-background peer-checked:bg-background peer-checked:text-foreground peer-focus-visible:outline-2 peer-focus-visible:outline-offset-4">
                       {service}
-                    </button>
-                  );
-                })}
+                    </span>
+                  </label>
+                ))}{" "}
               </div>
             </fieldset>
             <div className="mt-3 [@media(min-width:768px)_and_(min-height:800px)]:mt-6 grid grid-cols-2 gap-3">

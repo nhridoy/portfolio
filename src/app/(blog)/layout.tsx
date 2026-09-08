@@ -7,7 +7,7 @@ export default function MyLayout({
     <div className="dark bg-background">
       <div className="theme-container">
         <Header />
-        {children}
+        <main id="main-content">{children}</main>
       </div>
     </div>
   );

@@ -167,7 +167,10 @@ export default function Intro() {
           animate={exiting ? { opacity: 0, y: -12 } : { opacity: 1, y: 0 }}
           transition={{ duration: 0.4, ease: "easeIn", delay: 0.6 }}
         >
-          <h1 className="text-10xl uppercase -ml-2.5 text-black font-extrabold block">
+          <div
+            aria-hidden="true"
+            className="text-10xl uppercase -ml-2.5 text-black font-extrabold block"
+          >
             {buildTextChars(PERSONAL_INFO.name).map(
               ({ word, chars }, wordIndex, words) => (
                 <Fragment key={word}>
@@ -192,7 +195,7 @@ export default function Intro() {
                 </Fragment>
               ),
             )}
-          </h1>
+          </div>
         </Div>
 
         <Div

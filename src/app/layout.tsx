@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import dynamic from "next/dynamic";
 import { Cormorant, Inter, Outfit, Playfair_Display } from "next/font/google";
+import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/seo";
 import "./globals.css";
 
 import { DeferredProviders } from "@/components/providers/deferred-providers";
@@ -39,14 +40,13 @@ const cormorant = Cormorant({
   weight: ["400"],
 });
 
-const BASE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL || "https://iamnahid.com";
-
 export const metadata: Metadata = {
-  metadataBase: new URL(BASE_URL),
-  title: "Nahidujjaman Hridoy | Software Engineer | Full-Stack & DevOps Expert",
-  description:
-    "Nahidujjaman Hridoy is a skilled Software Engineer specializing in React, Next.js, TypeScript, Django, and AWS. Builds high-performance web apps, e-commerce platforms, streaming services, ERP systems, and mobile applications for global clients. creativity is my source code.",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: `${SITE_NAME} | Software Engineer`,
+    template: `%s | ${SITE_NAME}`,
+  },
+  description: SITE_DESCRIPTION,
   keywords: [
     "Software Engineer",
     "Full-Stack Developer",
@@ -70,54 +70,30 @@ export const metadata: Metadata = {
     "nhridoy",
     "Portfolio",
   ],
-  authors: [{ name: "Nahidujjaman Hridoy" }],
-  creator: "Nahidujjaman Hridoy",
-  publisher: "Nahidujjaman Hridoy",
-  openGraph: {
-    title: "Nahidujjaman Hridoy | Software Engineer Portfolio",
-    description:
-      "Explore 15+ projects including e-commerce platforms, streaming services, ERP systems, and mobile apps. Specializing in React, Next.js, Django, and AWS for global clients.",
-    url: "/",
-    siteName: "Nahidujjaman Hridoy - Software Engineer",
-    images: [
-      {
-        url: "/og-image.jpg",
-        width: 1200,
-        height: 630,
-        alt: "Nahidujjaman Hridoy - Software Engineer Portfolio",
-      },
-    ],
-    locale: "en_US",
-    type: "website",
-  },
-  // twitter: {
-  //   card: "summary_large_image",
-  //   title: "Nahidujjaman Hridoy | Software Engineer",
-  //   description:
-  //     "Building scalable web and mobile applications with React, Next.js, Django, and AWS. 15+ projects across e-commerce, streaming, ERP, and more.",
-  //   creator: "@nhridoy",
-  //   images: ["/og-image.jpg"],
-  // },
-  // verification: {
-  //   google: "your-google-verification-code",
-  // },
+  authors: [{ name: SITE_NAME, url: SITE_URL }],
+  creator: SITE_NAME,
+  alternates: { types: { "application/rss+xml": "/feed.xml" } },
   robots: {
     index: true,
     follow: true,
     googleBot: {
       index: true,
       follow: true,
-      "max-video-preview": -1,
       "max-image-preview": "large",
       "max-snippet": -1,
+      "max-video-preview": -1,
     },
   },
-  icons: {
-    icon: "/favicon.ico",
-    apple: "/apple-touch-icon.png",
+  verification: {
+    google: process.env.GOOGLE_SITE_VERIFICATION,
+    other: process.env.BING_SITE_VERIFICATION
+      ? { "msvalidate.01": process.env.BING_SITE_VERIFICATION }
+      : undefined,
   },
+  other: process.env.WEBMCP_ORIGIN_TRIAL_TOKEN
+    ? { "origin-trial": process.env.WEBMCP_ORIGIN_TRIAL_TOKEN }
+    : undefined,
 };
-
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -137,6 +113,12 @@ export default function RootLayout({
       suppressHydrationWarning={process.env.NODE_ENV === "production"}
     >
       <body className="min-h-screen">
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[10000] focus:bg-background focus:p-3 focus:text-foreground"
+        >
+          Skip to content
+        </a>
         <DeferredProviders>
           <ReadingProgress />
           {children}
