@@ -6,7 +6,7 @@ export const SITE_URL = new URL(
 ).origin;
 export const SITE_NAME = "Nahidujjaman Hridoy";
 export const SITE_DESCRIPTION =
-  "Software engineer in Bangladesh building thoughtful interfaces and dependable systems with React, Next.js, Django, and AWS. Explore projects and get in touch.";
+  "Software engineer building thoughtful interfaces and dependable systems with React, Next.js, Django, and AWS.";
 export const absoluteUrl = (path = "/") => new URL(path, `${SITE_URL}/`).href;
 export const personId = `${SITE_URL}/#person`;
 export const websiteId = `${SITE_URL}/#website`;

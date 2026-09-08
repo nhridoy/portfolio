@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Hero from "@/components/sections/Hero";
 import HomeSections from "@/components/sections/home-sections";
 import Intro from "@/components/sections/Intro";
@@ -16,7 +17,7 @@ const homeMetadata = pageMetadata(
   "/",
 );
 
-export const metadata = {
+export const metadata: Metadata = {
   ...homeMetadata,
   title: { absolute: `${SITE_NAME} | Software Engineer` },
 };
