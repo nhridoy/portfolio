@@ -1,7 +1,12 @@
 import type { Metadata } from "next";
-import Hero from "@/components/sections/Hero";
-import HomeSections from "@/components/sections/home-sections";
+import About from "@/components/sections/About/About";
+import Contact from "@/components/sections/Contact/Contact";
+import Experience from "@/components/sections/Experience/Experience";
+import Hero from "@/components/sections/Hero/Hero";
 import Intro from "@/components/sections/Intro";
+import SelectedWorks from "@/components/sections/SelectedWorks/SelectedWorks";
+import Skills from "@/components/sections/Skills/Skills";
+import TagLine from "@/components/sections/TagLine/TagLine";
 import { JsonLd } from "@/components/seo/json-ld";
 import { PERSONAL_INFO } from "@/lib/constants";
 import {
@@ -28,10 +33,12 @@ export default function Home() {
       <JsonLd data={homeGraph} />
       <Intro />
       <Hero />
-      <HomeSections
-        shortInfo={PERSONAL_INFO.shortInfo}
-        tagline={PERSONAL_INFO.tagline}
-      />
+      <About text={PERSONAL_INFO.shortInfo} />
+      <TagLine text={PERSONAL_INFO.tagline} />
+      <Skills />
+      <Experience />
+      <SelectedWorks />
+      <Contact />
     </main>
   );
 }

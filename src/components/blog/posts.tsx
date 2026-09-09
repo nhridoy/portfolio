@@ -1,10 +1,10 @@
 import { ArrowRight, Tags } from "lucide-react";
+import Link from "next/link";
 import { Search } from "nextra/components";
 import { formatDate } from "@/lib/format-date";
 import { getPosts, type PostItem } from "@/lib/get-posts";
 import { getTags } from "@/lib/get-tags";
 import { cn } from "@/lib/utils";
-import { AnimatedLink } from "../ui/animated-link";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import { Body, H2, H3, Muted } from "../ui/typography";
@@ -59,9 +59,9 @@ export default async function Posts({
               >
                 <div className="sm:flex-1">
                   <H3>
-                    <AnimatedLink href={post.route} className="hover:underline">
+                    <Link href={post.route} className="hover:underline">
                       {post.title}
-                    </AnimatedLink>
+                    </Link>
                   </H3>
 
                   {post.frontMatter.description && (
@@ -73,7 +73,7 @@ export default async function Posts({
                     <div className="flex flex-wrap gap-x-2 text-muted-foreground">
                       {post.frontMatter.tags.map((tagName, index: number) => {
                         return (
-                          <AnimatedLink
+                          <Link
                             key={tagName}
                             href={`/tags/${tagName}`}
                             className="text-sm text-muted-foreground hover:underline"
@@ -82,7 +82,7 @@ export default async function Posts({
                               {tagName}
                               {index < post.frontMatter.tags.length - 1 && ", "}
                             </span>
-                          </AnimatedLink>
+                          </Link>
                         );
                       })}
                     </div>
@@ -118,12 +118,9 @@ export default async function Posts({
             <Badge
               key={tag.name}
               render={
-                <AnimatedLink
-                  href={`/tags/${tag.name}`}
-                  className="hover:underline"
-                >
+                <Link href={`/tags/${tag.name}`} className="hover:underline">
                   {tag.name}
-                </AnimatedLink>
+                </Link>
               }
             />
           ))}

@@ -9,7 +9,7 @@ import {
 import { div as Div, span as Span } from "framer-motion/m";
 import { Fragment, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { buildTextChars } from "@/lib/utils";
-import { Button } from "../ui/button";
+import { Button } from "../../ui/button";
 
 // ---------------------------------------------------------------------------
 // BREATHING & ANIMATION CONFIG (PERCENTAGE-BASED)
@@ -52,7 +52,7 @@ const Character = ({ char, index, totalChars, progress }: CharacterProps) => {
   );
 };
 
-const RevealingText = ({ text }: RevealingTextProps) => {
+const About = ({ text }: RevealingTextProps) => {
   const sectionRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLParagraphElement>(null);
@@ -201,4 +201,4 @@ const RevealingText = ({ text }: RevealingTextProps) => {
   );
 };
 
-export default RevealingText;
+export default About;

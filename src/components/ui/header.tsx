@@ -1,9 +1,9 @@
 "use client";
 
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { HTMLAttributes } from "react";
 import { cn } from "@/lib/utils";
-import { AnimatedLink } from "./animated-link";
 
 const Header = ({
   className,
@@ -19,7 +19,7 @@ const Header = ({
         aria-label="Main navigation"
         className="flex items-center justify-between"
       >
-        <AnimatedLink
+        <Link
           href="/"
           aria-label="Nahid — home"
           className="flex h-12 w-20 items-center justify-start transition-opacity hover:opacity-65 focus-visible:outline-2 focus-visible:outline-offset-4"
@@ -32,8 +32,8 @@ const Header = ({
           >
             <path d="M16 32H46C55 32 60 28 64 19L66 15C69 8 74 4 83 4H142C151 4 156 8 156 16C156 24 151 28 142 28H114C105 28 100 32 96 41L94 45C91 52 86 56 77 56H16C7 56 4 52 4 44C4 36 7 32 16 32Z" />
           </svg>
-        </AnimatedLink>
-        <AnimatedLink
+        </Link>
+        <Link
           href="/blog"
           aria-current={pathname.startsWith("/blog") ? "page" : undefined}
           className={cn(
@@ -44,7 +44,7 @@ const Header = ({
           )}
         >
           Blog
-        </AnimatedLink>
+        </Link>
       </nav>
     </header>
   );

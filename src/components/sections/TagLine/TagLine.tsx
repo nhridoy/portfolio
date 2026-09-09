@@ -14,7 +14,7 @@ interface SlidingTextProps {
   text: string;
 }
 
-const SlidingText = ({ text }: SlidingTextProps) => {
+const TagLine = ({ text }: SlidingTextProps) => {
   const sectionRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLSpanElement>(null);
@@ -160,4 +160,4 @@ const SlidingText = ({ text }: SlidingTextProps) => {
   );
 };
 
-export default SlidingText;
+export default TagLine;

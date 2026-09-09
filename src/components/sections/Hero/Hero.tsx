@@ -3,10 +3,10 @@
 import { useMotionValue, useReducedMotion, useSpring } from "framer-motion";
 import { div as Div } from "framer-motion/m";
 import { Plus } from "lucide-react";
+import Link from "next/link";
 import { type PointerEvent, useState } from "react";
-import { AnimatedLink } from "../ui/animated-link";
-import { Button } from "../ui/button";
-import Header from "../ui/header";
+import { Button } from "@/components/ui/button";
+import Header from "@/components/ui/header";
 import { PortraitTreatment } from "./portrait-treatment";
 
 export default function Hero() {
@@ -113,9 +113,10 @@ export default function Hero() {
           variant="interactive"
           className="pointer-events-auto uppercase font-bold text-background max-md:w-32 max-md:text-xs max-md:[&_span]:text-xs"
           render={
-            <AnimatedLink
+            <Link
               href="https://drive.google.com/file/d/1u9o56taT9Q2C36u9kl1Lx950gYRVWN3V/view?usp=sharing"
-              external
+              target="_blank"
+              rel="noopener noreferrer"
               className="hover:no-underline"
             />
           }

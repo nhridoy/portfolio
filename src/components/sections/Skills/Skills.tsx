@@ -145,7 +145,7 @@ function TrailMarker({
   );
 }
 
-export default function About() {
+export default function Skills() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const totalCards = Object.keys(SKILLS).length;
 
