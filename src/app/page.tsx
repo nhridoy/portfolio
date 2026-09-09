@@ -31,7 +31,7 @@ export default function Home() {
   return (
     <main id="main-content" className="flex-1">
       <JsonLd data={homeGraph} />
-      {/* <Intro /> */}
+      <Intro />
       <Hero />
       <About text={PERSONAL_INFO.shortInfo} />
       <TagLine text={PERSONAL_INFO.tagline} />
