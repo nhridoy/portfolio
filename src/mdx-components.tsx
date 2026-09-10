@@ -1,6 +1,6 @@
+import Link from "next/link";
 import { useMDXComponents as getNextraComponents } from "nextra/mdx-components";
 import { useMDXComponents as getThemeComponents } from "nextra-theme-blog"; // nextra-theme-blog or your custom theme
-import { AnimatedLink } from "./components/ui/animated-link";
 import { H1, H2, H3 } from "./components/ui/typography";
 
 // const components: MDXComponents = {};
@@ -15,22 +15,18 @@ const themeComponents = getThemeComponents({
   h2: ({ id, children }) => (
     <H2 id={id} className="group relative">
       {children}
-      <AnimatedLink
-        href={`#${id}`}
-        className="ml-2 opacity-0 group-hover:opacity-100"
-      >
+      <Link href={`#${id}`} className="ml-2 opacity-0 group-hover:opacity-100">
         #
-      </AnimatedLink>
+      </Link>
     </H2>
   ),
   h3: ({ children }) => <H3>{children}</H3>,
 
   // a: ({ href, children, target }) => {
-  //   const external = target === "_blank";
   //   return (
-  //     <AnimatedLink href={href as string} external={external}>
+  //     <Link href={href as string} target="_blank" rel="noopener noreferrer">
   //       {children}
-  //     </AnimatedLink>
+  //     </Link>
   //   );
   // },
 

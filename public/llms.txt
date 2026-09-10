@@ -1,0 +1,36 @@
+# Nahidujjaman Hridoy
+
+> Software engineer based in Bangladesh, building interfaces and full-stack systems with React, Next.js, Django, and AWS.
+
+## About
+
+Nahidujjaman Hridoy is a Software Engineer with expertise in full-stack development. He has worked with Swiss, US, South Korean, and Bangladeshi clients across e-commerce, streaming platforms, ERP systems, and mobile applications.
+
+## Skills
+
+- **Frontend:** React, Next.js, TypeScript, JavaScript, Tailwind CSS, Framer Motion, GraphQL
+- **Backend:** Python, Django, Django REST Framework, FastAPI, Node.js, PostgreSQL, Redis
+- **DevOps:** Docker, AWS (EC2, ECS, Fargate, Lambda, S3, CloudFront, Route53), CI/CD, Nginx
+
+## Experience
+
+- Software Engineer at SELISE Bangladesh (Feb 2023 – Present)
+- Senior Backend Developer at Potential (Apr 2024 – Aug 2025)
+- Full Stack Developer at Nexis Ltd (Apr 2022 – Feb 2023)
+- Backend Developer at Techforing Ltd (Sep 2021 – Apr 2022)
+
+
+## Main pages
+- [Portfolio](https://iamnahid.com/): Background, skills, experience, and selected projects.
+- [Selected work](https://iamnahid.com/#selected-works): Project descriptions and links.
+- [Contact](https://iamnahid.com/#contact): Project enquiry form and direct email.
+- [Blog](https://iamnahid.com/blog): Technical articles and tutorials.
+- [Sitemap](https://iamnahid.com/sitemap.xml): Canonical public pages.
+
+## Contact and profiles
+- [Email](mailto:hi@iamnahid.com): Direct contact.
+- [GitHub](https://github.com/nhridoy): Public code and projects.
+- [LinkedIn](https://www.linkedin.com/in/nahidujjaman-hridoy): Professional profile.
+
+## Interaction
+The contact form prepares an email draft. It does not send email or confirm delivery. The user reviews and sends the draft in their email app. Supporting browsers can discover the form through WebMCP annotations.

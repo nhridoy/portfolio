@@ -1,73 +1,43 @@
-import dynamic from "next/dynamic";
-import { Hero } from "@/components/sections/hero";
-import { SectionDots } from "@/components/ui/section-dots";
+import type { Metadata } from "next";
+import About from "@/components/sections/About/About";
+import Contact from "@/components/sections/Contact/Contact";
+import Experience from "@/components/sections/Experience/Experience";
+import Hero from "@/components/sections/Hero/Hero";
+import Intro from "@/components/sections/Intro";
+import SelectedWorks from "@/components/sections/SelectedWorks/SelectedWorks";
+import Skills from "@/components/sections/Skills/Skills";
+import TagLine from "@/components/sections/TagLine/TagLine";
+import { JsonLd } from "@/components/seo/json-ld";
+import { PERSONAL_INFO } from "@/lib/constants";
+import {
+  homeGraph,
+  pageMetadata,
+  SITE_DESCRIPTION,
+  SITE_NAME,
+} from "@/lib/seo";
 
-const About = dynamic(() => import("@/components/sections/about"), {
-  ssr: true,
-});
+const homeMetadata = pageMetadata(
+  `${SITE_NAME} | Software Engineer`,
+  SITE_DESCRIPTION,
+  "/",
+);
 
-const Experience = dynamic(() => import("@/components/sections/experience"), {
-  ssr: true,
-});
-
-const Skills = dynamic(() => import("@/components/sections/skills"), {
-  ssr: true,
-});
-
-const Projects = dynamic(() => import("@/components/sections/projects"), {
-  ssr: true,
-});
-
-const Contact = dynamic(() => import("@/components/sections/contact"), {
-  ssr: true,
-});
+export const metadata: Metadata = {
+  ...homeMetadata,
+  title: { absolute: `${SITE_NAME} | Software Engineer` },
+};
 
 export default function Home() {
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Person",
-    name: "Nahidujjaman Hridoy",
-    url: "https://nhridoy.github.io",
-    image:
-      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop",
-    jobTitle: "Software Engineer",
-    worksFor: {
-      "@type": "Organization",
-      name: "SELISE Bangladesh",
-    },
-    alumniOf: "Nexis Ltd",
-    sameAs: [
-      "https://github.com/nhridoy",
-      "https://linkedin.com/in/nahidujjaman-hridoy",
-      "https://nhridoy.github.io",
-    ],
-    knowsAbout: [
-      "React",
-      "Next.js",
-      "TypeScript",
-      "Django",
-      "Python",
-      "AWS",
-      "Docker",
-      "PostgreSQL",
-      "MongoDB",
-      "Full-Stack Development",
-      "DevOps",
-    ],
-  };
-
   return (
-    <main className="flex-1">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
-      <SectionDots />
+    <main id="main-content" className="flex-1">
+      <JsonLd data={homeGraph} />
+      <Intro />
       <Hero />
-      <About />
-      <Experience />
+      <About text={PERSONAL_INFO.shortInfo} />
+      <TagLine text={PERSONAL_INFO.tagline} />
       <Skills />
-      <Projects />
+      <Experience />
+      <SelectedWorks />
       <Contact />
     </main>
   );
