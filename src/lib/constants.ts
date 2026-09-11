@@ -27,9 +27,9 @@ export const EXPERIENCES = [
   },
   {
     id: "exp-2",
-    role: "Senior Backend Developer",
+    role: "Full Stack Developer",
     company: "Potential",
-    period: "Apr 2024 – Aug 2025",
+    period: "Feb 2022 – Feb 2023",
     description:
       "Led backend development for diverse applications including fitness trackers, e-commerce platforms, and video streaming services. Optimized API performance through caching and database tuning. Integrated payment gateways and social authentication. Worked extensively with Django REST Framework, PostgreSQL, Redis, and AWS cloud services.",
     skills: [
@@ -41,30 +41,30 @@ export const EXPERIENCES = [
       "AWS",
     ],
   },
-  {
-    id: "exp-3",
-    role: "Full Stack Developer",
-    company: "Nexis Ltd",
-    period: "Apr 2022 – Feb 2023",
-    description:
-      "Built full-stack applications including websites and HR Management Software with custom SSO systems. Integrated hardware devices like fingerprint attendance systems and automated document generation. Worked with Django, FastAPI, React, and cloud infrastructure.",
-    skills: [
-      "Python",
-      "JavaScript",
-      "TypeScript",
-      "Django",
-      "React",
-      "Next.js",
-      "PostgreSQL",
-      "Redis",
-      "Docker",
-    ],
-  },
+  // {
+  //   id: "exp-3",
+  //   role: "Full Stack Developer",
+  //   company: "Nexis Ltd",
+  //   period: "Apr 2022 – Feb 2023",
+  //   description:
+  //     "Built full-stack applications including websites and HR Management Software with custom SSO systems. Integrated hardware devices like fingerprint attendance systems and automated document generation. Worked with Django, FastAPI, React, and cloud infrastructure.",
+  //   skills: [
+  //     "Python",
+  //     "JavaScript",
+  //     "TypeScript",
+  //     "Django",
+  //     "React",
+  //     "Next.js",
+  //     "PostgreSQL",
+  //     "Redis",
+  //     "Docker",
+  //   ],
+  // },
   {
     id: "exp-4",
     role: "Backend Developer",
     company: "Techforing Ltd",
-    period: "Sep 2021 – Apr 2022",
+    period: "Sep 2021 – Feb 2022",
     description:
       "Built backend systems and internal enterprise software. Developed company website and HR management & recruitment platforms.",
     skills: ["Python", "Django", "Django REST Framework", "PostgreSQL", "AWS"],
