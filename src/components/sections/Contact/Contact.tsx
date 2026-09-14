@@ -162,9 +162,9 @@ export default function Contact() {
 
           <form
             {...{
-              toolname: "prepare_project_enquiry",
+              toolname: "send_project_enquiry",
               tooldescription:
-                "Prepare an email draft to Nahidujjaman Hridoy about a software project. Fill the contact form for user review. Submitting opens the email app; it does not send the email.",
+                "Send an email to Nahidujjaman Hridoy about a software project. Fill the contact form for user review.",
             }}
             onSubmit={handleSubmit(onSubmit)}
             ref={formRef}
