@@ -1,8 +1,19 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useReducedMotion } from "framer-motion";
 import { ArrowUpRight, Check, Copy } from "lucide-react";
-import { type FormEvent, type PointerEvent, useRef, useState } from "react";
+import { type PointerEvent, useRef, useState, useTransition } from "react";
+import { useForm } from "react-hook-form";
+import sendEmailAction from "@/actions/sendEmailAction";
+import { FormInput } from "@/components/form/FormInput";
+import { FormTextarea } from "@/components/form/FormTextarea";
+import { FieldGroup } from "@/components/ui/field";
+import { cn } from "@/lib/utils";
+import {
+  sendEmailSchema,
+  type sendEmailSchemaType,
+} from "@/schema/sendEmailSchema";
 import { ContactGlobe } from "./contact-globe";
 
 const services = [
@@ -16,10 +27,25 @@ const inputClass =
 
 export default function Contact() {
   const [copyStatus, setCopyStatus] = useState("");
-  const [draftOpened, setDraftOpened] = useState(false);
+  const [sendState, setSendState] = useState<"success" | "failed" | "idle">(
+    "idle",
+  );
+  const [isPending, startTransition] = useTransition();
   const email = "hi@iamnahid.com";
   const reducedMotion = useReducedMotion();
   const formRef = useRef<HTMLFormElement>(null);
+
+  const { handleSubmit, control, register, formState, reset } =
+    useForm<sendEmailSchemaType>({
+      defaultValues: {
+        name: "",
+        email: "",
+        services: [],
+        budget: "",
+        message: "",
+      },
+      resolver: zodResolver(sendEmailSchema),
+    });
 
   function moveGlassLight(event: PointerEvent<HTMLElement>) {
     const form = formRef.current;
@@ -39,26 +65,18 @@ export default function Contact() {
     }
   }
 
-  function openDraft(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    const body = `Hi Nahid,\n\nI'm ${data.get("name")}.\nEmail: ${data.get("email")}\nInterested in: ${data.getAll("services").join(", ") || "Let's discuss"}\nBudget: ${data.get("budget") || "Let's discuss"}\n\n${data.get("message")}\n`;
-    window.location.href = `mailto:${email}?subject=${encodeURIComponent(`Project enquiry from ${data.get("name")}`)}&body=${encodeURIComponent(body)}`;
-    setDraftOpened(true);
-    const nativeEvent = event.nativeEvent as SubmitEvent & {
-      agentInvoked?: boolean;
-      respondWith?: (result: Promise<unknown>) => void;
-    };
-    if (nativeEvent.agentInvoked && nativeEvent.respondWith) {
-      nativeEvent.respondWith(
-        Promise.resolve({
-          status: "draft_requested",
-          message:
-            "An email draft was requested. The user must review and send it in their email application. No message has been sent by this website.",
-        }),
-      );
-    }
-  }
+  const onSubmit = (data: sendEmailSchemaType) => {
+    startTransition(async () => {
+      const response = await sendEmailAction(data);
+
+      if (response.status === "success") {
+        setSendState("success");
+        // reset();
+      } else {
+        setSendState("failed");
+      }
+    });
+  };
 
   return (
     <section
@@ -148,13 +166,13 @@ export default function Contact() {
               tooldescription:
                 "Prepare an email draft to Nahidujjaman Hridoy about a software project. Fill the contact form for user review. Submitting opens the email app; it does not send the email.",
             }}
-            onSubmit={openDraft}
+            onSubmit={handleSubmit(onSubmit)}
             ref={formRef}
-            className="relative min-w-0 rounded-3xl border border-background/20 bg-background/[0.045] p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.16),inset_0_-1px_0_rgba(255,255,255,0.03),0_24px_64px_rgba(0,0,0,0.18)] backdrop-blur-md backdrop-saturate-125 [background-image:radial-gradient(350px_circle_at_15%_0%,rgba(255,255,255,0.09),transparent_75%)] md:rounded-[2rem] md:p-6 [@media(min-width:768px)_and_(min-height:800px)]:p-8 [@media(min-height:950px)]:p-10"
+            className="relative min-w-0 rounded-3xl border border-background/20 bg-background/4.5 p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.16),inset_0_-1px_0_rgba(255,255,255,0.03),0_24px_64px_rgba(0,0,0,0.18)] backdrop-blur-md backdrop-saturate-125 bg-[radial-gradient(350px_circle_at_15%_0%,rgba(255,255,255,0.09),transparent_75%)] md:rounded-[2rem] md:p-6 [@media(min-width:768px)_and_(min-height:800px)]:p-8 [@media(min-height:950px)]:p-10"
           >
             <div
               aria-hidden="true"
-              className="pointer-events-none absolute -inset-px rounded-[inherit] p-px opacity-[var(--border-opacity,0)] transition-opacity duration-300"
+              className="pointer-events-none absolute -inset-px rounded-[inherit] p-px opacity-(--border-opacity,0) transition-opacity duration-300"
               style={{
                 background:
                   "radial-gradient(180px circle at var(--light-x,0px) var(--light-y,0px), rgba(255,255,255,0.75), transparent 75%)",
@@ -165,98 +183,80 @@ export default function Contact() {
                 WebkitMaskComposite: "xor",
               }}
             />
-            <fieldset className="m-0 min-w-0 border-0 p-0">
-              <legend className="mb-2 text-xs text-background/50">
-                WHAT CAN I HELP WITH?
-              </legend>
-              <div className="flex flex-wrap gap-1.5">
-                {services.map((service) => (
-                  <label key={service} className="relative cursor-pointer">
-                    <input
-                      type="checkbox"
-                      name="services"
-                      value={service}
-                      className="peer sr-only"
-                      {...{
-                        toolparamdescription:
-                          "Software services requested for the project. Select any that apply.",
-                      }}
-                    />
-                    <span className="block rounded-md border border-background/25 px-2.5 py-1.5 text-xs text-background/65 transition-colors hover:border-background/60 peer-checked:border-background peer-checked:bg-background peer-checked:text-foreground peer-focus-visible:outline-2 peer-focus-visible:outline-offset-4">
-                      {service}
-                    </span>
-                  </label>
-                ))}{" "}
-              </div>
-            </fieldset>
-            <div className="mt-3 [@media(min-width:768px)_and_(min-height:800px)]:mt-6 grid grid-cols-2 gap-3">
-              <label
-                className="text-xs text-background/55"
-                htmlFor="contact-name"
-              >
-                Your name
-                <input
-                  id="contact-name"
+            <FieldGroup>
+              <fieldset className="m-0 min-w-0 border-0 p-0">
+                <legend
+                  className={cn("mb-2 text-xs text-background/50", {
+                    "text-destructive": formState.errors.services,
+                  })}
+                >
+                  WHAT CAN I HELP WITH?
+                </legend>
+                <div className="flex flex-wrap gap-1.5">
+                  {services.map((service) => (
+                    <label key={service} className="relative cursor-pointer">
+                      <input
+                        type="checkbox"
+                        {...register("services")}
+                        value={service}
+                        className="peer sr-only"
+                        {...{
+                          toolparamdescription:
+                            "Software services requested for the project. Select any that apply.",
+                        }}
+                      />
+                      <span className="block rounded-md border border-background/25 px-2.5 py-1.5 text-xs text-background/65 transition-colors hover:border-background/60 peer-checked:border-background peer-checked:bg-background peer-checked:text-foreground peer-focus-visible:outline-2 peer-focus-visible:outline-offset-4">
+                        {service}
+                      </span>
+                    </label>
+                  ))}{" "}
+                </div>
+              </fieldset>
+
+              <div className="grid grid-cols-2 gap-3">
+                <FormInput
+                  control={control}
                   name="name"
-                  autoComplete="name"
-                  required
-                  maxLength={100}
+                  label="Your name"
                   placeholder="Alex Morgan"
-                  className={inputClass}
                 />
-              </label>
-              <label
-                className="text-xs text-background/55"
-                htmlFor="contact-email"
-              >
-                Your email
-                <input
-                  id="contact-email"
+                <FormInput
+                  control={control}
                   name="email"
-                  type="email"
-                  autoComplete="email"
-                  required
+                  label="Your email"
                   placeholder="alex@company.com"
-                  className={inputClass}
                 />
-              </label>
-            </div>
-            <label
-              className="mt-3 [@media(min-width:768px)_and_(min-height:800px)]:mt-6 block text-xs text-background/55"
-              htmlFor="contact-message"
-            >
-              A little about your project
-              <textarea
-                id="contact-message"
+              </div>
+              <FormTextarea
+                control={control}
                 name="message"
-                required
-                rows={2}
-                maxLength={3000}
+                label="A little about your project"
                 placeholder="The idea, the challenge, the possibilities..."
-                className={`${inputClass} resize-none`}
               />
-            </label>
-            <label
-              className="mt-3 [@media(min-width:768px)_and_(min-height:800px)]:mt-6 block text-xs text-background/55"
-              htmlFor="contact-budget"
-            >
-              Budget, if you have one{" "}
-              <span className="text-xs text-background/30">(optional)</span>
-              <input
-                id="contact-budget"
+              <FormInput
+                control={control}
                 name="budget"
-                maxLength={100}
+                label="Budget, if you have one (optional)"
                 placeholder="A range or let's discuss"
-                className={inputClass}
               />
-            </label>
-            <div className="mt-3 [@media(min-width:768px)_and_(min-height:800px)]:mt-6 flex items-center justify-between gap-3">
-              <p className="m-0! max-w-40 text-xs leading-relaxed text-background/40">
-                Opens a draft in your email app.
+            </FieldGroup>
+            <div className="mt-3 flex items-center justify-between gap-3">
+              <p
+                className={cn("text-xs", {
+                  "text-green-500": sendState === "success",
+                  "text-destructive": sendState === "failed",
+                })}
+              >
+                {sendState === "success"
+                  ? "Email sent successfully! Please check your inbox."
+                  : sendState === "failed"
+                    ? "Failed to send email. Please try again."
+                    : ""}
               </p>
               <button
                 type="submit"
-                className="group inline-flex min-h-10 items-center justify-between gap-4 rounded-md bg-background px-4 text-sm font-medium text-foreground transition-colors hover:bg-background/85 focus-visible:outline-2 focus-visible:outline-offset-4"
+                disabled={isPending}
+                className="group cursor-pointer inline-flex min-h-10 items-center justify-between gap-4 rounded-md bg-background px-4 text-sm font-medium text-foreground transition-colors hover:bg-background/85 focus-visible:outline-2 focus-visible:outline-offset-4"
               >
                 Let's talk{" "}
                 <ArrowUpRight
@@ -265,11 +265,6 @@ export default function Contact() {
                 />
               </button>
             </div>
-            <p role="status" className="m-0! mt-1! text-xs text-background/55">
-              {draftOpened
-                ? "Continue in your email app to send. If it didn't open, email me directly using the link."
-                : ""}
-            </p>
           </form>
         </div>
       </div>
