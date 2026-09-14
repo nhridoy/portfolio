@@ -71,7 +71,7 @@ export default function Contact() {
 
       if (response.status === "success") {
         setSendState("success");
-        // reset();
+        reset();
       } else {
         setSendState("failed");
       }
