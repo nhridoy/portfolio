@@ -20,14 +20,21 @@ const sendEmailAction = async (
   formData.append("budget", parsedData.data.budget || "");
   formData.append("message", parsedData.data.message);
 
-  const response = await fetch(process.env.MAIL_SENDER_WEBHOOK_URL || "", {
-    method: "POST",
-    headers: {
-      "x-api-key": process.env.MAILSEND_API_KEY || "",
-    },
-    body: formData,
-  });
-  return response.status === 200 ? { status: "success" } : { status: "failed" };
+  try {
+    const response = await fetch(process.env.MAIL_SENDER_WEBHOOK_URL || "", {
+      method: "POST",
+      headers: {
+        "x-api-key": process.env.MAILSEND_API_KEY || "",
+      },
+      body: formData,
+    });
+    return response.status === 200
+      ? { status: "success" }
+      : { status: "failed" };
+  } catch (error) {
+    console.error("Email sending error:", error);
+    return { status: "failed" };
+  }
 };
 
 export default sendEmailAction;
