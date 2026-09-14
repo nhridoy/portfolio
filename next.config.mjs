@@ -1,5 +1,7 @@
 import nextra from "nextra";
 
+const isDev = process.env.NODE_ENV === "development";
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   turbopack: {
@@ -58,7 +60,9 @@ const nextConfig = {
             key: "Content-Security-Policy",
             value: [
               "upgrade-insecure-requests",
-              "script-src 'self' 'unsafe-inline' https://va.vercel-scripts.com https://vitals.vercel-insights.com",
+              // Conditionally allow 'unsafe-eval' and websocket connections (ws:, wss:) during local dev
+              `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""} https://va.vercel-scripts.com https://vitals.vercel-insights.com`,
+              `connect-src 'self'${isDev ? " ws: wss:" : ""} https://va.vercel-scripts.com https://vitals.vercel-insights.com`,
               "object-src 'none'",
               "base-uri 'self'",
               "form-action 'self'",
