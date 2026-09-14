@@ -28,9 +28,7 @@ const sendEmailAction = async (
       },
       body: formData,
     });
-    return response.status === 200
-      ? { status: "success" }
-      : { status: "failed" };
+    return response.ok ? { status: "success" } : { status: "failed" };
   } catch (error) {
     console.error("Email sending error:", error);
     return { status: "failed" };
